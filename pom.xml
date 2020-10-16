@@ -13,33 +13,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Version des dépendances -->
-        <javafx.version>14</javafx.version>
+        <javafx.version>1.8</javafx.version>
 
     </properties>
-
-    <dependencies>
-        <!-- OPEN JAVAFX -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx</artifactId>
-            <version>${javafx.version}</version>
-            <type>pom</type>
-        </dependency>
-
-        <!-- OPEN JAVAFX CONTROLS-->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
-
-        <!-- OPEN JAVAFXF FXML -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
-    </dependencies>
 
     <!-- CONFIG DES BUIDS -->
     <build>
@@ -47,33 +23,10 @@
         <!-- PLUGIN DE BUILD -->
         <plugins>
 
-            <!-- MAVEN COMPILER -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <release>${javafx.version}</release>
-                </configuration>
-            </plugin>
-
             <!-- MAVEN RESSOURCES -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.0.2</version>
-            </plugin>
-
-            <!-- JAVAFX-MAVEN-PLUGIN -->
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.4</version>
-                <configuration>
-                    <source>${javafx.version}</source>
-                    <target>${javafx.version}</target>
-                    <release>${javafx.version}</release>
-                    <mainClass>fr.manchez.snoopy.application.Main</mainClass>
-                </configuration>
             </plugin>
 
             <!-- JUNIT JUPITER -->
