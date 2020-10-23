@@ -1,1 +1,10 @@
 fr\manchez\snoopy\application\Main.class
+fr\manchez\snoopy\application\SnoopyWindow.class
+fr\manchez\snoopy\application\models\Levels\Level.class
+fr\manchez\snoopy\application\models\Personnage.class
+fr\manchez\snoopy\application\models\Levels\Structure.class
+fr\manchez\snoopy\application\models\Levels\LevelLoader.class
+fr\manchez\snoopy\application\enums\Structures.class
+fr\manchez\snoopy\application\models\Object.class
+fr\manchez\snoopy\application\enums\Level.class
+fr\manchez\snoopy\application\models\Levels\LevelLoader$1.class
