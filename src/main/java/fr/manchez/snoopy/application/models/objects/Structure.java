@@ -1,28 +1,23 @@
-package fr.manchez.snoopy.application.models.Levels;
+package fr.manchez.snoopy.application.models.objects;
 
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Structures;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import fr.manchez.snoopy.application.models.objects.Object;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.InputStream;
 
-public class Structure {
-
-    /** Coordonnées X de la structure dans l'espace 2D **/
-    private DoubleProperty xProperty;
-
-    /** Coordonnées Y de la structure dans l'espace 2D **/
-    private DoubleProperty yProperty;
+public class Structure extends Object {
 
     /** Image de la structure **/
-    private ImageView imageView;
+
+    protected ImageView imageView;
 
     /** Structure **/
-    private Structures structure;
+
+    protected Structures structure;
 
     /**
      * Constructeur
@@ -31,24 +26,38 @@ public class Structure {
      */
     public Structure(Point2D point2D, Structures structure){
 
+        super(point2D);
+
         this.structure = structure;
 
-        xProperty = new SimpleDoubleProperty(point2D.getX());
-        yProperty = new SimpleDoubleProperty(point2D.getY());
+        imageView = new javafx.scene.image.ImageView(getImage(structure));
+
+        //On bind les propriétés de notre structure
+        imageView.xProperty().bindBidirectional(xProperty);
+        imageView.yProperty().bindBidirectional(yProperty);
+
+    }
+
+    public ImageView getImageView(){
+        return imageView;
+    }
+
+    /**
+     *
+     * @param structure
+     * @return
+     */
+    protected Image getImage(Structures structure){
 
         //On récupére l'image correspondant à la structure
         InputStream inputStream = getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/" + structure.getFileURL());
-        Image image = new Image(
+        return new Image(
                 inputStream,
                 structure.getWidth()*SnoopyWindow.SCALE,
                 structure.getHeight()*SnoopyWindow.SCALE,
                 false,
                 true);
-        imageView = new javafx.scene.image.ImageView(image);
 
-        //On bind les propriétés de notre structure
-        imageView.xProperty().bindBidirectional(xProperty);
-        imageView.yProperty().bindBidirectional(yProperty);
 
     }
 

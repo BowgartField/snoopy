@@ -1,13 +1,16 @@
-package fr.manchez.snoopy.application.models.Levels;
+package fr.manchez.snoopy.application.models.levels;
 
 import fr.manchez.snoopy.application.SnoopyWindow;
-import fr.manchez.snoopy.application.enums.Level;
+import fr.manchez.snoopy.application.enums.Levels;
 import fr.manchez.snoopy.application.enums.Structures;
+import fr.manchez.snoopy.application.models.objects.Personnage;
+import fr.manchez.snoopy.application.models.objects.Structure;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -21,58 +24,73 @@ import java.util.Map;
  */
 public class LevelLoader {
 
-    List<Point2D> point2DList = new ArrayList<Point2D>();
+    /** Niveau Chargé **/
+    Level level = new Level();
 
-    /** Level Structures **/
-    List<List<Character>> levelStructure = new ArrayList<>();
+    /** Liste des positions possibles pour les structures **/
+    List<Point2D> structuresPosition = new ArrayList<>();
+
+    /** Charactéres contenus dans le fichier .txt **/
+    List<List<Character>> levelCharacters = new ArrayList<>();
 
     /** Url du fichier correspondant au niveau */
-    private final Level level;
+    private final Levels levels;
 
     /** Fenêtre dans laquelle chargé le niveau */
     SnoopyWindow window;
 
     /**
      * Constructeur par défaut
-     * @param level Niveau a chargé
+     * @param levels Niveau a chargé
      */
-    public LevelLoader(Level level, SnoopyWindow window){
-        this.level = level;
+    public LevelLoader(Levels levels, SnoopyWindow window){
+        this.levels = levels;
         this.window = window;
     }
 
     /**
      * Dessine le niveau dans la fenêtre
      */
-    public void draw(){
+    public Level load(){
 
-        //Charge le niveau
-        load();
-
+        loadFileIntoArray();
         createStructuresPoint2DList();
-
-        //
         drawTimer();
-
-        //
-        drawStructures();
-
-        //Ajoute un fond d'écran
         setBackground();
+        createStructures();
 
-    }
-
-    private void setBackground() {
-
+        return level;
 
     }
 
     /**
-     * Charge le niveau dans un tableau
+     * Affiche le fond d'écran
      */
-    private void load(){
+    private void setBackground() {
 
-        InputStream in = getClass().getResourceAsStream("/fr/manchez/snoopy/levels/" + level);
+        window.getPane().setBackground(
+                new Background(
+                        new BackgroundImage(
+                                new Image(
+                                        getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/Fond/fond.png"),
+                                        580,580,true,true
+                                ),
+                                BackgroundRepeat.NO_REPEAT,
+                                BackgroundRepeat.NO_REPEAT,
+                                BackgroundPosition.CENTER,
+                                BackgroundSize.DEFAULT
+                        )
+                )
+        );
+
+    }
+
+    /**
+     * Charge le niveau depuis un .txt dans un tableau
+     */
+    private void loadFileIntoArray(){
+
+        InputStream in = getClass().getResourceAsStream("/fr/manchez/snoopy/levels/" + levels);
 
         try(Reader fr = new InputStreamReader(in, StandardCharsets.UTF_8)){
 
@@ -89,7 +107,7 @@ public class LevelLoader {
                 }else if (content == 13){
 
                     // 13 (ASCII) = carrage return (retour à la ligne). On change donc de ligne
-                    levelStructure.add(charactersLine);
+                    levelCharacters.add(charactersLine);
                     charactersLine = new ArrayList<>();
 
                 }
@@ -98,7 +116,7 @@ public class LevelLoader {
 
             //Permet d'ajouter la dernière ligne puisque lorsque le pointeur arrive sur le derniere élément
             //Ce n'est pas 13 donc la derniere ligne n'est pas enregistré dans la tableau
-            levelStructure.add(charactersLine);
+            levelCharacters.add(charactersLine);
 
         }catch (Exception e){
             e.printStackTrace();
@@ -231,33 +249,33 @@ public class LevelLoader {
     /**
      * Dessines les structres
      */
-    private void drawStructures(){
+    private void createStructures(){
 
         int index = 0;
 
         //on boucle sur les colonnes
-        for(List<Character> charactersList: levelStructure){
+        for(List<Character> charactersList: levelCharacters){
 
             //on boucle sur les colonnes
             for (Character character: charactersList){
 
+                //On scale les coordonnées
+                Point2D newPoint2D = new Point2D(
+                        structuresPosition.get(index).getX()*window.getScale()+window.getScale(),
+                        structuresPosition.get(index).getY()*window.getScale()+window.getScale()
+                );
+
                 Structures structure = Structures.getStructuresFromSymbol(character);
 
-                InputStream inputStream = getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/" + structure.getFileURL());
-                Image image = new Image(
-                        inputStream,
-                        structure.getWidth()*window.getScale(),
-                        structure.getHeight()*window.getScale(),
-                        false,
-                        true);
-                ImageView imageView = new ImageView(image);
+                if(!String.valueOf(character).equals(Structures.SNOOPY_IMMOBILE.getSymbol())){
 
-                imageView.setX(point2DList.get(index).getX()*window.getScale()+window.getScale());
-                imageView.setY(point2DList.get(index).getY()*window.getScale()+window.getScale());
+                    level.addStructure(new Structure(newPoint2D,structure));
 
-                System.out.println(point2DList.get(index));
+                }else{
 
-                window.getPane().getChildren().add(imageView);
+                    level.addSnoopy(new Personnage(newPoint2D,structure));
+
+                }
 
                 index++;
 
@@ -278,7 +296,7 @@ public class LevelLoader {
 
             for (int x : positions) {
 
-                point2DList.add(new Point2D(x, y));
+                structuresPosition.add(new Point2D(x, y));
 
             }
 
