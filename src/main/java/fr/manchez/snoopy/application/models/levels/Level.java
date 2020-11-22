@@ -1,5 +1,6 @@
 package fr.manchez.snoopy.application.models.levels;
 
+import fr.manchez.snoopy.application.MenuWindow;
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.models.objects.Personnage;
 import fr.manchez.snoopy.application.models.objects.Structure;
@@ -57,6 +58,8 @@ public class Level {
         window.getPane().getChildren().add(snoopy.getImageView());
 
     }
+
+
 
     /*
         GETTERS

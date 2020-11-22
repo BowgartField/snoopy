@@ -1,4 +1,7 @@
+fr\manchez\snoopy\application\MenuWindow$1.class
+fr\manchez\snoopy\application\models\menu\StartMenu.class
 fr\manchez\snoopy\application\Main.class
+fr\manchez\snoopy\application\models\menu\PasswordMenu.class
 fr\manchez\snoopy\application\SnoopyWindow.class
 fr\manchez\snoopy\application\models\objects\Personnage$4.class
 fr\manchez\snoopy\application\models\objects\Personnage$1.class
@@ -7,14 +10,15 @@ fr\manchez\snoopy\application\models\objects\Object.class
 fr\manchez\snoopy\application\models\objects\Personnage$13.class
 fr\manchez\snoopy\application\models\objects\Personnage$17.class
 fr\manchez\snoopy\application\enums\Structures.class
+fr\manchez\snoopy\application\enums\Menus.class
 fr\manchez\snoopy\application\models\objects\Personnage$12.class
 fr\manchez\snoopy\application\models\levels\LevelLoader.class
 fr\manchez\snoopy\application\models\objects\Personnage$9.class
-fr\manchez\snoopy\application\SnoopyWindow$1.class
 fr\manchez\snoopy\application\models\objects\Personnage$3.class
 fr\manchez\snoopy\application\models\objects\Personnage$18.class
 fr\manchez\snoopy\application\models\objects\Personnage$5.class
 fr\manchez\snoopy\application\models\objects\Personnage$11.class
+fr\manchez\snoopy\application\models\menu\GameMenu.class
 fr\manchez\snoopy\application\models\objects\Personnage$2.class
 fr\manchez\snoopy\application\models\objects\Personnage$14.class
 fr\manchez\snoopy\application\models\objects\Personnage$19.class

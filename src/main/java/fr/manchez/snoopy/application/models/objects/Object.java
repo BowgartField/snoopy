@@ -20,4 +20,14 @@ public class Object {
         xProperty = new SimpleDoubleProperty(position.getX());
         yProperty = new SimpleDoubleProperty(position.getY());
     }
+
+    public DoubleProperty yPropertyProperty() {
+        return yProperty;
+    }
+
+    public DoubleProperty xPropertyProperty() {
+        return xProperty;
+    }
+
+
 }

@@ -11,13 +11,13 @@ import javafx.stage.Stage;
 public class SnoopyWindow {
 
     //Stage de la fenêtre
-    Stage stage;
+    protected Stage stage;
 
     //Element root de la fenêtre
-    Pane pane = new Pane();
+    protected Pane pane = new Pane();
 
     //Scene
-    Scene scene;
+    protected Scene scene;
 
     public static int SCALE = 2;
     public static int width = 580;
@@ -30,6 +30,8 @@ public class SnoopyWindow {
 
         scene = new Scene(pane);
         stage.setScene(scene);
+
+        System.out.println("Scene: " + scene);
 
         initialize();
         events();
@@ -58,30 +60,14 @@ public class SnoopyWindow {
     /**
      *
      */
-    public void events(){
+    public void events(){}
 
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
+    public void clearAllMotherFucker(){
 
-                KeyCode keyCode = event.getCode();
+        System.out.println(stage);
 
-                if(!Main.level.getPersonnage().isMoving()){
-
-                    if(keyCode.equals(KeyCode.LEFT)){
-                        Main.level.getPersonnage().moveLeft();
-                    }else if(keyCode.equals(KeyCode.RIGHT)){
-                        Main.level.getPersonnage().moveRight();
-                    }else if(keyCode.equals(KeyCode.UP)){
-                        Main.level.getPersonnage().moveUp();
-                    }else if(keyCode.equals(KeyCode.DOWN)){
-                        Main.level.getPersonnage().moveDown();
-                    }
-
-                }
-
-            }
-        });
+        getPane().getChildren().clear();
+        getPane().setBackground(Background.EMPTY);
 
     }
 
@@ -104,4 +90,5 @@ public class SnoopyWindow {
     public int getScale() {
         return SCALE;
     }
+
 }

@@ -3,6 +3,7 @@ package fr.manchez.snoopy.application.models.objects;
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Structures;
 import fr.manchez.snoopy.application.models.objects.Object;
+import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -49,6 +50,7 @@ public class Structure extends Object {
      */
     protected Image getImage(Structures structure){
 
+        //System.out.println("/fr/manchez/snoopy/sprites/" + structure.getFileURL());
         //On récupére l'image correspondant à la structure
         InputStream inputStream = getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/" + structure.getFileURL());
         return new Image(
@@ -58,6 +60,17 @@ public class Structure extends Object {
                 false,
                 true);
 
+
+
+    }
+
+    /**
+     *
+     * @param structure
+     */
+    public void setImage(Structures structure){
+
+        imageView.setImage(getImage(structure));
 
     }
 
