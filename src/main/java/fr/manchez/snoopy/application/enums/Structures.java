@@ -16,13 +16,8 @@ public enum Structures {
     EMPTY("X", "", 30,30),
 
     BIRD("P","Personnages/Oiseau/oiseau.png",32,32),
-    POINTS("","Details/1000.png",32,16),
-
-    BALLE("","Details/balle.png",16,16),
 
     SNOOPY_IMMOBILE("S","Personnages/Snoopy/face_immobile.png",32,32),
-    SNOOPY_SPAWN_POINT("S","Personnages/Snoopy/face_immobile.png",32,32),
-
     SNOOPY_LEFT_1("","Personnages/Snoopy/left/left_1.png",32,32),
     SNOOPY_LEFT_2("","Personnages/Snoopy/left/left_2.png",32,32),
     SNOOPY_LEFT_3("","Personnages/Snoopy/left/left_3.png",32,32),
@@ -34,15 +29,23 @@ public enum Structures {
     SNOOPY_DOWN_1("","Personnages/Snoopy/down/down_1.png",32,32),
     SNOOPY_DOWN_2("","Personnages/Snoopy/down/down_2.png",32,32),
 
+
     OBSTACLE("O","Blocs/obstacle.png",30,30),
     DESTRUCTIBLE("D","Blocs/destructible2.png",30,30),
 
-    DEBRIS("","Blocs/cassé.png",30,30),
+    CURSEUR("", "Details/curseur.png", 16, 16),
+    CURSEURUP("", "Details/curseurUp.png", 16, 16),
 
-    CURSEUR("","Détails/curseur.png",16,16);
-
-
-
+    ZERO("0", "Textes/Chiffres/0.png", 14, 14),
+    UN("1", "Textes/Chiffres/1.png", 14, 14),
+    DEUX("2", "Textes/Chiffres/2.png", 14, 14),
+    TROIS("3", "Textes/Chiffres/3.png", 14, 14),
+    QUATRE("4", "Textes/Chiffres/4.png", 14, 14),
+    CINQ("5", "Textes/Chiffres/5.png", 14, 14),
+    SIX("6", "Textes/Chiffres/6.png", 14, 14),
+    SEPT("7", "Textes/Chiffres/7.png", 14, 14),
+    HUIT("8", "Textes/Chiffres/8.png", 14, 14),
+    NEUF("9", "Textes/Chiffres/9.png", 14, 14);
 
     /** Url vers le fichier de la structures **/
     private final String fileURL;
