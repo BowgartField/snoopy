@@ -1,0 +1,2 @@
+- recoder le timer
+- coder la balle

@@ -1,29 +1,29 @@
 package fr.manchez.snoopy.application;
 
+
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class SnoopyWindow {
+public class SnoopyWindow{
 
     //Stage de la fenêtre
-    Stage stage;
+    protected Stage stage;
 
     //Element root de la fenêtre
-    Pane pane = new Pane();
+    protected Pane pane = new Pane();
 
     //Scene
-    Scene scene;
+    protected Scene scene;
 
     public static int SCALE = 2;
     public static int width = 580;
 
     //Sprite total sur l'écran
-    private final int totalSpriteInWidth = 20;
+    protected final int totalSpriteInWidth = 20;
 
     public SnoopyWindow(Stage stage){
         this.stage = stage;
@@ -39,8 +39,7 @@ public class SnoopyWindow {
     /**
      * Initialize le menu d'accueil
      */
-    private void initialize(){
-
+    protected void initialize(){
 
         pane.setPrefWidth(640);
         pane.setPrefHeight(640);
@@ -58,32 +57,7 @@ public class SnoopyWindow {
     /**
      *
      */
-    public void events(){
-
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-
-                KeyCode keyCode = event.getCode();
-
-                if(!Main.level.getPersonnage().isMoving()){
-
-                    if(keyCode.equals(KeyCode.LEFT)){
-                        Main.level.getPersonnage().moveLeft();
-                    }else if(keyCode.equals(KeyCode.RIGHT)){
-                        Main.level.getPersonnage().moveRight();
-                    }else if(keyCode.equals(KeyCode.UP)){
-                        Main.level.getPersonnage().moveUp();
-                    }else if(keyCode.equals(KeyCode.DOWN)){
-                        Main.level.getPersonnage().moveDown();
-                    }
-
-                }
-
-            }
-        });
-
-    }
+    public void events(){}
 
     /*
         GETTERS
@@ -104,4 +78,6 @@ public class SnoopyWindow {
     public int getScale() {
         return SCALE;
     }
+
+
 }

@@ -1,5 +1,6 @@
 package fr.manchez.snoopy.application.models.levels;
 
+import fr.manchez.snoopy.application.Main;
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Levels;
 import fr.manchez.snoopy.application.enums.Structures;
@@ -11,6 +12,8 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -256,7 +259,9 @@ public class LevelLoader {
         //on boucle sur les colonnes
         for(List<Character> charactersList: levelCharacters){
 
-            //on boucle sur les colonnes
+            List<Structure> structureList = new ArrayList<>();
+
+            //on boucle sur les lignes
             for (Character character: charactersList){
 
                 //On scale les coordonnées
@@ -267,13 +272,36 @@ public class LevelLoader {
 
                 Structures structure = Structures.getStructuresFromSymbol(character);
 
+                //La structure n'est pas le player
                 if(!String.valueOf(character).equals(Structures.SNOOPY_IMMOBILE.getSymbol())){
 
-                    level.addStructure(new Structure(newPoint2D,structure));
+                    structureList.add(new Structure(newPoint2D,structure));
+
+                    //La structure est un obstacle ou un destructible
+                    if(structure.getSymbol().equals(Structures.OBSTACLE.getSymbol()) || structure.getSymbol().equals(Structures.DESTRUCTIBLE.getSymbol())){
+
+                        Rectangle rectangleColision = new Rectangle(
+                                newPoint2D.getX(),
+                                newPoint2D.getY(),
+                                structure.getWidth()*window.getScale(),
+                                structure.getHeight()*window.getScale()
+                        );
+
+                        level.addColisionStructure(structure,rectangleColision);
+
+                    }
+
+                    //La structure est un oiseau
+                    if(structure.getSymbol().equals(Structures.BIRD.getSymbol())){
+
+                        level.addBirds();
+
+                    }
 
                 }else{
 
                     level.addSnoopy(new Personnage(newPoint2D,structure));
+                    structureList.add(new Structure(newPoint2D,Structures.SNOOPY_SPAWN_POINT));
 
                 }
 
@@ -281,7 +309,11 @@ public class LevelLoader {
 
             }
 
+            level.addStructure(structureList);
+
         }
+
+        System.out.println(level.getColisionRectangle());
 
     }
 
@@ -303,5 +335,6 @@ public class LevelLoader {
         }
 
     }
+
 
 }

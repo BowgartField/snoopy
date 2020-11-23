@@ -21,8 +21,13 @@ public class Main extends Application {
 
     public void start(Stage stage) throws Exception {
 
+        System.out.println(stage);
+        stage = new Stage();
+        System.out.println(stage);
+
+
         //On créé la fenêtre snoopy
-        window = new SnoopyWindow(stage);
+        window = new LevelWindows(stage);
 
         level = new LevelLoader(Levels.MAIN, window).load();
         level.drawStructure(window);

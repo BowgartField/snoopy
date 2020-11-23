@@ -1,23 +1,43 @@
 package fr.manchez.snoopy.application.models.levels;
 
+import fr.manchez.snoopy.application.Main;
 import fr.manchez.snoopy.application.SnoopyWindow;
+import fr.manchez.snoopy.application.enums.Structures;
+import fr.manchez.snoopy.application.models.objects.Balle;
 import fr.manchez.snoopy.application.models.objects.Personnage;
 import fr.manchez.snoopy.application.models.objects.Structure;
+import javafx.animation.TranslateTransition;
+import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Permet de gére un niveau au niveau:
+ * Permet de gére un niveau avec:
  * - des colisions
- * - des emplacements des structures
+ * - les emplacements des structures
  */
 public class Level {
 
     /**
+     * Oiseaux restants
+     */
+    private int birdsRemaining = 0;
+
+    /**
+     *
+     */
+    private HashMap<Rectangle,Structures> colisionRectangle = new HashMap<>();
+
+    /**
      * Contient la structure du Niveau
      */
-    private List<Structure> levelStruture = new ArrayList<>();
+    private List<List<Structure>> levelStruture = new ArrayList<>();
 
     /**
      * Snoopy
@@ -25,11 +45,28 @@ public class Level {
     private Personnage snoopy;
 
     /**
+     * La balle
+     */
+    private Balle balle;
+
+
+    public Level(){}
+
+
+    /**
      * Ajoute une structure au niveau
      * @param structure structure
      */
-    public void addStructure(Structure structure){
+    public void addStructure(List<Structure> structure){
         levelStruture.add(structure);
+    }
+
+    /**
+     * Ajoute les colisions au niveau
+     * @param rectangleColision Colision à ajouter
+     */
+    public void addColisionStructure(Structures structures, Rectangle rectangleColision){
+        colisionRectangle.put(rectangleColision,structures);
     }
 
     /**
@@ -42,19 +79,102 @@ public class Level {
     }
 
     /**
-     *
+     * On affiche les structure du niveau à l'intérieur de la fenêtre
+     * -> Les structures du niveau
+     * -> Le personnage
+     * -> La balle
      */
     public void drawStructure(SnoopyWindow window){
 
         //On affiche le décor dans la fenêtre
-        for (Structure structure: levelStruture){
+        for (List<Structure> structureList: levelStruture){
 
-            window.getPane().getChildren().add(structure.getImageView());
+            for(Structure structure: structureList){
+
+                if(!structure.getStructure().getSymbol().equals(Structures.SNOOPY_SPAWN_POINT.getSymbol())){
+
+                    window.getPane().getChildren().add(structure.getImageView());
+
+                }
+
+            }
 
         }
 
-        // On affiche le personnage
+        //On affiche le décor dans la fenêtre
+        for(Map.Entry<Rectangle,Structures> test: getColisionRectangle().entrySet()){
+
+            Rectangle rec = test.getKey();
+            rec.setFill(Color.BROWN);
+            rec.setOpacity(0.3);
+
+            Main.window.getPane().getChildren().add(rec);
+
+        }
+
+        window.getPane().getChildren().add(snoopy.getHitbox());
+
+        //On affiche le personnage
         window.getPane().getChildren().add(snoopy.getImageView());
+
+        //On affiche la balle
+        balle = new Balle();
+        window.getPane().getChildren().add(balle.getImageView());
+
+    }
+
+    /**
+     *
+     */
+    public void animateGetBird(Structure bird){
+
+        birdsRemaining--;
+
+        Structure points = new Structure(
+                new Point2D(
+                        bird.getImageView().getX(),
+                        bird.getImageView().getY()
+                ),
+                Structures.POINTS
+        );
+
+        Main.window.getPane().getChildren().add(points.getImageView());
+
+        final TranslateTransition translateAnimation = new TranslateTransition(
+                Duration.millis(700), points.getImageView());
+
+        translateAnimation.setByY(-32*SnoopyWindow.SCALE);
+        translateAnimation.playFromStart();
+
+        translateAnimation.setOnFinished(event -> Main.window.getPane().getChildren().remove(points.getImageView()));
+
+        if(birdsRemaining == 0){ // -> VICTOIRE
+
+            //Animation de victoire
+            //Affichage du score
+            //Passage au niveau suivant
+
+            System.out.println("victoire !");
+
+        }
+
+    }
+
+    /**
+     *
+     */
+    public void getColisionRectangle(Rectangle rectangle){
+
+        //colisionRectangle.s
+
+    }
+
+    /**
+     * Ajoute un oiseau en plus
+     */
+    public void addBirds(){
+
+        birdsRemaining++;
 
     }
 
@@ -69,4 +189,21 @@ public class Level {
         return snoopy;
     }
 
+    /**
+     *
+     */
+    public HashMap<Rectangle,Structures> getColisionRectangle(){
+        return colisionRectangle;
+    }
+
+    /**
+     *
+     */
+    public List<List<Structure>> getLevelStruture(){
+        return levelStruture;
+    }
+
+    /*
+        SETTERS
+     */
 }

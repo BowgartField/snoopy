@@ -4,7 +4,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
 
-public class Object {
+public abstract class Object {
 
     /** Coordonnées X de l'objet dans la fenêtre **/
     protected DoubleProperty xProperty;

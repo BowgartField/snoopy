@@ -2,14 +2,19 @@ package fr.manchez.snoopy.application.models.objects;
 
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Structures;
-import fr.manchez.snoopy.application.models.objects.Object;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Rectangle;
 
 import java.io.InputStream;
 
 public class Structure extends Object {
+
+    /**
+     * Hitbox pour gérer les collisions
+     */
+    protected final Rectangle hitbox;
 
     /** Image de la structure **/
 
@@ -30,11 +35,18 @@ public class Structure extends Object {
 
         this.structure = structure;
 
-        imageView = new javafx.scene.image.ImageView(getImage(structure));
+        imageView = new ImageView(getImage(structure));
 
         //On bind les propriétés de notre structure
         imageView.xProperty().bindBidirectional(xProperty);
         imageView.yProperty().bindBidirectional(yProperty);
+
+        //On créer la hitbox
+        hitbox = new Rectangle(
+                structure.getWidth()*SnoopyWindow.SCALE,
+                structure.getHeight()*SnoopyWindow.SCALE);
+        hitbox.xProperty().bindBidirectional(xProperty);
+        hitbox.yProperty().bindBidirectional(yProperty);
 
     }
 
@@ -43,7 +55,7 @@ public class Structure extends Object {
     }
 
     /**
-     *
+     * Récupére l'image dans les dossiers
      * @param structure
      * @return
      */
@@ -59,6 +71,28 @@ public class Structure extends Object {
                 true);
 
 
+    }
+
+    /**
+     * Change l'image de la structure
+     */
+    protected void setImage(Structures structure){
+
+        imageView.setImage(getImage(structure));
+
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Structures getStructure(){
+        return structure;
+    }
+
+    @Override
+    public String toString() {
+        return structure.getSymbol();
     }
 
 }

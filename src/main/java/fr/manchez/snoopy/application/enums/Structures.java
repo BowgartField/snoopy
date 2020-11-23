@@ -16,8 +16,13 @@ public enum Structures {
     EMPTY("X", "", 30,30),
 
     BIRD("P","Personnages/Oiseau/oiseau.png",32,32),
+    POINTS("","Details/1000.png",32,16),
+
+    BALLE("","Details/balle.png",16,16),
 
     SNOOPY_IMMOBILE("S","Personnages/Snoopy/face_immobile.png",32,32),
+    SNOOPY_SPAWN_POINT("S","Personnages/Snoopy/face_immobile.png",32,32),
+
     SNOOPY_LEFT_1("","Personnages/Snoopy/left/left_1.png",32,32),
     SNOOPY_LEFT_2("","Personnages/Snoopy/left/left_2.png",32,32),
     SNOOPY_LEFT_3("","Personnages/Snoopy/left/left_3.png",32,32),
@@ -29,9 +34,12 @@ public enum Structures {
     SNOOPY_DOWN_1("","Personnages/Snoopy/down/down_1.png",32,32),
     SNOOPY_DOWN_2("","Personnages/Snoopy/down/down_2.png",32,32),
 
-
     OBSTACLE("O","Blocs/obstacle.png",30,30),
-    DESTRUCTIBLE("D","Blocs/destructible2.png",30,30);
+    DESTRUCTIBLE("D","Blocs/destructible2.png",30,30),
+
+    DEBRIS("","Blocs/cassé.png",30,30),
+
+    CURSEUR("","Détails/curseur.png",16,16);
 
 
 
