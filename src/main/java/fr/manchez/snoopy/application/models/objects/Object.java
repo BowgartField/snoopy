@@ -1,5 +1,6 @@
 package fr.manchez.snoopy.application.models.objects;
 
+import fr.manchez.snoopy.application.SnoopyWindow;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
@@ -17,6 +18,7 @@ public abstract class Object {
      * @param position Position de l'objet dans la fênetre
      */
     public Object(Point2D position){
+
         xProperty = new SimpleDoubleProperty(position.getX());
         yProperty = new SimpleDoubleProperty(position.getY());
     }

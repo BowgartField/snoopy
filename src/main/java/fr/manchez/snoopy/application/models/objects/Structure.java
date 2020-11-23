@@ -43,7 +43,7 @@ public class Structure extends Object {
 
         //On créer la hitbox
         hitbox = new Rectangle(
-                structure.getWidth()*SnoopyWindow.SCALE,
+                structure.getWidth()* SnoopyWindow.SCALE,
                 structure.getHeight()*SnoopyWindow.SCALE);
         hitbox.xProperty().bindBidirectional(xProperty);
         hitbox.yProperty().bindBidirectional(yProperty);
@@ -70,13 +70,12 @@ public class Structure extends Object {
                 false,
                 true);
 
-
     }
 
     /**
      * Change l'image de la structure
      */
-    protected void setImage(Structures structure){
+    public void setImage(Structures structure){
 
         imageView.setImage(getImage(structure));
 

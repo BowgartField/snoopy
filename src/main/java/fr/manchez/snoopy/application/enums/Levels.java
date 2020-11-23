@@ -1,8 +1,6 @@
 package fr.manchez.snoopy.application.enums;
 
-import fr.manchez.snoopy.application.models.levels.Level;
-
-public enum Levels {
+public enum Levels{
 
     MAIN("test.txt", "0001"),
     LEVEL_1("", "");

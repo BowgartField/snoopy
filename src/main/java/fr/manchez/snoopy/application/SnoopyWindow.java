@@ -1,51 +1,122 @@
 package fr.manchez.snoopy.application;
 
-
-import javafx.event.EventHandler;
+import fr.manchez.snoopy.application.enums.Displays;
+import fr.manchez.snoopy.application.enums.Levels;
+import fr.manchez.snoopy.application.models.display.Display;
+import fr.manchez.snoopy.application.models.display.DisplayLoader;
+import fr.manchez.snoopy.application.models.levels.LevelDisplay;
+import fr.manchez.snoopy.application.models.levels.LevelDisplayLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class SnoopyWindow{
 
-    //Stage de la fenêtre
-    protected Stage stage;
+    /** Stage de la fenêtre **/
+    private Stage stage;
 
-    //Element root de la fenêtre
-    protected Pane pane = new Pane();
+    /** Element root de la fenêtre **/
+    private Pane pane;
 
-    //Scene
-    protected Scene scene;
+    /** Scene **/
+    private Scene scene;
 
+    /** Display */
+    private Display display;
+
+    /** Level Display **/
+    private LevelDisplay levelDisplay;
+
+    /** Valeur de la mise à l'échelle **/
     public static int SCALE = 2;
-    public static int width = 580;
 
-    //Sprite total sur l'écran
-    protected final int totalSpriteInWidth = 20;
+    public SnoopyWindow(Stage stage, Displays displays){
 
-    public SnoopyWindow(Stage stage){
         this.stage = stage;
 
+        pane = new Pane();
         scene = new Scene(pane);
         stage.setScene(scene);
 
+        loadNewDisplay(displays);
+
         initialize();
-        events();
+        eventsCatcher();
 
     }
 
     /**
-     * Initialize le menu d'accueil
+     * Initialize la fenêtre
      */
-    protected void initialize(){
+    private void initialize(){
 
         pane.setPrefWidth(640);
         pane.setPrefHeight(640);
         stage.setResizable(false);
 
     }
+
+
+    /**
+     * Réceptionne et route l'event vers le bon display
+     */
+    private void eventsCatcher(){
+        scene.setOnKeyPressed(event -> {
+            if(display != null) {
+                 display.traductEvent(event);
+            }else {
+                levelDisplay.traductEvent(event);
+            }
+        });
+    }
+
+    /**
+     * Charge une nouveau display
+     * @param windowType Type de windows à charger
+     */
+    public void loadNewDisplay(Displays windowType){
+
+        levelDisplay = null;
+
+        //Supprimer tous
+        pane.setBackground(Background.EMPTY);
+        pane.getChildren().clear();
+
+        //On charge notre display
+        display = DisplayLoader.load(windowType, this);
+
+        //On charge les éléments dans la scène
+        display.draw();
+
+        System.out.println("ici1");
+
+    }
+
+    /**
+     * Charge un nouveau niveau
+     * @param levels Niveau a chargé
+     */
+    public void loadNewLevelDisplay(Levels levels){
+
+        display = null;
+
+        //On créer une nouvelle stage et scène
+        pane.setBackground(Background.EMPTY);
+        pane.getChildren().clear();
+
+        //On charge notre level
+        levelDisplay = new LevelDisplayLoader(levels,this).load();
+
+        //On charge les éléments dans la scène
+        levelDisplay.draw();
+
+    }
+
+    /*
+        UTILS
+     */
 
     /**
      * Affiche la fenêtre
@@ -55,29 +126,36 @@ public class SnoopyWindow{
     }
 
     /**
-     *
+     * Ajoute les nodes dans la scène
+     * @param nodes Nodes à ajouter
      */
-    public void events(){}
+    public void addAllNode(Node... nodes){
+
+        for (Node node: nodes){
+
+            pane.getChildren().add(node);
+
+        }
+
+
+    }
 
     /*
         GETTERS
      */
-
-    public int getTotalSpriteInWidth() {
-        return totalSpriteInWidth;
-    }
-
     public Scene getScene(){
         return scene;
     }
-
     public Pane getPane() {
         return pane;
     }
-
     public int getScale() {
         return SCALE;
     }
-
-
+    public Display getDisplay() {
+        return display;
+    }
+    public LevelDisplay getLevelDisplay() {
+        return levelDisplay;
+    }
 }

@@ -8,6 +8,8 @@ import fr.manchez.snoopy.application.models.objects.Personnage;
 import fr.manchez.snoopy.application.models.objects.Structure;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Point2D;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -22,7 +24,9 @@ import java.util.Map;
  * - des colisions
  * - les emplacements des structures
  */
-public class Level {
+public class LevelDisplay {
+
+    SnoopyWindow window;
 
     /**
      * Oiseaux restants
@@ -50,7 +54,11 @@ public class Level {
     private Balle balle;
 
 
-    public Level(){}
+    public LevelDisplay(SnoopyWindow window){
+
+        this.window = window;
+
+    }
 
 
     /**
@@ -84,7 +92,7 @@ public class Level {
      * -> Le personnage
      * -> La balle
      */
-    public void drawStructure(SnoopyWindow window){
+    public void draw(){
 
         //On affiche le décor dans la fenêtre
         for (List<Structure> structureList: levelStruture){
@@ -118,7 +126,7 @@ public class Level {
         window.getPane().getChildren().add(snoopy.getImageView());
 
         //On affiche la balle
-        balle = new Balle();
+        balle = new Balle(window);
         window.getPane().getChildren().add(balle.getImageView());
 
     }
@@ -178,6 +186,30 @@ public class Level {
 
     }
 
+    /**
+     * Event
+     * @param event Event arrivé
+     */
+    public void traductEvent(KeyEvent event){
+
+        KeyCode keyCode = event.getCode();
+
+        if(!snoopy.isMoving()){
+
+            if(keyCode.equals(KeyCode.LEFT)){
+                snoopy.moveLeft();
+            }else if(keyCode.equals(KeyCode.RIGHT)){
+                snoopy.moveRight();
+            }else if(keyCode.equals(KeyCode.UP)){
+                snoopy.moveUp();
+            }else if(keyCode.equals(KeyCode.DOWN)){
+                snoopy.moveDown();
+            }
+
+        }
+
+    }
+
     /*
         GETTERS
      */
@@ -202,8 +234,4 @@ public class Level {
     public List<List<Structure>> getLevelStruture(){
         return levelStruture;
     }
-
-    /*
-        SETTERS
-     */
 }

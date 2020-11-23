@@ -1,6 +1,5 @@
 package fr.manchez.snoopy.application.models.levels;
 
-import fr.manchez.snoopy.application.Main;
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Levels;
 import fr.manchez.snoopy.application.enums.Structures;
@@ -12,7 +11,6 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.io.*;
@@ -25,10 +23,10 @@ import java.util.Map;
 /**
  * Class permettant de chargé un niveau depuis un fichier .txt dans un objet Level
  */
-public class LevelLoader {
+public class LevelDisplayLoader {
 
     /** Niveau Chargé **/
-    Level level = new Level();
+    LevelDisplay level;
 
     /** Liste des positions possibles pour les structures **/
     List<Point2D> structuresPosition = new ArrayList<>();
@@ -46,15 +44,17 @@ public class LevelLoader {
      * Constructeur par défaut
      * @param levels Niveau a chargé
      */
-    public LevelLoader(Levels levels, SnoopyWindow window){
+    public LevelDisplayLoader(Levels levels, SnoopyWindow window){
         this.levels = levels;
         this.window = window;
+
+       level = new LevelDisplay(window);
     }
 
     /**
      * Dessine le niveau dans la fenêtre
      */
-    public Level load(){
+    public LevelDisplay load(){
 
         loadFileIntoArray();
         createStructuresPoint2DList();
@@ -300,7 +300,7 @@ public class LevelLoader {
 
                 }else{
 
-                    level.addSnoopy(new Personnage(newPoint2D,structure));
+                    level.addSnoopy(new Personnage(newPoint2D,structure,window));
                     structureList.add(new Structure(newPoint2D,Structures.SNOOPY_SPAWN_POINT));
 
                 }

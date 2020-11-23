@@ -3,24 +3,20 @@ package fr.manchez.snoopy.application.models.objects;
 import fr.manchez.snoopy.application.Main;
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Structures;
-import fr.manchez.snoopy.application.models.objects.Object;
 import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.util.List;
 import java.util.Map;
 
 public class Personnage extends Structure {
+
+    SnoopyWindow window;
 
     /** Le permet est en déplacement */
     private boolean isMoving = false;
@@ -35,8 +31,11 @@ public class Personnage extends Structure {
     /**
      * Créer un Personnage dans la fenêtre aux position x et y
      */
-    public Personnage(Point2D point2D, Structures structure) {
+    public Personnage(Point2D point2D, Structures structure, SnoopyWindow window) {
+
         super(point2D, structure);
+        this.window = window;
+
     }
 
     /**
@@ -99,7 +98,7 @@ public class Personnage extends Structure {
                     getImageView().setImage(getImage(Structures.SNOOPY_LEFT_2));
                     xProperty.set(xProperty.doubleValue()-mov*SnoopyWindow.SCALE);
 
-                    Structure nextStructure = Main.level.getLevelStruture().get(moveToY).get(moveToX);
+                    Structure nextStructure = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX);
                     actionWhenMove(nextStructure);
 
                     isMoving = false;
@@ -173,7 +172,7 @@ public class Personnage extends Structure {
                     getImageView().setImage(getImage(Structures.SNOOPY_RIGHT_2));
                     xProperty.set(xProperty.doubleValue()+mov*SnoopyWindow.SCALE);
 
-                    Structure nextStructure = Main.level.getLevelStruture().get(moveToY).get(moveToX);
+                    Structure nextStructure = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX);
                     actionWhenMove(nextStructure);
 
                     isMoving = false;
@@ -245,7 +244,7 @@ public class Personnage extends Structure {
                     getImageView().setImage(getImage(Structures.SNOOPY_UP_1));
                     yProperty.set(yProperty.doubleValue()-mov*SnoopyWindow.SCALE);
 
-                    Structure nextStructure = Main.level.getLevelStruture().get(moveToY).get(moveToX);
+                    Structure nextStructure = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX);
                     actionWhenMove(nextStructure);
 
                     isMoving = false;
@@ -319,7 +318,7 @@ public class Personnage extends Structure {
                     getImageView().setImage(getImage(Structures.SNOOPY_DOWN_1));
                     yProperty.set(yProperty.doubleValue()+mov*SnoopyWindow.SCALE);
 
-                    Structure nextStructure = Main.level.getLevelStruture().get(moveToY).get(moveToX);
+                    Structure nextStructure = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX);
                     actionWhenMove(nextStructure);
 
                     isMoving = false;
@@ -345,17 +344,17 @@ public class Personnage extends Structure {
         if(nextStructure.getStructure().getSymbol().equals(Structures.DESTRUCTIBLE.getSymbol())){
 
             nextStructure.imageView.setImage(nextStructure.getImage(Structures.DEBRIS));
-            Main.level.getColisionRectangle(nextStructure.hitbox);
+            window.getLevelDisplay().getColisionRectangle(nextStructure.hitbox);
 
         }
 
         if(nextStructure.getStructure().getSymbol().equals(Structures.BIRD.getSymbol())){
 
            Main.window.getPane().getChildren().remove(nextStructure.imageView);
-           Main.level.animateGetBird(nextStructure);
+           window.getLevelDisplay().animateGetBird(nextStructure);
 
            //Remplace l'oiseau par du vide
-            List<Structure> structureList = Main.level.getLevelStruture().get(moveToY);
+            List<Structure> structureList = window.getLevelDisplay().getLevelStruture().get(moveToY);
 
             Structure empty = new Structure(new Point2D(
                     nextStructure.getImageView().getX(),
@@ -384,7 +383,7 @@ public class Personnage extends Structure {
 
         boolean result = false;
 
-        for(Map.Entry<Rectangle,Structures> struc: Main.level.getColisionRectangle().entrySet()){
+        for(Map.Entry<Rectangle,Structures> struc: window.getLevelDisplay().getColisionRectangle().entrySet()){
 
             if(!struc.getValue().getSymbol().equals(Structures.DESTRUCTIBLE.getSymbol())){
 

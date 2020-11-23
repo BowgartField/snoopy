@@ -1,21 +1,24 @@
-package fr.manchez.snoopy.application.models.menu;
+package fr.manchez.snoopy.application.models.display.displays;
 
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Structures;
+import fr.manchez.snoopy.application.models.display.Display;
 import fr.manchez.snoopy.application.models.objects.Structure;
 import javafx.geometry.Point2D;
-import javafx.scene.input.KeyCode;
 
-public abstract class Menu {
+public abstract class MenuDisplay extends Display{
 
     protected Structure curseur;
 
     /** Premiere ligne de sélection = true*/
     protected boolean isOption1 = true;
 
-    public void drawMenu(SnoopyWindow window){
+    public MenuDisplay(SnoopyWindow snoopyWindow) {
+        super(snoopyWindow);
+    }
 
-        window.getPane().getChildren().clear();
+    @Override
+    public void draw(){
 
         // On affiche le curseur
         curseur = new Structure(
@@ -24,7 +27,9 @@ public abstract class Menu {
         );
 
         window.getPane().getChildren().add(curseur.getImageView());
+
+        drawOther();
     }
 
-    public void moveArrow(KeyCode keyCode){}
+    protected void drawOther(){};
 }

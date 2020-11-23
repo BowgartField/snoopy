@@ -9,7 +9,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.LineTo;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
@@ -17,15 +16,19 @@ import java.util.Map;
 
 public class Balle extends Structure{
 
+    SnoopyWindow window;
+
     private int stepX = 1;
     private int stepY = 1;
 
     /**
      * Créer un object dans la fenêtre aux position x et y
      */
-    public Balle() {
+    public Balle(SnoopyWindow window) {
 
         super(new Point2D(50,150), Structures.BALLE);
+
+        this.window = window;
 
 
         /*
@@ -66,7 +69,7 @@ public class Balle extends Structure{
 
     public void isColided(){
 
-        for(Map.Entry<Rectangle,Structures> rectangle: Main.level.getColisionRectangle().entrySet()){
+        for(Map.Entry<Rectangle,Structures> rectangle: window.getLevelDisplay().getColisionRectangle().entrySet()){
 
             if(rectangle.getValue().getSymbol().equals(Structures.OBSTACLE.getSymbol()) || rectangle.getValue().getSymbol().equals(Structures.DESTRUCTIBLE.getSymbol())){
 
