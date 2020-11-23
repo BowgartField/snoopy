@@ -130,14 +130,11 @@ public class SnoopyWindow{
      * @param nodes Nodes à ajouter
      */
     public void addAllNode(Node... nodes){
+            pane.getChildren().addAll(nodes);
+    }
 
-        for (Node node: nodes){
-
-            pane.getChildren().add(node);
-
-        }
-
-
+    public void removeAllNode(Node... nodes){
+        pane.getChildren().removeAll(nodes);
     }
 
     /*

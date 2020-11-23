@@ -37,7 +37,7 @@ public class Balle extends Structure{
 
         hitbox.setFill(Color.BLUE);
         hitbox.setOpacity(0.5);
-        Main.window.getPane().getChildren().add(hitbox);
+        window.addAllNode(hitbox);
 
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10), new EventHandler<ActionEvent>() {
@@ -90,14 +90,14 @@ public class Balle extends Structure{
 
                             //tape le bas du bloc
                             if(balleBounds.getMinY() == blocBounds.getMaxY()){
-                                System.out.println("bas \n");
+                                //System.out.println("bas \n");
                                 stepY = -stepY;
                                 break;
                             }
 
                             //tape la droite du bloc
                             if(balleBounds.getMinX() == blocBounds.getMaxX()){
-                                System.out.println("droite \n");
+                                //System.out.println("droite \n");
                                 stepX = -stepX;
                                 break;
                             }
@@ -119,21 +119,18 @@ public class Balle extends Structure{
 
                             //tape le bas du bloc
                             if(balleBounds.getMinY() == blocBounds.getMaxY()){
-                                System.out.println("bas \n");
+                                //System.out.println("bas \n");
                                 stepY = -stepY;
                                 break;
                             }
 
                             //tape la gauche du bloc
                             if(balleBounds.getMaxX() == blocBounds.getMinX()){
-                                System.out.println("gauche \n");
+                                //System.out.println("gauche \n");
                                 stepX = -stepX;
                                 break;
                             }
                         }
-
-
-
 
                     }
 
@@ -151,7 +148,7 @@ public class Balle extends Structure{
 
                             //tape la gauche du bloc
                             if(balleBounds.getMaxX() == blocBounds.getMinX()){
-                                System.out.println("gauche \n");
+                                //System.out.println("gauche \n");
                                 stepX = -stepX;
                                 break;
                             }
@@ -159,7 +156,7 @@ public class Balle extends Structure{
                             //tape le haut du bloc
                             if(balleBounds.getMaxY() == blocBounds.getMinY()){
 
-                                System.out.println("haut \n");
+                                //System.out.println("haut \n");
                                 stepY = -stepY;
                                 break;
 
@@ -184,7 +181,7 @@ public class Balle extends Structure{
                             //tape le haut du bloc
                             if(balleBounds.getMaxY() == blocBounds.getMinY()){
 
-                                System.out.println("haut \n");
+                                //System.out.println("haut \n");
                                 stepY = -stepY;
                                 break;
 
@@ -193,7 +190,7 @@ public class Balle extends Structure{
                             //tape la droite du bloc
                             if(balleBounds.getMinX() == blocBounds.getMaxX()){
 
-                                System.out.println("droite \n");
+                                //System.out.println("droite \n");
                                 stepX = -stepX;
                                 break;
 

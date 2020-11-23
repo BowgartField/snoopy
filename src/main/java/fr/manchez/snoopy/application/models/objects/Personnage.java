@@ -350,7 +350,7 @@ public class Personnage extends Structure {
 
         if(nextStructure.getStructure().getSymbol().equals(Structures.BIRD.getSymbol())){
 
-           Main.window.getPane().getChildren().remove(nextStructure.imageView);
+           window.removeAllNode(nextStructure.imageView);
            window.getLevelDisplay().animateGetBird(nextStructure);
 
            //Remplace l'oiseau par du vide

@@ -1,2 +1,3 @@
 - recoder le timer
-- coder la balle
+- coder balle qui passe a travers les débris
+- coder animation

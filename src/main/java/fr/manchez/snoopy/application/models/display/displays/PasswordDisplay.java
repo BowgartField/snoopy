@@ -31,18 +31,18 @@ public class PasswordDisplay extends MenuDisplay {
         super(snoopyWindow);
 
         window.getPane().setBackground(
-                new Background(
-                        new BackgroundImage(
-                                new Image(
-                                        getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/Fond/"+ Displays.PasswordDisplay.getBackgroundURL()),
-                                        640,640,true,true
-                                ),
-                                BackgroundRepeat.NO_REPEAT,
-                                BackgroundRepeat.NO_REPEAT,
-                                BackgroundPosition.CENTER,
-                                BackgroundSize.DEFAULT
-                        )
+            new Background(
+                new BackgroundImage(
+                        new Image(
+                                getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/Fond/"+ Displays.PasswordDisplay.getBackgroundURL()),
+                                640,640,true,true
+                        ),
+                        BackgroundRepeat.NO_REPEAT,
+                        BackgroundRepeat.NO_REPEAT,
+                        BackgroundPosition.CENTER,
+                        BackgroundSize.DEFAULT
                 )
+            )
         );
 
         password.add(0);
@@ -56,10 +56,6 @@ public class PasswordDisplay extends MenuDisplay {
     public void drawOther(){
 
         /** Affichage du curseur et des numéros permettant de composer le mot de passe */
-        curseur = new Structure(
-                new Point2D(73* SnoopyWindow.SCALE, 216*SnoopyWindow.SCALE),
-                Structures.CURSEUR
-        );
         curseurUp = new Structure(
                 new Point2D(96* SnoopyWindow.SCALE, 232*SnoopyWindow.SCALE),
                 Structures.CURSEURUP
@@ -82,7 +78,6 @@ public class PasswordDisplay extends MenuDisplay {
         );
 
         window.addAllNode(
-                curseur.getImageView(),
                 integer1.getImageView(),
                 integer2.getImageView(),
                 integer3.getImageView(),
@@ -142,8 +137,11 @@ public class PasswordDisplay extends MenuDisplay {
                 curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + -34*SnoopyWindow.SCALE);
                 isOption1 = true;
             }else if (keyCode.equals(KeyCode.RIGHT) && isOption1) {
-                Main.window.getPane().getChildren().remove(curseur.getImageView()); // Cache le curseur de base
-                Main.window.getPane().getChildren().add(curseurUp.getImageView()); // Affiche le curseur qui pointe vers le haut
+
+                System.out.println("ici");
+
+                window.removeAllNode(curseur.getImageView()); // Cache le curseur de base
+                window.addAllNode(curseurUp.getImageView()); // Affiche le curseur qui pointe vers le haut
                 isChoosingPass = true; // Spécifie qu'on est entrain de sélectionner le mot de passe
             }else if (keyCode.equals(KeyCode.ENTER) && !isOption1){
 
@@ -184,8 +182,8 @@ public class PasswordDisplay extends MenuDisplay {
                 curseurUp.xPropertyProperty().set(curseurUp.xPropertyProperty().get() + -16 * SnoopyWindow.SCALE);
                 position--;
             }else if (keyCode.equals(KeyCode.LEFT) && position == 0) {
-                Main.window.getPane().getChildren().remove(curseurUp.getImageView()); // Cache le curseur qui pointe vers le haut
-                Main.window.getPane().getChildren().add(curseur.getImageView()); // Affiche le curseur de base
+                window.removeAllNode(curseurUp.getImageView()); // Cache le curseur qui pointe vers le haut
+                window.addAllNode(curseur.getImageView()); // Affiche le curseur de base
                 isChoosingPass = false; // Spécifie qu'on n'est plus entrain de sélectionner le mot de passe
             }else if (keyCode.equals(KeyCode.UP)) {
                 increment(true);

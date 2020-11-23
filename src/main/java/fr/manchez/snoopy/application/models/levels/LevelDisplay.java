@@ -109,6 +109,7 @@ public class LevelDisplay {
 
         }
 
+        /*
         //On affiche le décor dans la fenêtre
         for(Map.Entry<Rectangle,Structures> test: getColisionRectangle().entrySet()){
 
@@ -116,11 +117,14 @@ public class LevelDisplay {
             rec.setFill(Color.BROWN);
             rec.setOpacity(0.3);
 
-            Main.window.getPane().getChildren().add(rec);
+            window.addAllNode(rec);
 
         }
 
-        window.getPane().getChildren().add(snoopy.getHitbox());
+        //DEBUT Hitbox personnage
+        //window.getPane().getChildren().add(snoopy.getHitbox());
+
+         */
 
         //On affiche le personnage
         window.getPane().getChildren().add(snoopy.getImageView());
@@ -146,7 +150,7 @@ public class LevelDisplay {
                 Structures.POINTS
         );
 
-        Main.window.getPane().getChildren().add(points.getImageView());
+        window.addAllNode(points.getImageView());
 
         final TranslateTransition translateAnimation = new TranslateTransition(
                 Duration.millis(700), points.getImageView());
@@ -154,7 +158,7 @@ public class LevelDisplay {
         translateAnimation.setByY(-32*SnoopyWindow.SCALE);
         translateAnimation.playFromStart();
 
-        translateAnimation.setOnFinished(event -> Main.window.getPane().getChildren().remove(points.getImageView()));
+        translateAnimation.setOnFinished(event -> window.removeAllNode(points.getImageView()));
 
         if(birdsRemaining == 0){ // -> VICTOIRE
 
