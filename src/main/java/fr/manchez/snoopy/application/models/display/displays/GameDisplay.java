@@ -2,6 +2,7 @@ package fr.manchez.snoopy.application.models.display.displays;
 
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Displays;
+import fr.manchez.snoopy.application.enums.Levels;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -45,9 +46,10 @@ public class  GameDisplay extends MenuDisplay {
         }else if(keyCode.equals(KeyCode.DOWN) && !isOption1){
             curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + -34*SnoopyWindow.SCALE);
             isOption1 = true;
-        }else if (keyCode.equals(KeyCode.ENTER) && isOption1){/** lance le 1er level*/
-            // Main.menu = new MenuLoader(Main.window, Menus.PasswordMenu).load();
-            // Main.menu.drawMenu(Main.window);
+        }else if (keyCode.equals(KeyCode.ENTER) && isOption1){
+
+            window.loadNewLevelDisplay(Levels.LEVEL_1);
+
         }else if(keyCode.equals(KeyCode.ENTER) && !isOption1){
 
             window.loadNewDisplay(Displays.PasswordDisplay);

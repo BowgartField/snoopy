@@ -138,8 +138,6 @@ public class PasswordDisplay extends MenuDisplay {
                 isOption1 = true;
             }else if (keyCode.equals(KeyCode.RIGHT) && isOption1) {
 
-                System.out.println("ici");
-
                 window.removeAllNode(curseur.getImageView()); // Cache le curseur de base
                 window.addAllNode(curseurUp.getImageView()); // Affiche le curseur qui pointe vers le haut
                 isChoosingPass = true; // Spécifie qu'on est entrain de sélectionner le mot de passe
@@ -151,26 +149,12 @@ public class PasswordDisplay extends MenuDisplay {
             }else if (keyCode.equals(KeyCode.ENTER)){
                 /** Vérification du code de la game*/
                 String pass = String.valueOf(password.get(0)) + password.get(1) + password.get(2) + password.get(3);
-                Levels level  =  Levels.findLevelsFromPassword(pass);
-
-
+                Levels level = Levels.findLevelsFromPassword(pass);
 
                 if(level != null){
 
-                    //TODO: changer ca
                     window.loadNewLevelDisplay(level);
-
-                    /*
-                    Main.window.clearAllMotherFucker();
-                    Main.window = new LevelWindow();
-                    Main.level = new LevelLoader(level, Main.window).load();
-                    Main.level.drawStructure(Main.window);
-                    System.out.println("ok");
-
-                     */
-
                 }
-
 
             }
         }else{

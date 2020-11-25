@@ -1,19 +1,23 @@
 package fr.manchez.snoopy.application.models.levels;
 
-import fr.manchez.snoopy.application.Main;
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Structures;
+import fr.manchez.snoopy.application.models.Timer;
 import fr.manchez.snoopy.application.models.objects.Balle;
 import fr.manchez.snoopy.application.models.objects.Personnage;
 import fr.manchez.snoopy.application.models.objects.Structure;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
+import javax.sound.midi.Soundbank;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +30,21 @@ import java.util.Map;
  */
 public class LevelDisplay {
 
+    /** Image de pause */
+    ImageView pauseBackground = new ImageView();
+
+    /** Image "pause" */
+    ImageView pauseDisplay = new ImageView();
+
+    /**  Le niveau est en pause */
+    boolean isPause = false;
+
+    /** Timer **/
+    Timer timer;
+
+    /**
+     * window
+     */
     SnoopyWindow window;
 
     /**
@@ -37,6 +56,11 @@ public class LevelDisplay {
      *
      */
     private HashMap<Rectangle,Structures> colisionRectangle = new HashMap<>();
+
+    /**
+     *
+     */
+    private List<Rectangle> colisionToRemove = new ArrayList<>();
 
     /**
      * Contient la structure du Niveau
@@ -57,9 +81,68 @@ public class LevelDisplay {
     public LevelDisplay(SnoopyWindow window){
 
         this.window = window;
+        timer = new Timer(window);
+
+        initPause();
 
     }
 
+    /**
+     * Initialise les éléments relatifs au menu pause
+     */
+    private void initPause() {
+
+        //On récupére l'image correspondant à la structure
+        InputStream pauseBgIS = getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/Fond/pausebg.png");
+
+        pauseBackground.setImage(
+                new Image(
+                        pauseBgIS,
+                        320*SnoopyWindow.SCALE,
+                        320*SnoopyWindow.SCALE,
+                        false,
+                        true)
+        );
+
+        pauseBackground.setOpacity(0.6);
+
+        //On récupére l'image du pause
+        InputStream pauseIS = getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/Details/pause.png");
+
+        pauseDisplay = new ImageView(
+            new Image(
+                    pauseIS,
+                    Structures.PAUSE.getWidth()*SnoopyWindow.SCALE,
+                    Structures.PAUSE.getHeight()*SnoopyWindow.SCALE
+                    ,false
+                    ,true
+            )
+        );
+
+        pauseDisplay.setY((window.getPane().getHeight()-Structures.PAUSE.getHeight()*SnoopyWindow.SCALE)/2);
+        pauseDisplay.setX((window.getPane().getWidth()-Structures.PAUSE.getWidth()*SnoopyWindow.SCALE)/2);
+
+    }
+
+    /**
+     * Déclencher lors de la victoire
+     */
+    public void victory(){
+
+        System.out.println("victoire !!");
+
+    }
+
+    /**
+     * Déclencher lors de la défaite
+     */
+    public void defaite(){
+
+        window.getLevelDisplay().getPersonnage().animateDefeate();
+
+        System.out.println("Défaite !!");
+
+    }
 
     /**
      * Ajoute une structure au niveau
@@ -109,7 +192,7 @@ public class LevelDisplay {
 
         }
 
-        /*
+        /* DEBUG
         //On affiche le décor dans la fenêtre
         for(Map.Entry<Rectangle,Structures> test: getColisionRectangle().entrySet()){
 
@@ -127,16 +210,16 @@ public class LevelDisplay {
          */
 
         //On affiche le personnage
-        window.getPane().getChildren().add(snoopy.getImageView());
+        window.addAllNode(snoopy.getImageView());
 
         //On affiche la balle
         balle = new Balle(window);
-        window.getPane().getChildren().add(balle.getImageView());
+        window.addAllNode(balle.getImageView());
 
     }
 
     /**
-     *
+     * Animation déclenché au passage de Snoopy sur un l'oiseau
      */
     public void animateGetBird(Structure bird){
 
@@ -173,11 +256,34 @@ public class LevelDisplay {
     }
 
     /**
-     *
+     * Ajoute des colisions à supprimer à la liste
      */
-    public void getColisionRectangle(Rectangle rectangle){
+    public void setColisionToRemove(Rectangle rectangle){
+        colisionToRemove.add(rectangle);
+    }
 
-        //colisionRectangle.s
+    /**
+     * Supprime les colisions
+     */
+    public void removeColision(){
+
+        for (Rectangle rectangle: colisionToRemove){
+
+            try{
+
+                for (Map.Entry<Rectangle, Structures> colision: colisionRectangle.entrySet()){
+                    if(colision.getKey().getX() == rectangle.getX() && colision.getKey().getY() == rectangle.getY()){
+                        colisionRectangle.remove(colision.getKey());
+                    }
+                }
+
+            } catch (Exception e) {
+                System.out.println();
+            }
+
+        }
+
+        colisionToRemove.clear();
 
     }
 
@@ -198,17 +304,52 @@ public class LevelDisplay {
 
         KeyCode keyCode = event.getCode();
 
-        if(!snoopy.isMoving()){
+        if(!isPause){
 
-            if(keyCode.equals(KeyCode.LEFT)){
-                snoopy.moveLeft();
-            }else if(keyCode.equals(KeyCode.RIGHT)){
-                snoopy.moveRight();
-            }else if(keyCode.equals(KeyCode.UP)){
-                snoopy.moveUp();
-            }else if(keyCode.equals(KeyCode.DOWN)){
-                snoopy.moveDown();
+            if(!snoopy.isMoving()){
+
+                if(keyCode.equals(KeyCode.LEFT)){
+                    snoopy.moveLeft();
+                }else if(keyCode.equals(KeyCode.RIGHT)){
+                    snoopy.moveRight();
+                }else if(keyCode.equals(KeyCode.UP)){
+                    snoopy.moveUp();
+                }else if(keyCode.equals(KeyCode.DOWN)){
+                    snoopy.moveDown();
+                }
+
             }
+
+            //Si on appuye sur le "p" -> pause
+            if(keyCode.equals(KeyCode.P)){ setPause(); }
+
+        }else{
+
+            //Si on appuye sur le "p" -> enleve la pause
+            if(keyCode.equals(KeyCode.P)){ setPause(); }
+
+        }
+
+    }
+
+    /**
+     * Met en Pause le jeu
+     */
+    public void setPause(){
+
+        if(!isPause){
+
+            pauseBackground.toFront();
+            pauseDisplay.toFront();
+            window.addAllNode(pauseBackground,pauseDisplay);
+
+            isPause = true;
+
+        }else{
+
+            //Enleve l'écran de pause
+            window.removeAllNode(pauseBackground,pauseDisplay);
+            isPause = false;
 
         }
 
@@ -237,5 +378,13 @@ public class LevelDisplay {
      */
     public List<List<Structure>> getLevelStruture(){
         return levelStruture;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isPause() {
+        return isPause;
     }
 }

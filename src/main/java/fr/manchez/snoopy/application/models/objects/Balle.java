@@ -1,6 +1,5 @@
 package fr.manchez.snoopy.application.models.objects;
 
-import fr.manchez.snoopy.application.Main;
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Structures;
 import javafx.animation.*;
@@ -44,22 +43,32 @@ public class Balle extends Structure{
             @Override
             public void handle(ActionEvent event) {
 
-                xProperty.set(xProperty.get()+stepX);
-                yProperty.set(yProperty.get()+stepY);
+                // si le niveau n'est pas en pause
+                if(!window.getLevelDisplay().isPause()){
 
-                //If the ball reaches the left or right border make the step negative
-                if(xProperty.get() <= 16*SnoopyWindow.SCALE || xProperty.get() >= 580){
-                    stepX = -stepX;
+                    xProperty.set(xProperty.get()+stepX);
+                    yProperty.set(yProperty.get()+stepY);
+
+                    //If the ball reaches the left or right border make the step negative
+                    if(xProperty.get() <= 16*SnoopyWindow.SCALE || xProperty.get() >= 580){
+                        stepX = -stepX;
+                    }
+
+                    //If the ball reaches the bottom or top border make the step negative
+                    if(yProperty.get() <= 16*SnoopyWindow.SCALE || yProperty.get() >= 580){
+                        stepY = -stepY;
+                    }
+
+                    //colision avec blocs
+                    isColided();
+
+                    //cloision avec personnage
+                    isColidedWithPlayer();
+
                 }
-
-                //If the ball reaches the bottom or top border make the step negative
-                if(yProperty.get() <= 16*SnoopyWindow.SCALE || yProperty.get() >= 580){
-                    stepY = -stepY;
-                }
-
-                isColided();
 
             }
+
         }));
 
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -67,6 +76,42 @@ public class Balle extends Structure{
 
     }
 
+    /**
+     * Gére les colisions entre le personnage et la balle
+     */
+    public void isColidedWithPlayer() {
+
+        Personnage personnage = window.getLevelDisplay().getPersonnage();
+
+        if(hitbox.intersects(personnage.hitbox.getLayoutBounds())){
+
+            if(!personnage.isDefeating){
+
+                personnage.setDefeating(true);
+
+                //On vérifie si il reste de la vie
+                if(personnage.getVie() > 0){
+
+                    personnage.setVie(personnage.getVie()-1);
+                    personnage.animateLooseLife();
+
+                }else{
+                    window.getLevelDisplay().defaite();
+                }
+
+            }
+
+        }else{
+
+            personnage.setDefeating(false);
+
+        }
+
+    }
+
+    /**
+     * Gére les colisions avec les blocs
+     */
     public void isColided(){
 
         for(Map.Entry<Rectangle,Structures> rectangle: window.getLevelDisplay().getColisionRectangle().entrySet()){
@@ -90,14 +135,12 @@ public class Balle extends Structure{
 
                             //tape le bas du bloc
                             if(balleBounds.getMinY() == blocBounds.getMaxY()){
-                                //System.out.println("bas \n");
                                 stepY = -stepY;
                                 break;
                             }
 
                             //tape la droite du bloc
                             if(balleBounds.getMinX() == blocBounds.getMaxX()){
-                                //System.out.println("droite \n");
                                 stepX = -stepX;
                                 break;
                             }
@@ -119,14 +162,12 @@ public class Balle extends Structure{
 
                             //tape le bas du bloc
                             if(balleBounds.getMinY() == blocBounds.getMaxY()){
-                                //System.out.println("bas \n");
                                 stepY = -stepY;
                                 break;
                             }
 
                             //tape la gauche du bloc
                             if(balleBounds.getMaxX() == blocBounds.getMinX()){
-                                //System.out.println("gauche \n");
                                 stepX = -stepX;
                                 break;
                             }
@@ -148,15 +189,12 @@ public class Balle extends Structure{
 
                             //tape la gauche du bloc
                             if(balleBounds.getMaxX() == blocBounds.getMinX()){
-                                //System.out.println("gauche \n");
                                 stepX = -stepX;
                                 break;
                             }
 
                             //tape le haut du bloc
                             if(balleBounds.getMaxY() == blocBounds.getMinY()){
-
-                                //System.out.println("haut \n");
                                 stepY = -stepY;
                                 break;
 
@@ -181,7 +219,6 @@ public class Balle extends Structure{
                             //tape le haut du bloc
                             if(balleBounds.getMaxY() == blocBounds.getMinY()){
 
-                                //System.out.println("haut \n");
                                 stepY = -stepY;
                                 break;
 
@@ -190,7 +227,6 @@ public class Balle extends Structure{
                             //tape la droite du bloc
                             if(balleBounds.getMinX() == blocBounds.getMaxX()){
 
-                                //System.out.println("droite \n");
                                 stepX = -stepX;
                                 break;
 
@@ -205,6 +241,8 @@ public class Balle extends Structure{
             }
 
         }
+
+        window.getLevelDisplay().removeColision();
 
     }
 

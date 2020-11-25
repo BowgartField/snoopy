@@ -2,13 +2,15 @@ package fr.manchez.snoopy.application.enums;
 
 public enum Structures {
 
-    COIN_HAUT_GAUCHE("","Contours/coin_haut_gauche.png",16,16),
-    COIN_HAUT_DROITE("","Contours/coin_haut_droite.png", 16,16),
-    COIN_BAS_GAUCHE("","Contours/coin_bas_gauche.png",16,16),
-    COIN_BAS_DROITE("","Contours/coin_bas_droite.png",16,16),
+    COIN_HAUT_GAUCHE("CHG","Contours/coin_haut_gauche.png",16,16),
+    COIN_HAUT_DROITE("CHD","Contours/coin_haut_droite.png", 16,16),
+    COIN_BAS_GAUCHE("CBG","Contours/coin_bas_gauche.png",16,16),
+    COIN_BAS_DROITE("CBD","Contours/coin_bas_droite.png",16,16),
 
-    TIMER_HORI_ON("","Contours/timer_horizontal_ON.png",16,16),
-    TIMER_VER_ON("","Contours/timer_vertical_ON.png",16,16),
+    TIMER_HORI_ON("HON","Contours/timer_horizontal_ON.png",16,16),
+    TIMER_VER_ON("VON","Contours/timer_vertical_ON.png",16,16),
+    TIMER_HORI_OFF("HOF","Contours/timer_horizontal_OFF.png",16,16),
+    TIMER_VER_OFF("VOF","Contours/timer_vertical_OFF.png",16,16),
 
     TIMER_NOIR("","Contours/trait_haut_noir.png",32,16),
     TIMER_GRIS("","Contours/trait_haut_gris.png",32,16),
@@ -42,6 +44,7 @@ public enum Structures {
 
     CURSEUR("", "Details/curseur.png", 16, 16),
     CURSEURUP("", "Details/curseurUp.png", 16, 16),
+    PAUSE("","Details/pause.png",80,16),
 
     ZERO("0", "Textes/Chiffres/0.png", 14, 14),
     UN("1", "Textes/Chiffres/1.png", 14, 14),

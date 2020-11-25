@@ -1,3 +1,25 @@
-- recoder le timer
+- animation toucher par la balle
+- animation défaite
+- vie perso
+    - niveau fini = vie + 1
+    - 5 vie au départ
+
+- coder sauvegarde
+
+- code écran fin de niveau
+- système de score
+
+- coder autres blocs
+- coder animation début du jeu
+
+FINI:
 - coder balle qui passe a travers les débris
-- coder animation
+- recoder le timer
+- coder play / pause
+    - timer OK
+    - personnage OK
+    - balle OK
+- coder quand perso touche la balle
+
+EN CONSTRUCTION:
+

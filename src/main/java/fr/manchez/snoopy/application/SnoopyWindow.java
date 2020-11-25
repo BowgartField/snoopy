@@ -90,8 +90,6 @@ public class SnoopyWindow{
         //On charge les éléments dans la scène
         display.draw();
 
-        System.out.println("ici1");
-
     }
 
     /**
@@ -155,4 +153,8 @@ public class SnoopyWindow{
     public LevelDisplay getLevelDisplay() {
         return levelDisplay;
     }
+    public Stage getStage(){
+        return stage;
+    }
+
 }

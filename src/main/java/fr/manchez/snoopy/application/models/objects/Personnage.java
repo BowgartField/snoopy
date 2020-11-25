@@ -16,6 +16,15 @@ import java.util.Map;
 
 public class Personnage extends Structure {
 
+    /** Vie du personnage **/
+    int vie = 5;
+
+    /** **/
+    boolean isDefeating = false;
+
+    /**
+     * Window
+     */
     SnoopyWindow window;
 
     /** Le permet est en déplacement */
@@ -339,15 +348,15 @@ public class Personnage extends Structure {
      */
     public void actionWhenMove(Structure nextStructure){
 
-        //System.out.println("{symb=" + structure.structure.getSymbol() + ", y=" + moveToY + ", x=" + moveToX + "}");
-
+        //si le bloc suivant est une destructible
         if(nextStructure.getStructure().getSymbol().equals(Structures.DESTRUCTIBLE.getSymbol())){
 
             nextStructure.imageView.setImage(nextStructure.getImage(Structures.DEBRIS));
-            window.getLevelDisplay().getColisionRectangle(nextStructure.hitbox);
+            window.getLevelDisplay().setColisionToRemove(nextStructure.hitbox);
 
         }
 
+        //si le bloc suivant est un oiseau
         if(nextStructure.getStructure().getSymbol().equals(Structures.BIRD.getSymbol())){
 
            window.removeAllNode(nextStructure.imageView);
@@ -362,7 +371,7 @@ public class Personnage extends Structure {
             ),Structures.EMPTY);
 
             structureList.remove(moveToX);
-           structureList.add(moveToX,empty);
+            structureList.add(moveToX,empty);
 
         }
 
@@ -374,6 +383,26 @@ public class Personnage extends Structure {
      */
     public boolean isMoving(){
         return isMoving;
+    }
+
+    /**
+     * Animation à la perte de vie
+     */
+    public void animateLooseLife(){
+
+        //gauche -> droite -> gauche -> droite -> snoopy desamparé -> depop
+        //enleve les structures
+        //charge le level de score
+
+    }
+
+    /**
+     * Animation de la défaite
+     */
+    public void animateDefeate(){
+
+
+
     }
 
     /**
@@ -400,7 +429,18 @@ public class Personnage extends Structure {
 
     }
 
-    public Rectangle getHitbox() {
-        return hitbox;
+
+    public int getVie() {
+        return vie;
+    }
+    public void setVie(int vie) {
+        this.vie = vie;
+    }
+
+    public boolean isDefeating() {
+        return isDefeating;
+    }
+    public void setDefeating(boolean defeating) {
+        isDefeating = defeating;
     }
 }

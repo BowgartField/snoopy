@@ -2,8 +2,7 @@ package fr.manchez.snoopy.application.enums;
 
 public enum Levels{
 
-    MAIN("test.txt", "0001"),
-    LEVEL_1("", "");
+    LEVEL_1("test.txt", "0001");
 
     private String Url;
     private String password;
