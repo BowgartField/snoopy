@@ -2,6 +2,7 @@ package fr.manchez.snoopy.application.models.display.displays;
 
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Displays;
+import fr.manchez.snoopy.application.enums.Levels;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;

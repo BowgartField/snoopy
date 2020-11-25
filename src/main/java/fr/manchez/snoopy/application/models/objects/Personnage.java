@@ -2,6 +2,7 @@ package fr.manchez.snoopy.application.models.objects;
 
 import fr.manchez.snoopy.application.Main;
 import fr.manchez.snoopy.application.SnoopyWindow;
+import fr.manchez.snoopy.application.enums.Sounds;
 import fr.manchez.snoopy.application.enums.Structures;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -354,6 +355,8 @@ public class Personnage extends Structure {
             nextStructure.imageView.setImage(nextStructure.getImage(Structures.DEBRIS));
             window.getLevelDisplay().setColisionToRemove(nextStructure.hitbox);
 
+            window.playSound(Sounds.BLOC_BREAK);
+
         }
 
         //si le bloc suivant est un oiseau
@@ -393,6 +396,7 @@ public class Personnage extends Structure {
         //gauche -> droite -> gauche -> droite -> snoopy desamparé -> depop
         //enleve les structures
         //charge le level de score
+        //TODO: animation perte de vie
 
     }
 

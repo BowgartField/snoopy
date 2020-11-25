@@ -63,6 +63,7 @@ public class Structure extends Object {
 
         //On récupére l'image correspondant à la structure
         InputStream inputStream = getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/" + structure.getFileURL());
+
         return new Image(
                 inputStream,
                 structure.getWidth()*SnoopyWindow.SCALE,

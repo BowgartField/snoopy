@@ -114,6 +114,8 @@ public class Balle extends Structure{
      */
     public void isColided(){
 
+        //TODO: copier le tableau pour eviter ConccurentException
+
         for(Map.Entry<Rectangle,Structures> rectangle: window.getLevelDisplay().getColisionRectangle().entrySet()){
 
             if(rectangle.getValue().getSymbol().equals(Structures.OBSTACLE.getSymbol()) || rectangle.getValue().getSymbol().equals(Structures.DESTRUCTIBLE.getSymbol())){

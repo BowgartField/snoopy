@@ -2,6 +2,7 @@ package fr.manchez.snoopy.application;
 
 import fr.manchez.snoopy.application.enums.Displays;
 import fr.manchez.snoopy.application.enums.Levels;
+import fr.manchez.snoopy.application.enums.Sounds;
 import fr.manchez.snoopy.application.models.display.Display;
 import fr.manchez.snoopy.application.models.display.DisplayLoader;
 import fr.manchez.snoopy.application.models.levels.LevelDisplay;
@@ -10,9 +11,14 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 public class SnoopyWindow{
+
+    /** Media player **/
+    MediaPlayer mediaPlayer;
 
     /** Stage de la fenêtre **/
     private Stage stage;
@@ -90,8 +96,6 @@ public class SnoopyWindow{
         //On charge les éléments dans la scène
         display.draw();
 
-        System.out.println("ici1");
-
     }
 
     /**
@@ -135,6 +139,25 @@ public class SnoopyWindow{
 
     public void removeAllNode(Node... nodes){
         pane.getChildren().removeAll(nodes);
+    }
+
+    /**
+     *
+     * @param sound
+     */
+    public void playSound(Sounds sound){
+
+        try{
+
+            Media soundFile = new Media(getClass().getResource("/fr/manchez/snoopy/sounds/" + sound.getUrl()).toURI().toString());
+
+            mediaPlayer = new MediaPlayer(soundFile);
+            mediaPlayer.play();
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
     }
 
     /*

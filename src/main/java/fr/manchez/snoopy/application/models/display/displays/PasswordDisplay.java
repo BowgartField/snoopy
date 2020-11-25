@@ -56,10 +56,6 @@ public class PasswordDisplay extends MenuDisplay {
     public void drawOther(){
 
         /** Affichage du curseur et des numéros permettant de composer le mot de passe */
-        curseur = new Structure(
-                new Point2D(73* SnoopyWindow.SCALE, 216*SnoopyWindow.SCALE),
-                Structures.CURSEUR
-        );
         curseurUp = new Structure(
                 new Point2D(96* SnoopyWindow.SCALE, 232*SnoopyWindow.SCALE),
                 Structures.CURSEURUP
@@ -82,7 +78,6 @@ public class PasswordDisplay extends MenuDisplay {
         );
 
         window.addAllNode(
-                curseur.getImageView(),
                 integer1.getImageView(),
                 integer2.getImageView(),
                 integer3.getImageView(),
@@ -129,6 +124,7 @@ public class PasswordDisplay extends MenuDisplay {
 
         /** Vérifie sur quelle touche on appuie et sur quel ligne/colonne du menu on se trouve et effectue l'action correspondante*/
         if (!isChoosingPass) {
+
             if(keyCode.equals(KeyCode.UP) && isOption1){
                 curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + 34* SnoopyWindow.SCALE);
                 isOption1 = false;
@@ -150,18 +146,16 @@ public class PasswordDisplay extends MenuDisplay {
                 //TODO: Changer ca
                 window.loadNewDisplay(Displays.GameDisplay);
 
-            }else if (keyCode.equals(KeyCode.ENTER)){
+            }else if (keyCode.equals(KeyCode.ENTER)) {
                 /** Vérification du code de la game*/
                 String pass = String.valueOf(password.get(0)) + password.get(1) + password.get(2) + password.get(3);
-                Levels level  =  Levels.findLevelsFromPassword(pass);
+                Levels level = Levels.findLevelsFromPassword(pass);
 
-
-
-                if(level != null){
-
-                CheckPassword();
-
+                if (level != null) {
+                    CheckPassword();
+                }
             }
+
         }else{
 
             if (keyCode.equals(KeyCode.RIGHT) && position < 3){
@@ -194,15 +188,6 @@ public class PasswordDisplay extends MenuDisplay {
 
             //TODO: changer ca
             window.loadNewLevelDisplay(level);
-
-                    /*
-                    Main.window.clearAllMotherFucker();
-                    Main.window = new LevelWindow();
-                    Main.level = new LevelLoader(level, Main.window).load();
-                    Main.level.drawStructure(Main.window);
-                    System.out.println("ok");
-
-                     */
 
         }
 

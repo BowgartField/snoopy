@@ -6,9 +6,13 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
-
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class StartDisplay extends MenuDisplay {
+
+    /** Media player **/
+    MediaPlayer mediaPlayer;
 
     public StartDisplay(SnoopyWindow window){
         super(window);
@@ -27,6 +31,17 @@ public class StartDisplay extends MenuDisplay {
                         )
                 )
         );
+
+        try{
+
+            Media sound = new Media(getClass().getResource("/fr/manchez/snoopy/sounds/titleTheme.mp3").toURI().toString());
+
+            mediaPlayer = new MediaPlayer(sound);
+            mediaPlayer.play();
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
 
     }
 

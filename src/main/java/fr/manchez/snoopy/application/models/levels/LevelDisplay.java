@@ -1,6 +1,7 @@
 package fr.manchez.snoopy.application.models.levels;
 
 import fr.manchez.snoopy.application.SnoopyWindow;
+import fr.manchez.snoopy.application.enums.Sounds;
 import fr.manchez.snoopy.application.enums.Structures;
 import fr.manchez.snoopy.application.models.Timer;
 import fr.manchez.snoopy.application.models.objects.Balle;
@@ -129,6 +130,10 @@ public class LevelDisplay {
      */
     public void victory(){
 
+        //Animation de victoire
+        //Affichage du score
+        //Passage au niveau suivant
+
         System.out.println("victoire !!");
 
     }
@@ -223,6 +228,8 @@ public class LevelDisplay {
      */
     public void animateGetBird(Structure bird){
 
+        window.playSound(Sounds.BIRD_CATCH);
+
         birdsRemaining--;
 
         Structure points = new Structure(
@@ -245,11 +252,7 @@ public class LevelDisplay {
 
         if(birdsRemaining == 0){ // -> VICTOIRE
 
-            //Animation de victoire
-            //Affichage du score
-            //Passage au niveau suivant
-
-            System.out.println("victoire !");
+            window.getLevelDisplay().victory();
 
         }
 
