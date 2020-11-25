@@ -36,16 +36,17 @@ public class StartDisplay extends MenuDisplay {
 
         KeyCode keyCode = event.getCode();
 
+        /** Vérifie la touche sur laquelle l'utilisateur appuie ainsi que la ligne sur laquelle le curseur est placée */
         if(keyCode.equals(KeyCode.UP) && isOption1){
             curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + 34* SnoopyWindow.SCALE);
             isOption1 = false;
-        }else if(keyCode.equals(KeyCode.UP) && !isOption1){
+        }else if(keyCode.equals(KeyCode.UP)){
             curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + -34*SnoopyWindow.SCALE);
             isOption1 = true;
         }else if(keyCode.equals(KeyCode.DOWN) && isOption1){
             curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + 34*SnoopyWindow.SCALE);
             isOption1 = false;
-        }else if(keyCode.equals(KeyCode.DOWN) && !isOption1){
+        }else if(keyCode.equals(KeyCode.DOWN)){
             curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + -34*SnoopyWindow.SCALE);
             isOption1 = true;
         }else if (keyCode.equals(KeyCode.ENTER)){

@@ -8,6 +8,7 @@ import fr.manchez.snoopy.application.models.display.displays.StartDisplay;
 
 public abstract class DisplayLoader {
 
+    /** Gère le background a afficher*/
     public static Display load(Displays displays, SnoopyWindow window){
 
         Display display = null;

@@ -131,12 +131,13 @@ public class SnoopyWindow{
      */
     public void addAllNode(Node... nodes){
 
-        for (Node node: nodes){
+            pane.getChildren().addAll(nodes);
 
-            pane.getChildren().add(node);
+    }
 
-        }
+    public void removeAllNode(Node... nodes){
 
+        pane.getChildren().removeAll(nodes);
 
     }
 

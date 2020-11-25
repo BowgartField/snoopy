@@ -9,7 +9,7 @@ public class Main extends Application {
     /**
      * Fenêtre principale
      */
-    public static SnoopyWindow window;
+    private SnoopyWindow window;
 
     public static void main(String[] args){
         launch(args);

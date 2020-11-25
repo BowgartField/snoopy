@@ -37,7 +37,7 @@ public class Balle extends Structure{
 
         hitbox.setFill(Color.BLUE);
         hitbox.setOpacity(0.5);
-        Main.window.getPane().getChildren().add(hitbox);
+        window.addAllNode(hitbox);
 
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10), new EventHandler<ActionEvent>() {
