@@ -2,7 +2,6 @@ package fr.manchez.snoopy.application.models.display.displays;
 
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Displays;
-import fr.manchez.snoopy.application.enums.Levels;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -29,11 +28,13 @@ public class  GameDisplay extends MenuDisplay {
         );
     }
 
+    /** Effectue une action en fonction de la touche sur laquelle l'utilisateur appuie */
     @Override
     public void traductEvent(KeyEvent keyEvent){
 
         KeyCode keyCode = keyEvent.getCode();
 
+        /** Vérifie la touche sur laquelle l'utilisateur appuie ainsi que la ligne sur laquelle le curseur est placée */
         if(keyCode.equals(KeyCode.UP) && isOption1){
             curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + 34* SnoopyWindow.SCALE);
             isOption1 = false;

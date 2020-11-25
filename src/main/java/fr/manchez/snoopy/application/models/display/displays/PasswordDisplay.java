@@ -31,18 +31,18 @@ public class PasswordDisplay extends MenuDisplay {
         super(snoopyWindow);
 
         window.getPane().setBackground(
-            new Background(
-                new BackgroundImage(
-                        new Image(
-                                getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/Fond/"+ Displays.PasswordDisplay.getBackgroundURL()),
-                                640,640,true,true
-                        ),
-                        BackgroundRepeat.NO_REPEAT,
-                        BackgroundRepeat.NO_REPEAT,
-                        BackgroundPosition.CENTER,
-                        BackgroundSize.DEFAULT
+                new Background(
+                        new BackgroundImage(
+                                new Image(
+                                        getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/Fond/"+ Displays.PasswordDisplay.getBackgroundURL()),
+                                        640,640,true,true
+                                ),
+                                BackgroundRepeat.NO_REPEAT,
+                                BackgroundRepeat.NO_REPEAT,
+                                BackgroundPosition.CENTER,
+                                BackgroundSize.DEFAULT
+                        )
                 )
-            )
         );
 
         password.add(0);
@@ -56,6 +56,10 @@ public class PasswordDisplay extends MenuDisplay {
     public void drawOther(){
 
         /** Affichage du curseur et des numéros permettant de composer le mot de passe */
+        curseur = new Structure(
+                new Point2D(73* SnoopyWindow.SCALE, 216*SnoopyWindow.SCALE),
+                Structures.CURSEUR
+        );
         curseurUp = new Structure(
                 new Point2D(96* SnoopyWindow.SCALE, 232*SnoopyWindow.SCALE),
                 Structures.CURSEURUP
@@ -78,6 +82,7 @@ public class PasswordDisplay extends MenuDisplay {
         );
 
         window.addAllNode(
+                curseur.getImageView(),
                 integer1.getImageView(),
                 integer2.getImageView(),
                 integer3.getImageView(),
@@ -137,7 +142,6 @@ public class PasswordDisplay extends MenuDisplay {
                 curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + -34*SnoopyWindow.SCALE);
                 isOption1 = true;
             }else if (keyCode.equals(KeyCode.RIGHT) && isOption1) {
-
                 window.removeAllNode(curseur.getImageView()); // Cache le curseur de base
                 window.addAllNode(curseurUp.getImageView()); // Affiche le curseur qui pointe vers le haut
                 isChoosingPass = true; // Spécifie qu'on est entrain de sélectionner le mot de passe
@@ -149,12 +153,13 @@ public class PasswordDisplay extends MenuDisplay {
             }else if (keyCode.equals(KeyCode.ENTER)){
                 /** Vérification du code de la game*/
                 String pass = String.valueOf(password.get(0)) + password.get(1) + password.get(2) + password.get(3);
-                Levels level = Levels.findLevelsFromPassword(pass);
+                Levels level  =  Levels.findLevelsFromPassword(pass);
+
+
 
                 if(level != null){
 
-                    window.loadNewLevelDisplay(level);
-                }
+                CheckPassword();
 
             }
         }else{
@@ -173,7 +178,33 @@ public class PasswordDisplay extends MenuDisplay {
                 increment(true);
             }else if(keyCode.equals(KeyCode.DOWN)){
                 increment(false);
+            }else if(keyCode.equals(KeyCode.ENTER)){
+                CheckPassword();
             }
         }
+    }
+
+    /** Vérification du code donné et lancement du level correspondant*/
+    private void CheckPassword(){
+
+        String pass = String.valueOf(password.get(0)) + password.get(1) + password.get(2) + password.get(3);
+        Levels level  =  Levels.findLevelsFromPassword(pass);
+
+        if(level != null){
+
+            //TODO: changer ca
+            window.loadNewLevelDisplay(level);
+
+                    /*
+                    Main.window.clearAllMotherFucker();
+                    Main.window = new LevelWindow();
+                    Main.level = new LevelLoader(level, Main.window).load();
+                    Main.level.drawStructure(Main.window);
+                    System.out.println("ok");
+
+                     */
+
+        }
+
     }
 }
