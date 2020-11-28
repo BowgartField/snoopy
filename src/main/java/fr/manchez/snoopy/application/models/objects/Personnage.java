@@ -18,7 +18,7 @@ import java.util.Map;
 public class Personnage extends Structure {
 
     /** Vie du personnage **/
-    int vie = 5;
+    int vie = 23;
 
     /** **/
     boolean isDefeating = false;

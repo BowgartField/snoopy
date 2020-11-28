@@ -1,6 +1,8 @@
 package fr.manchez.snoopy.application.models.levels;
 
 import fr.manchez.snoopy.application.SnoopyWindow;
+import fr.manchez.snoopy.application.enums.Displays;
+import fr.manchez.snoopy.application.enums.Levels;
 import fr.manchez.snoopy.application.enums.Sounds;
 import fr.manchez.snoopy.application.enums.Structures;
 import fr.manchez.snoopy.application.models.Timer;
@@ -31,14 +33,46 @@ import java.util.Map;
  */
 public class LevelDisplay {
 
+    Levels level;
+
     /** Image de pause */
     ImageView pauseBackground = new ImageView();
 
     /** Image "pause" */
     ImageView pauseDisplay = new ImageView();
 
-    /**  Le niveau est en pause */
+    /** Image de fin de niveau*/
+    ImageView levelEndBackground = new ImageView();
+
+    /** Image "Stage XXX clear" ou "stage XXX"*/
+    ImageView stageInfo = new ImageView();
+
+    /** Image du curseur*/
+    ImageView cursor = new ImageView();
+
+    /** Structure des vies */
+    Structure vieUnite;
+    Structure vieDixaine;
+
+    /** Structure du numéro de niveau*/
+    Structure levelNbUnite;
+    Structure levelNbDixaine;
+    Structure levelNbCentaine;
+
+    /**  Le niveau est en pause*/
     boolean isPause = false;
+
+    /** Une vie est perdue*/
+    boolean isLooseLife = false;
+
+    /** La partie est perdue*/
+    boolean isLoose = false;
+
+    /** Le niveau est gagné*/
+    boolean isWin = false;
+
+    /** La ligne 1 de l'écran de défaite est sélectionnée */
+    boolean isOption1 = true;
 
     /** Timer **/
     Timer timer;
@@ -79,9 +113,10 @@ public class LevelDisplay {
     private Balle balle;
 
 
-    public LevelDisplay(SnoopyWindow window){
+    public LevelDisplay(SnoopyWindow window, Levels level){
 
         this.window = window;
+        this.level = level;
         timer = new Timer(window);
 
         initPause();
@@ -126,6 +161,122 @@ public class LevelDisplay {
     }
 
     /**
+     * Initialise les éléments relatifs à l'écran de perte de vie
+     */
+    private void showLooseLifeScreen(){
+        levelEndBackground.setImage(
+                new Image(
+                        getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/Fond/"+ Displays.LevelEndDisplay.getBackgroundURL()),
+                        290*SnoopyWindow.SCALE,
+                        290*SnoopyWindow.SCALE,
+                        false,
+                        true)
+        );
+        levelEndBackground.setY(15*SnoopyWindow.SCALE);
+        levelEndBackground.setX(15*SnoopyWindow.SCALE);
+
+
+        stageInfo = new ImageView(
+                new Image(
+                        getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/"+ Structures.STAGE_LOOSE.getFileURL()),
+                        Structures.STAGE_LOOSE.getWidth()*SnoopyWindow.SCALE,
+                        Structures.STAGE_LOOSE.getHeight()*SnoopyWindow.SCALE,
+                        false,
+                        true
+                )
+        );
+        stageInfo.setY(32*SnoopyWindow.SCALE);
+        stageInfo.setX((window.getPane().getWidth()-Structures.STAGE_LOOSE.getWidth()*SnoopyWindow.SCALE)/2);
+
+
+
+        window.addAllNode(
+                levelEndBackground,
+                stageInfo
+        );
+
+        displayLifes();
+        displayActualLevel();
+    }
+
+    /**
+    * Initialise les éléments relatifs à l'écran de gain de niveau
+    */
+    private void showWinScreen(){
+        levelEndBackground.setImage(
+                new Image(
+                        getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/Fond/"+ Displays.LevelEndDisplay.getBackgroundURL()),
+                        290*SnoopyWindow.SCALE,
+                        290*SnoopyWindow.SCALE,
+                        false,
+                        true)
+        );
+        levelEndBackground.setY(15*SnoopyWindow.SCALE);
+        levelEndBackground.setX(15*SnoopyWindow.SCALE);
+
+        stageInfo = new ImageView(
+                new Image(
+                        getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/"+ Structures.STAGE_CLEAR.getFileURL()),
+                        Structures.STAGE_CLEAR.getWidth()*SnoopyWindow.SCALE,
+                        Structures.STAGE_CLEAR.getHeight()*SnoopyWindow.SCALE,
+                        false,
+                        true
+                )
+        );
+        stageInfo.setY(32*SnoopyWindow.SCALE);
+        stageInfo.setX((window.getPane().getWidth()-Structures.STAGE_CLEAR.getWidth()*SnoopyWindow.SCALE)/2);
+
+
+        window.addAllNode(
+                levelEndBackground,
+                stageInfo
+        );
+
+
+        displayLifes();
+        displayActualLevel();
+    }
+
+    /** Affiche les éléments relatifs à la défaite*/
+    private void showLooseScreen(){
+
+
+
+        levelEndBackground.setImage(
+                new Image(
+                        getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/Fond/"+ Displays.LooseDisplay.getBackgroundURL()),
+                        290*SnoopyWindow.SCALE,
+                        290*SnoopyWindow.SCALE,
+                        false,
+                        true)
+        );
+        levelEndBackground.setY(15*SnoopyWindow.SCALE);
+        levelEndBackground.setX(15*SnoopyWindow.SCALE);
+
+
+        cursor = new ImageView(
+                new Image(
+                        getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/"+ Structures.CURSEUR.getFileURL()),
+                        Structures.CURSEUR.getWidth()*SnoopyWindow.SCALE,
+                        Structures.CURSEUR.getHeight()*SnoopyWindow.SCALE,
+                        false,
+                        true
+                )
+        );
+        stageInfo.setY(32*SnoopyWindow.SCALE);
+        stageInfo.setX((window.getPane().getWidth()-Structures.CURSEUR.getWidth()*SnoopyWindow.SCALE)/2);
+
+        window.addAllNode(
+                levelEndBackground,
+                cursor
+        );
+        displayActualPassword();
+        displayCursor();
+
+    }
+
+
+    /**
      * Déclencher lors de la victoire
      */
     public void victory(){
@@ -136,16 +287,243 @@ public class LevelDisplay {
 
         System.out.println("victoire !!");
 
+        isWin = true;
+        isPause = true;
+        showWinScreen();
+
     }
 
     /**
      * Déclencher lors de la défaite
      */
-    public void defaite(){
-
-        window.getLevelDisplay().getPersonnage().animateDefeate();
+    public void defeat(){
 
         System.out.println("Défaite !!");
+
+        isLoose = true;
+        isPause = true;
+
+        showLooseScreen();
+
+    }
+
+    /**
+     * Déclencher lors de la perte de vie
+     */
+    public void looseLife(){
+
+        System.out.println("perte de vie !!");
+        window.getLevelDisplay().getPersonnage().animateDefeate();
+
+        isLooseLife = true;
+        isPause = true;
+
+        showLooseLifeScreen();
+
+    }
+
+    /**
+     * Gère l'affichage du nombre de vies restantes
+     */
+    private void displayLifes(){
+
+        int vie = getPersonnage().getVie();
+
+        if(vie < 9){
+            vieDixaine = new Structure(
+                    new Point2D(162*SnoopyWindow.SCALE + levelEndBackground.getX(), 210*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.ZERO
+            );
+            vieUnite = new Structure(
+                    new Point2D(178* SnoopyWindow.SCALE + levelEndBackground.getX(), 210*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(vie).charAt(0))
+            );
+
+        }else{
+            vieDixaine = new Structure(
+                    new Point2D(162* SnoopyWindow.SCALE + levelEndBackground.getX(), 210*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(vie).charAt(0))
+            );
+            vieUnite = new Structure(
+                    new Point2D(178* SnoopyWindow.SCALE + levelEndBackground.getX(), 210*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(vie).charAt(1))
+            );
+        }
+
+
+        window.addAllNode(
+                vieDixaine.getImageView(),
+                vieUnite.getImageView()
+        );
+
+    }
+
+    /**
+     * Gère l'affichage du niveau en cours
+     */
+    private void displayActualLevel(){
+
+        int levelNumber = level.getLevelNumber();
+
+        /**Gère les coordonnées de placement de "levelNumber"*/
+        int x = Structures.STAGE_CLEAR.getWidth()/2;
+        int y = 18;
+        if(isLooseLife){
+            x = 170;
+        }
+
+
+        if(levelNumber < 10){
+            levelNbCentaine = new Structure(
+                    new Point2D(x*SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.ZERO
+            );
+            levelNbDixaine = new Structure(
+                    new Point2D((x+16)*SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.ZERO
+            );
+            levelNbUnite = new Structure(
+                    new Point2D((x+32)* SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(levelNumber).charAt(0))
+            );
+        }else if(levelNumber < 100){
+            levelNbCentaine = new Structure(
+                    new Point2D(x*SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.ZERO
+            );
+            levelNbDixaine = new Structure(
+                    new Point2D((x+16)*SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(levelNumber).charAt(1))
+            );
+            levelNbUnite = new Structure(
+                    new Point2D((x+32)* SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(levelNumber).charAt(0))
+            );
+        }else {
+            levelNbCentaine = new Structure(
+                    new Point2D(x*SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(levelNumber).charAt(2))
+            );
+            levelNbDixaine = new Structure(
+                    new Point2D((x+16)*SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(levelNumber).charAt(1))
+            );
+            levelNbUnite = new Structure(
+                    new Point2D((x+32)* SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(levelNumber).charAt(0))
+            );
+        }
+
+        window.addAllNode(
+                levelNbUnite.getImageView(),
+                levelNbDixaine.getImageView(),
+                levelNbCentaine.getImageView()
+        );
+
+    }
+
+    /**
+     * Gère l'affichage du mot de passe du niveau
+     */
+    private void displayActualPassword(){
+        /**Structures des numéros du mot de passe*/
+        Structure intPass1;
+        Structure intPass2;
+        Structure intPass3;
+        Structure intPass4;
+
+        int password = Integer.parseInt(level.getPassword());
+        int y = 258;
+        int x = 194;
+
+        if(password < 10){
+            intPass1 = new Structure(
+                    new Point2D(x*SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.ZERO
+            );
+            intPass2 = new Structure(
+                    new Point2D((x+16)*SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.ZERO
+            );
+            intPass3 = new Structure(
+                    new Point2D((x+32)* SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.ZERO
+            );
+
+            intPass4 = new Structure(
+                    new Point2D((x+46)* SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(password).charAt(0))
+            );
+        }else if (password < 100){
+            intPass1 = new Structure(
+                    new Point2D(x*SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.ZERO
+            );
+            intPass2 = new Structure(
+                    new Point2D((x+16)*SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.ZERO
+            );
+            intPass3 = new Structure(
+                    new Point2D((x+32)* SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(password).charAt(0))
+            );
+
+            intPass4 = new Structure(
+                    new Point2D((x+46)* SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(password).charAt(1))
+            );
+        }else if (password < 1000){
+            intPass1 = new Structure(
+                    new Point2D(x*SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.ZERO
+            );
+            intPass2 = new Structure(
+                    new Point2D((x+16)*SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(password).charAt(0))
+            );
+            intPass3 = new Structure(
+                    new Point2D((x+32)* SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(password).charAt(1))
+            );
+
+            intPass4 = new Structure(
+                    new Point2D((x+46)* SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(password).charAt(2))
+            );
+        }else{
+            intPass1 = new Structure(
+                    new Point2D(x*SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(password).charAt(0))
+            );
+            intPass2 = new Structure(
+                    new Point2D((x+16)*SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(password).charAt(1))
+            );
+            intPass3 = new Structure(
+                    new Point2D((x+32)* SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(password).charAt(2))
+            );
+
+            intPass4 = new Structure(
+                    new Point2D((x+46)* SnoopyWindow.SCALE + levelEndBackground.getX(), y*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    Structures.getStructuresFromSymbol(String.valueOf(password).charAt(3))
+            );
+        }
+
+
+
+        window.addAllNode(
+                intPass1.getImageView(),
+                intPass2.getImageView(),
+                intPass3.getImageView(),
+                intPass4.getImageView()
+        );
+
+
+    }
+
+    /**Gère l'affichage du curseur*/
+    private void displayCursor(){
 
     }
 
@@ -330,6 +708,48 @@ public class LevelDisplay {
 
             //Si on appuye sur le "p" -> enleve la pause
             if(keyCode.equals(KeyCode.P)){ setPause(); }
+            if(isLooseLife && keyCode.equals(KeyCode.ENTER)){
+
+                window.loadNewLevelDisplay(level);
+
+                isPause = false;
+                isLooseLife = false;
+            }
+            if (isWin && keyCode.equals(KeyCode.ENTER)){
+
+                level = Levels.findLevelsFromLevelNumber(level.getLevelNumber()+1);
+                    window.loadNewLevelDisplay(level);
+
+                isPause = false;
+                isWin = false;
+            }
+            if(isLoose){
+                if(keyCode.equals(KeyCode.UP) && isOption1){
+                    cursor.setY(cursor.getY() + 34* SnoopyWindow.SCALE);
+                    isOption1 = false;
+                }else if(keyCode.equals(KeyCode.UP)){
+                    cursor.setY(cursor.getY() + -34*SnoopyWindow.SCALE);
+                    isOption1 = true;
+                }else if(keyCode.equals(KeyCode.DOWN) && isOption1){
+                    cursor.setY(cursor.getY() + 34* SnoopyWindow.SCALE);
+                    isOption1 = false;
+                }else if(keyCode.equals(KeyCode.DOWN)){
+                    cursor.setY(cursor.getY() + -34*SnoopyWindow.SCALE);
+                    isOption1 = true;
+                }else if (keyCode.equals(KeyCode.ENTER) && isOption1){
+
+                    window.loadNewDisplay(Displays.StartDisplay);
+                    isPause = false;
+                    isLoose = false;
+
+                }else if (keyCode.equals(KeyCode.ENTER)){
+
+                    window.loadNewLevelDisplay(Levels.LEVEL_1);
+                    isPause = false;
+                    isLoose = false;
+                    
+                }
+            }
 
         }
 

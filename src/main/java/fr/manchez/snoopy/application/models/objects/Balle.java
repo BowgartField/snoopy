@@ -85,6 +85,7 @@ public class Balle extends Structure{
 
         if(hitbox.intersects(personnage.hitbox.getLayoutBounds())){
 
+            /*
             if(!personnage.isDefeating){
 
                 personnage.setDefeating(true);
@@ -101,6 +102,8 @@ public class Balle extends Structure{
 
             }
 
+             */
+            window.getLevelDisplay().defeat();
         }else{
 
             personnage.setDefeating(false);

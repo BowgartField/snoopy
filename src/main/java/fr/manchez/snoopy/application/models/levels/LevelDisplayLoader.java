@@ -46,7 +46,7 @@ public class LevelDisplayLoader {
         this.levels = levels;
         this.window = window;
 
-       level = new LevelDisplay(window);
+       level = new LevelDisplay(window, levels);
     }
 
     /**
