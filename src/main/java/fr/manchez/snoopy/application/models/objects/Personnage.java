@@ -611,6 +611,7 @@ public class Personnage extends Structure {
     public void setVie(int vie) {
         this.vie = vie;
     }
+
     public boolean isDefeating() {
         return isDefeating;
     }

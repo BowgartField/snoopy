@@ -18,14 +18,18 @@ import java.util.List;
 public class PasswordDisplay extends MenuDisplay {
 
     protected Structure curseurUp;
+
+    /**Affichage des nombres du mot de passe */
     protected Structure integer1;
     protected Structure integer2;
     protected Structure integer3;
     protected Structure integer4;
 
-    List<Integer> password = new ArrayList<>(); //Stock le mot de passe
+    /** Stock le mot de passe*/
+    List<Integer> password = new ArrayList<>();
     boolean isChoosingPass = false;
-    int position = 0; //Stock la position
+    /** Stock la position*/
+    int position = 0;
 
     public PasswordDisplay(SnoopyWindow snoopyWindow){
         super(snoopyWindow);

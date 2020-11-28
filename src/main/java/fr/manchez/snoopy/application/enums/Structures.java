@@ -58,9 +58,10 @@ public enum Structures {
     SIX("6", "Textes/Chiffres/6.png", 14, 14),
     SEPT("7", "Textes/Chiffres/7.png", 14, 14),
     HUIT("8", "Textes/Chiffres/8.png", 14, 14),
-    NEUF("9", "Textes/Chiffres/9.png", 14, 14);
+    NEUF("9", "Textes/Chiffres/9.png", 14, 14),
 
-
+    STAGE_CLEAR("", "Textes/stageClear.png", 240, 16),
+    STAGE_LOOSE("", "Textes/stageNb.png", 141,16);
 
     /** Url vers le fichier de la structures **/
     private final String fileURL;
