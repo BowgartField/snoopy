@@ -17,8 +17,18 @@ import java.util.Map;
 
 public class Personnage extends Structure {
 
+    /**
+     * Time d'animation
+     *
+     * L'animation de perte de vie et de défaite est la même
+     * */
+    Timeline timeline;
+
     /** Vie du personnage **/
-    int vie = 5;
+    private int vie;
+
+    /** Vie par défaut */
+    public static int DEFAULT_VIE = 5;
 
     /** **/
     boolean isDefeating = false;
@@ -44,7 +54,13 @@ public class Personnage extends Structure {
     public Personnage(Point2D point2D, Structures structure, SnoopyWindow window) {
 
         super(point2D, structure);
+
+        vie = window.getSauvegarde().getPlayer().getVie();
+
         this.window = window;
+
+        //Initialise les animations
+        initAnimations();
 
     }
 
@@ -388,15 +404,85 @@ public class Personnage extends Structure {
         return isMoving;
     }
 
+    /*
+        Animation
+     */
+
+    /**
+     * Initialise les animations
+     */
+    private void initAnimations(){
+
+        //Tourne sur lui même puis est désamparé puis éclate
+        final KeyFrame keyFrame1 = new KeyFrame(Duration.millis(0), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(getImage(Structures.SNOOPY_RIGHT_1));
+
+                isMoving = true;
+
+            }
+        });
+        final KeyFrame keyFrame2 = new KeyFrame(Duration.millis(300), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(getImage(Structures.SNOOPY_UP_1));
+
+            }
+        });
+        final KeyFrame keyFrame3 = new KeyFrame(Duration.millis(600), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(getImage(Structures.SNOOPY_LEFT_1));
+
+            }
+        });
+        final KeyFrame keyFrame4 = new KeyFrame(Duration.millis(900), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(getImage(Structures.SNOOPY_IMMOBILE));
+
+
+            }
+        });
+        final KeyFrame keyFrame5 = new KeyFrame(Duration.millis(1200), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(getImage(Structures.SNOOPY_DESAMP));
+
+            }
+        });
+        final KeyFrame keyFrame6 = new KeyFrame(Duration.millis(1800), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(getImage(Structures.SNOOPY_MORT));
+
+                isMoving = false;
+
+            }
+        });
+
+        timeline = new Timeline(keyFrame1,keyFrame2,keyFrame3,keyFrame4,keyFrame5,keyFrame6);
+
+    }
+
     /**
      * Animation à la perte de vie
      */
     public void animateLooseLife(){
 
-        //gauche -> droite -> gauche -> droite -> snoopy desamparé -> depop
-        //enleve les structures
-        //charge le level de score
-        //TODO: animation perte de vie
+        isMoving = true;
+
+        timeline.playFromStart();
+
+        //TODO: changer la cible
+        timeline.setOnFinished(even -> window.getLevelDisplay().looseLife());
 
     }
 
@@ -405,12 +491,93 @@ public class Personnage extends Structure {
      */
     public void animateDefeate(){
 
+        isMoving = true;
 
+        timeline.playFromStart();
+
+        //TODO: changer la cible
+        timeline.setOnFinished(even -> window.getLevelDisplay().defeate());
 
     }
 
     /**
-     *
+     * Animation de victoire
+     */
+    public void animateVictory(){
+
+        //snoopy qui saute
+        final KeyFrame keyFrame1 = new KeyFrame(Duration.millis(0), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(getImage(Structures.SNOOPY_HEUREUX));
+                yProperty.set(yProperty.get()-16*SnoopyWindow.SCALE);
+                isMoving = true;
+
+            }
+        });
+        final KeyFrame keyFrame2 = new KeyFrame(Duration.millis(300), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(getImage(Structures.SNOOPY_IMMOBILE));
+                yProperty.set(yProperty.get()+16*SnoopyWindow.SCALE);
+
+            }
+        });
+        final KeyFrame keyFrame3 = new KeyFrame(Duration.millis(600), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(getImage(Structures.SNOOPY_HEUREUX));
+                yProperty.set(yProperty.get()-16*SnoopyWindow.SCALE);
+                isMoving = true;
+
+            }
+        });
+        final KeyFrame keyFrame4 = new KeyFrame(Duration.millis(900), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(getImage(Structures.SNOOPY_IMMOBILE));
+                yProperty.set(yProperty.get()+16*SnoopyWindow.SCALE);
+
+            }
+        });
+        final KeyFrame keyFrame5 = new KeyFrame(Duration.millis(1200), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(getImage(Structures.SNOOPY_HEUREUX));
+                yProperty.set(yProperty.get()-16*SnoopyWindow.SCALE);
+                isMoving = true;
+
+            }
+        });
+        final KeyFrame keyFrame6 = new KeyFrame(Duration.millis(1500), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(getImage(Structures.SNOOPY_IMMOBILE));
+                yProperty.set(yProperty.get()+16*SnoopyWindow.SCALE);
+
+            }
+        });
+
+        Timeline timeline = new Timeline(keyFrame1,keyFrame2,keyFrame3,keyFrame4,keyFrame5,keyFrame6);
+        timeline.playFromStart();
+
+        //On lance l'écran de victoire
+        timeline.setOnFinished(event -> window.getLevelDisplay().victory());
+
+    }
+
+    /*
+        COLISIONS
+     */
+
+    /**
+     * Contrôle si le personnage est en colision avec un bloc du décor
      */
     public boolean isColided(Rectangle playerRectangle){
 
@@ -434,13 +601,16 @@ public class Personnage extends Structure {
     }
 
 
+    /*
+        GETTERS AND SETTERS
+     */
+
     public int getVie() {
         return vie;
     }
     public void setVie(int vie) {
         this.vie = vie;
     }
-
     public boolean isDefeating() {
         return isDefeating;
     }

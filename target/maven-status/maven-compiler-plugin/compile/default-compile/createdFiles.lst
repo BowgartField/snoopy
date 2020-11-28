@@ -8,6 +8,7 @@ fr\manchez\snoopy\application\models\objects\Personnage$3.class
 fr\manchez\snoopy\application\models\Timer$1.class
 fr\manchez\snoopy\application\models\objects\Personnage$2.class
 fr\manchez\snoopy\application\models\objects\Personnage$14.class
+fr\manchez\snoopy\application\models\sauvegarde\Sauvegarde.class
 fr\manchez\snoopy\application\models\Timer.class
 fr\manchez\snoopy\application\models\objects\Balle$1.class
 fr\manchez\snoopy\application\models\objects\Personnage$16.class
@@ -17,6 +18,7 @@ fr\manchez\snoopy\application\models\objects\Personnage$20.class
 fr\manchez\snoopy\application\models\display\displays\PasswordDisplay.class
 fr\manchez\snoopy\application\models\objects\Personnage$15.class
 fr\manchez\snoopy\application\models\objects\Personnage.class
+fr\manchez\snoopy\application\models\sauvegarde\Player.class
 fr\manchez\snoopy\application\models\display\Display.class
 fr\manchez\snoopy\application\Main.class
 fr\manchez\snoopy\application\models\display\DisplayLoader.class
@@ -28,6 +30,7 @@ fr\manchez\snoopy\application\models\Timer$2.class
 fr\manchez\snoopy\application\models\objects\Personnage$17.class
 fr\manchez\snoopy\application\models\objects\Personnage$12.class
 fr\manchez\snoopy\application\models\objects\Personnage$18.class
+fr\manchez\snoopy\application\enums\PlayersType.class
 fr\manchez\snoopy\application\models\objects\Personnage$5.class
 fr\manchez\snoopy\application\models\levels\LevelDisplay.class
 fr\manchez\snoopy\application\models\objects\Personnage$11.class

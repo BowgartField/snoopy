@@ -87,23 +87,23 @@ public class Balle extends Structure{
 
             if(!personnage.isDefeating){
 
-                personnage.setDefeating(true);
+                personnage.setVie(personnage.getVie()-1);
 
-                //On vérifie si il reste de la vie
                 if(personnage.getVie() > 0){
 
-                    personnage.setVie(personnage.getVie()-1);
+                    //perte de vie
                     personnage.animateLooseLife();
 
                 }else{
-                    window.getLevelDisplay().defaite();
+
+                    //defaite
+                    personnage.animateDefeate();
+
                 }
 
+                personnage.setDefeating(true);
+
             }
-
-        }else{
-
-            personnage.setDefeating(false);
 
         }
 

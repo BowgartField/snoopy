@@ -1,6 +1,7 @@
 package fr.manchez.snoopy.application.models.levels;
 
 import fr.manchez.snoopy.application.SnoopyWindow;
+import fr.manchez.snoopy.application.enums.Levels;
 import fr.manchez.snoopy.application.enums.Sounds;
 import fr.manchez.snoopy.application.enums.Structures;
 import fr.manchez.snoopy.application.models.Timer;
@@ -9,16 +10,17 @@ import fr.manchez.snoopy.application.models.objects.Personnage;
 import fr.manchez.snoopy.application.models.objects.Structure;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Point2D;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-import javax.sound.midi.Soundbank;
 import java.io.InputStream;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +32,9 @@ import java.util.Map;
  * - les emplacements des structures
  */
 public class LevelDisplay {
+
+    /** Level actuel */
+    Levels level;
 
     /** Image de pause */
     ImageView pauseBackground = new ImageView();
@@ -79,9 +84,10 @@ public class LevelDisplay {
     private Balle balle;
 
 
-    public LevelDisplay(SnoopyWindow window){
+    public LevelDisplay(SnoopyWindow window, Levels level){
 
         this.window = window;
+        this.level = level;
         timer = new Timer(window);
 
         initPause();
@@ -97,12 +103,12 @@ public class LevelDisplay {
         InputStream pauseBgIS = getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/Fond/pausebg.png");
 
         pauseBackground.setImage(
-                new Image(
-                        pauseBgIS,
-                        320*SnoopyWindow.SCALE,
-                        320*SnoopyWindow.SCALE,
-                        false,
-                        true)
+            new Image(
+            pauseBgIS,
+            320*SnoopyWindow.SCALE,
+            320*SnoopyWindow.SCALE,
+            false,
+            true)
         );
 
         pauseBackground.setOpacity(0.6);
@@ -112,11 +118,11 @@ public class LevelDisplay {
 
         pauseDisplay = new ImageView(
             new Image(
-                    pauseIS,
-                    Structures.PAUSE.getWidth()*SnoopyWindow.SCALE,
-                    Structures.PAUSE.getHeight()*SnoopyWindow.SCALE
-                    ,false
-                    ,true
+                pauseIS,
+                Structures.PAUSE.getWidth()*SnoopyWindow.SCALE,
+                Structures.PAUSE.getHeight()*SnoopyWindow.SCALE
+                ,false
+                ,true
             )
         );
 
@@ -125,8 +131,10 @@ public class LevelDisplay {
 
     }
 
+
+
     /**
-     * Déclencher lors de la victoire
+     * Affiche le menu de victoire
      */
     public void victory(){
 
@@ -141,11 +149,22 @@ public class LevelDisplay {
     /**
      * Déclencher lors de la défaite
      */
-    public void defaite(){
+    public void defeate(){
 
-        window.getLevelDisplay().getPersonnage().animateDefeate();
+        //mettre le level en pause
+        //gerer les touches
+        //apeller initEndLevelScreen
 
         System.out.println("Défaite !!");
+
+    }
+
+    /**
+     *
+     */
+    public void looseLife(){
+
+        //perte de vie
 
     }
 
@@ -252,7 +271,7 @@ public class LevelDisplay {
 
         if(birdsRemaining == 0){ // -> VICTOIRE
 
-            window.getLevelDisplay().victory();
+            window.getLevelDisplay().getPersonnage().animateVictory();
 
         }
 
@@ -324,12 +343,38 @@ public class LevelDisplay {
             }
 
             //Si on appuye sur le "p" -> pause
-            if(keyCode.equals(KeyCode.P)){ setPause(); }
+            if(keyCode.equals(KeyCode.P)){ showPause(); }
+
+            //Si on appuye sur le "s" -> on sauvegarde
+            if(keyCode.equals(KeyCode.S)){
+
+                isPause = true;
+
+                Alert alert = new Alert(
+                        Alert.AlertType.INFORMATION,
+                        "Etes-vous sûre de vouloir sauvegarder et quitter ?",
+                        ButtonType.YES,
+                        ButtonType.NO);
+                alert.showAndWait();
+
+                if(alert.getResult() == ButtonType.YES){
+
+                    window.getSauvegarde().save();
+
+                }else if(alert.getResult() == ButtonType.NO){
+
+                    alert.close();
+
+                    isPause = false;
+
+                }
+
+            }
 
         }else{
 
             //Si on appuye sur le "p" -> enleve la pause
-            if(keyCode.equals(KeyCode.P)){ setPause(); }
+            if(keyCode.equals(KeyCode.P)){ showPause(); }
 
         }
 
@@ -338,7 +383,7 @@ public class LevelDisplay {
     /**
      * Met en Pause le jeu
      */
-    public void setPause(){
+    public void showPause(){
 
         if(!isPause){
 
@@ -378,6 +423,7 @@ public class LevelDisplay {
 
     /**
      *
+     * @return
      */
     public List<List<Structure>> getLevelStruture(){
         return levelStruture;

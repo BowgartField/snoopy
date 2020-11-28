@@ -46,7 +46,7 @@ public class LevelDisplayLoader {
         this.levels = levels;
         this.window = window;
 
-       level = new LevelDisplay(window);
+       level = new LevelDisplay(window, levels);
     }
 
     /**
@@ -90,7 +90,7 @@ public class LevelDisplayLoader {
      */
     private void loadFileIntoArray(){
 
-        InputStream in = getClass().getResourceAsStream("/fr/manchez/snoopy/levels/" + levels);
+        InputStream in = getClass().getResourceAsStream("/fr/manchez/snoopy/levels/" + levels.getUrl());
 
         try(Reader fr = new InputStreamReader(in, StandardCharsets.UTF_8)){
 
