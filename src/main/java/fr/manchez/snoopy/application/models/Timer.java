@@ -81,7 +81,7 @@ public class Timer {
 
                     }else{
 
-                        window.getLevelDisplay().defeate();
+                        window.getLevelDisplay().defeat();
                         timeline.stop();
 
                     }

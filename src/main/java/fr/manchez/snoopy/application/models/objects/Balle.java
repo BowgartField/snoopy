@@ -87,6 +87,7 @@ public class Balle extends Structure{
 
             if(!personnage.isDefeating){
 
+                //on enlève une vie
                 personnage.setVie(personnage.getVie()-1);
 
                 if(personnage.getVie() > 0){

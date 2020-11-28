@@ -477,8 +477,10 @@ public class Personnage extends Structure {
      */
     public void animateLooseLife(){
 
-        isMoving = true;
+        //On sauvegarde la vie
+        window.getSauvegarde().getPlayer().setVie(vie);
 
+        isMoving = true;
         timeline.playFromStart();
 
         //TODO: changer la cible
@@ -496,7 +498,7 @@ public class Personnage extends Structure {
         timeline.playFromStart();
 
         //TODO: changer la cible
-        timeline.setOnFinished(even -> window.getLevelDisplay().defeate());
+        timeline.setOnFinished(even -> window.getLevelDisplay().defeat());
 
     }
 

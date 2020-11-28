@@ -52,4 +52,7 @@ public enum Levels{
         return password;
     }
 
+    public String getUrl() {
+        return Url;
+    }
 }
