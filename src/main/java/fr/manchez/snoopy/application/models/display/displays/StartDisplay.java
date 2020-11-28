@@ -2,6 +2,7 @@ package fr.manchez.snoopy.application.models.display.displays;
 
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Displays;
+import fr.manchez.snoopy.application.enums.PlayersType;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -32,6 +33,8 @@ public class StartDisplay extends MenuDisplay {
                 )
         );
 
+        //TODO: charger musique du jeu
+        /*
         try{
 
             Media sound = new Media(getClass().getResource("/fr/manchez/snoopy/sounds/titleTheme.mp3").toURI().toString());
@@ -42,6 +45,7 @@ public class StartDisplay extends MenuDisplay {
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
+         */
 
     }
 
@@ -65,6 +69,12 @@ public class StartDisplay extends MenuDisplay {
             curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + -34*SnoopyWindow.SCALE);
             isOption1 = true;
         }else if (keyCode.equals(KeyCode.ENTER)){
+
+            if(isOption1){
+                window.setPlayersType(PlayersType.PLAYER1);
+            }else{
+                window.setPlayersType(PlayersType.PLAYER2);
+            }
 
             window.loadNewDisplay(Displays.GameDisplay);
 

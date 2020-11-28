@@ -24,6 +24,9 @@ public enum Structures {
 
     SNOOPY_IMMOBILE("S","Personnages/Snoopy/face_immobile.png",32,32),
     SNOOPY_SPAWN_POINT("S","Personnages/Snoopy/face_immobile.png",32,32),
+    SNOOPY_DESAMP("","Personnages/Snoopy/desempare.png",32,32),
+    SNOOPY_MORT("","Details/mort.png",32,32),
+    SNOOPY_HEUREUX("","Personnages/Snoopy/heureux.png",32,48),
 
     SNOOPY_LEFT_1("","Personnages/Snoopy/left/left_1.png",32,32),
     SNOOPY_LEFT_2("","Personnages/Snoopy/left/left_2.png",32,32),

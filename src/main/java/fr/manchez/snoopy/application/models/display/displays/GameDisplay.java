@@ -35,26 +35,34 @@ public class  GameDisplay extends MenuDisplay {
 
         KeyCode keyCode = keyEvent.getCode();
 
-        /** Vérifie la touche sur laquelle l'utilisateur appuie ainsi que la ligne sur laquelle le curseur est placée */
-        if(keyCode.equals(KeyCode.UP) && isOption1){
-            curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + 34* SnoopyWindow.SCALE);
-            isOption1 = false;
-        }else if(keyCode.equals(KeyCode.UP) && !isOption1){
-            curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + -34*SnoopyWindow.SCALE);
-            isOption1 = true;
-        }else if(keyCode.equals(KeyCode.DOWN) && isOption1){
-            curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + 34*SnoopyWindow.SCALE);
-            isOption1 = false;
-        }else if(keyCode.equals(KeyCode.DOWN) && !isOption1){
-            curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + -34*SnoopyWindow.SCALE);
-            isOption1 = true;
-        }else if (keyCode.equals(KeyCode.ENTER) && isOption1){
+        if(keyCode.equals(KeyCode.ESCAPE)){
 
-            window.loadNewLevelDisplay(Levels.LEVEL_1);
+            window.loadNewDisplay(Displays.StartDisplay);
 
-        }else if(keyCode.equals(KeyCode.ENTER) && !isOption1){
+        }else{
 
-            window.loadNewDisplay(Displays.PasswordDisplay);
+            /** Vérifie la touche sur laquelle l'utilisateur appuie ainsi que la ligne sur laquelle le curseur est placée */
+            if(keyCode.equals(KeyCode.UP) && isOption1){
+                curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + 34* SnoopyWindow.SCALE);
+                isOption1 = false;
+            }else if(keyCode.equals(KeyCode.UP) && !isOption1){
+                curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + -34*SnoopyWindow.SCALE);
+                isOption1 = true;
+            }else if(keyCode.equals(KeyCode.DOWN) && isOption1){
+                curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + 34*SnoopyWindow.SCALE);
+                isOption1 = false;
+            }else if(keyCode.equals(KeyCode.DOWN) && !isOption1){
+                curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + -34*SnoopyWindow.SCALE);
+                isOption1 = true;
+            }else if (keyCode.equals(KeyCode.ENTER) && isOption1){
+
+                window.loadNewLevelDisplay(Levels.LEVEL_1);
+
+            }else if(keyCode.equals(KeyCode.ENTER) && !isOption1){
+
+                window.loadNewDisplay(Displays.PasswordDisplay);
+
+            }
 
         }
 

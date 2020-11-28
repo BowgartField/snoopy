@@ -2,23 +2,30 @@ package fr.manchez.snoopy.application;
 
 import fr.manchez.snoopy.application.enums.Displays;
 import fr.manchez.snoopy.application.enums.Levels;
+import fr.manchez.snoopy.application.enums.PlayersType;
 import fr.manchez.snoopy.application.enums.Sounds;
 import fr.manchez.snoopy.application.models.display.Display;
 import fr.manchez.snoopy.application.models.display.DisplayLoader;
 import fr.manchez.snoopy.application.models.levels.LevelDisplay;
 import fr.manchez.snoopy.application.models.levels.LevelDisplayLoader;
+import fr.manchez.snoopy.application.models.sauvegarde.Sauvegarde;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 
 public class SnoopyWindow{
 
+    /** Joueur sélectionné **/
+    private PlayersType playersType;
+
+    /** Sauvegarde **/
+    private final Sauvegarde sauvegarde;
+
     /** Media player **/
-    MediaPlayer mediaPlayer;
+    AudioClip audioClip;
 
     /** Stage de la fenêtre **/
     private Stage stage;
@@ -45,6 +52,8 @@ public class SnoopyWindow{
         pane = new Pane();
         scene = new Scene(pane);
         stage.setScene(scene);
+
+        this.sauvegarde = new Sauvegarde(this);
 
         loadNewDisplay(displays);
 
@@ -137,6 +146,10 @@ public class SnoopyWindow{
             pane.getChildren().addAll(nodes);
     }
 
+    /**
+     *
+     * @param nodes
+     */
     public void removeAllNode(Node... nodes){
         pane.getChildren().removeAll(nodes);
     }
@@ -149,10 +162,8 @@ public class SnoopyWindow{
 
         try{
 
-            Media soundFile = new Media(getClass().getResource("/fr/manchez/snoopy/sounds/" + sound.getUrl()).toURI().toString());
-
-            mediaPlayer = new MediaPlayer(soundFile);
-            mediaPlayer.play();
+            audioClip = new AudioClip(getClass().getResource("/fr/manchez/snoopy/sounds/" + sound.getUrl()).toURI().toString());
+            audioClip.play();
 
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -178,4 +189,17 @@ public class SnoopyWindow{
     public LevelDisplay getLevelDisplay() {
         return levelDisplay;
     }
+    public Sauvegarde getSauvegarde() {
+        return sauvegarde;
+    }
+    public PlayersType getPlayersType() {
+        return playersType;
+    }
+    public void setPlayersType(PlayersType playersType) {
+        this.playersType = playersType;
+    }
+    public Stage getStage(){
+        return stage;
+    }
+
 }

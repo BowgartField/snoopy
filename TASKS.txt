@@ -1,15 +1,14 @@
-- animation toucher par la balle
-- animation défaite
-- vie perso
-    - niveau fini = vie + 1
-    - 5 vie au départ
-
 - coder sauvegarde
-
-- code écran fin de niveau
-- système de score
+    - menu
+    - bouton continuer ou sauvegarder
 
 - coder autres blocs
+    -bloc poussage
+    -bloc piégé
+    -bloc bloc qui apparait disparait
+    -bloc tapis roulant
+    -bloc TP
+
 - coder animation début du jeu
 
 FINI:
@@ -20,6 +19,12 @@ FINI:
     - personnage OK
     - balle OK
 - coder quand perso touche la balle
+- animation toucher par la balle
+- animation défaite
+- vie perso
+    - niveau fini = vie + 1
+    - 5 vie au départ
 
 EN CONSTRUCTION:
-
+- code écran fin de niveau
+- système de score

@@ -122,60 +122,68 @@ public class PasswordDisplay extends MenuDisplay {
 
         KeyCode keyCode = event.getCode();
 
-        /** Vérifie sur quelle touche on appuie et sur quel ligne/colonne du menu on se trouve et effectue l'action correspondante*/
-        if (!isChoosingPass) {
+        if(keyCode.equals(KeyCode.ESCAPE)){
 
-            if(keyCode.equals(KeyCode.UP) && isOption1){
-                curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + 34* SnoopyWindow.SCALE);
-                isOption1 = false;
-            }else if(keyCode.equals(KeyCode.UP)){
-                curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + -34*SnoopyWindow.SCALE);
-                isOption1 = true;
-            }else if(keyCode.equals(KeyCode.DOWN) && isOption1){
-                curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + 34*SnoopyWindow.SCALE);
-                isOption1 = false;
-            }else if(keyCode.equals(KeyCode.DOWN)){
-                curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + -34*SnoopyWindow.SCALE);
-                isOption1 = true;
-            }else if (keyCode.equals(KeyCode.RIGHT) && isOption1) {
-                window.removeAllNode(curseur.getImageView()); // Cache le curseur de base
-                window.addAllNode(curseurUp.getImageView()); // Affiche le curseur qui pointe vers le haut
-                isChoosingPass = true; // Spécifie qu'on est entrain de sélectionner le mot de passe
-            }else if (keyCode.equals(KeyCode.ENTER) && !isOption1){
+            window.loadNewDisplay(Displays.GameDisplay);
 
-                //TODO: Changer ca
-                window.loadNewDisplay(Displays.GameDisplay);
+        }else{
 
-            }else if (keyCode.equals(KeyCode.ENTER)) {
-                /** Vérification du code de la game*/
-                String pass = String.valueOf(password.get(0)) + password.get(1) + password.get(2) + password.get(3);
-                Levels level = Levels.findLevelsFromPassword(pass);
+            /** Vérifie sur quelle touche on appuie et sur quel ligne/colonne du menu on se trouve et effectue l'action correspondante*/
+            if (!isChoosingPass) {
 
-                if (level != null) {
+                if(keyCode.equals(KeyCode.UP) && isOption1){
+                    curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + 34* SnoopyWindow.SCALE);
+                    isOption1 = false;
+                }else if(keyCode.equals(KeyCode.UP)){
+                    curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + -34*SnoopyWindow.SCALE);
+                    isOption1 = true;
+                }else if(keyCode.equals(KeyCode.DOWN) && isOption1){
+                    curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + 34*SnoopyWindow.SCALE);
+                    isOption1 = false;
+                }else if(keyCode.equals(KeyCode.DOWN)){
+                    curseur.yPropertyProperty().set(curseur.yPropertyProperty().get() + -34*SnoopyWindow.SCALE);
+                    isOption1 = true;
+                }else if (keyCode.equals(KeyCode.RIGHT) && isOption1) {
+                    window.removeAllNode(curseur.getImageView()); // Cache le curseur de base
+                    window.addAllNode(curseurUp.getImageView()); // Affiche le curseur qui pointe vers le haut
+                    isChoosingPass = true; // Spécifie qu'on est entrain de sélectionner le mot de passe
+                }else if (keyCode.equals(KeyCode.ENTER) && !isOption1){
+
+                    window.loadNewDisplay(Displays.GameDisplay);
+
+                }else if (keyCode.equals(KeyCode.ENTER)) {
+                    /** Vérification du code de la game*/
+                    String pass = String.valueOf(password.get(0)) + password.get(1) + password.get(2) + password.get(3);
+                    Levels level = Levels.findLevelsFromPassword(pass);
+
+                    if (level != null) {
+                        CheckPassword();
+                    }
+                }
+
+            }else{
+
+                if (keyCode.equals(KeyCode.RIGHT) && position < 3){
+                    curseurUp.xPropertyProperty().set(curseurUp.xPropertyProperty().get() + 16* SnoopyWindow.SCALE);
+                    position++;
+                }else if (keyCode.equals(KeyCode.LEFT) && position > 0) {
+                    curseurUp.xPropertyProperty().set(curseurUp.xPropertyProperty().get() + -16 * SnoopyWindow.SCALE);
+                    position--;
+                }else if (keyCode.equals(KeyCode.LEFT) && position == 0) {
+                    window.removeAllNode(curseurUp.getImageView()); // Cache le curseur qui pointe vers le haut
+                    window.addAllNode(curseur.getImageView()); // Affiche le curseur de base
+                    isChoosingPass = false; // Spécifie qu'on n'est plus entrain de sélectionner le mot de passe
+                }else if (keyCode.equals(KeyCode.UP)) {
+                    increment(true);
+                }else if(keyCode.equals(KeyCode.DOWN)){
+                    increment(false);
+                }else if(keyCode.equals(KeyCode.ENTER)){
                     CheckPassword();
                 }
             }
 
-        }else{
-
-            if (keyCode.equals(KeyCode.RIGHT) && position < 3){
-                curseurUp.xPropertyProperty().set(curseurUp.xPropertyProperty().get() + 16* SnoopyWindow.SCALE);
-                position++;
-            }else if (keyCode.equals(KeyCode.LEFT) && position > 0) {
-                curseurUp.xPropertyProperty().set(curseurUp.xPropertyProperty().get() + -16 * SnoopyWindow.SCALE);
-                position--;
-            }else if (keyCode.equals(KeyCode.LEFT) && position == 0) {
-                window.removeAllNode(curseurUp.getImageView()); // Cache le curseur qui pointe vers le haut
-                window.addAllNode(curseur.getImageView()); // Affiche le curseur de base
-                isChoosingPass = false; // Spécifie qu'on n'est plus entrain de sélectionner le mot de passe
-            }else if (keyCode.equals(KeyCode.UP)) {
-                increment(true);
-            }else if(keyCode.equals(KeyCode.DOWN)){
-                increment(false);
-            }else if(keyCode.equals(KeyCode.ENTER)){
-                CheckPassword();
-            }
         }
+
     }
 
     /** Vérification du code donné et lancement du level correspondant*/
@@ -186,7 +194,6 @@ public class PasswordDisplay extends MenuDisplay {
 
         if(level != null){
 
-            //TODO: changer ca
             window.loadNewLevelDisplay(level);
 
         }

@@ -351,7 +351,7 @@ public class LevelDisplay {
                 isPause = true;
 
                 Alert alert = new Alert(
-                        Alert.AlertType.INFORMATION,
+                        Alert.AlertType.CONFIRMATION,
                         "Etes-vous sûre de vouloir sauvegarder et quitter ?",
                         ButtonType.YES,
                         ButtonType.NO);

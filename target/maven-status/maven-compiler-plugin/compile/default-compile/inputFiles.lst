@@ -1,6 +1,7 @@
 C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\application\models\Timer.java
 C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\application\models\objects\Object.java
 C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\application\SnoopyWindow.java
+C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\application\models\sauvegarde\Player.java
 C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\application\models\display\displays\MenuDisplay.java
 C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\application\enums\Sounds.java
 C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\application\enums\Structures.java
@@ -9,6 +10,7 @@ C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\appl
 C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\application\enums\Levels.java
 C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\application\models\display\DisplayLoader.java
 C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\application\models\levels\LevelDisplayLoader.java
+C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\application\enums\PlayersType.java
 C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\application\models\objects\Personnage.java
 C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\application\models\objects\Structure.java
 C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\application\models\display\displays\GameDisplay.java
@@ -17,3 +19,4 @@ C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\appl
 C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\application\models\objects\Balle.java
 C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\application\models\display\displays\StartDisplay.java
 C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\application\models\levels\LevelDisplay.java
+C:\Users\Mrjer\Documents\projet java\snoopy\src\main\java\fr\manchez\snoopy\application\models\sauvegarde\Sauvegarde.java
