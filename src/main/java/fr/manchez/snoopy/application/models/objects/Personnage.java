@@ -28,7 +28,7 @@ public class Personnage extends Structure {
     private int vie;
 
     /** Vie par défaut */
-    public static int DEFAULT_VIE = 5;
+    public static int DEFAULT_VIE = 1;
 
     /** **/
     boolean isDefeating = false;

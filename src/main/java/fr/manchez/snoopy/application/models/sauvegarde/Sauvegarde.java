@@ -59,7 +59,7 @@ public class Sauvegarde {
 
         }catch (IOException e){
 
-            System.out.println(e.getMessage());
+            e.printStackTrace();
 
         }
 
@@ -86,10 +86,6 @@ public class Sauvegarde {
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
-
-        //ferme la fenêtre
-        window.getStage().close();
-
 
     }
 
