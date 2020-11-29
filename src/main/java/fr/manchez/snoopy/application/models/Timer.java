@@ -220,5 +220,4 @@ public class Timer {
         return (maxTimer-timerIndex)*100;
 
     }
-
 }

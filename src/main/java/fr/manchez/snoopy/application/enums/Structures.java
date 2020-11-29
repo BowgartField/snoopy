@@ -61,7 +61,14 @@ public enum Structures {
     NEUF("9", "Textes/Chiffres/9.png", 14, 14),
 
     STAGE_CLEAR("", "Textes/stageClear.png", 240, 16),
-    STAGE_LOOSE("", "Textes/stageNb.png", 141,16);
+    STAGE_LOOSE("", "Textes/stageNb.png", 141,16),
+
+    BALL_STATE1("", "Details/boule1.png", 32, 32),
+    BALL_STATE2("", "Details/boule2.png", 32, 32),
+    BALL_STATE3("", "Details/boule3.png", 32, 32),
+    SHADOW_STATE1("", "Details/ombre1.png", 32, 16),
+    SHADOW_STATE2("", "Details/ombre2.png", 32, 16),
+    SHADOW_STATE3("", "Details/ombre3.png", 32, 16);
 
     /** Url vers le fichier de la structures **/
     private final String fileURL;

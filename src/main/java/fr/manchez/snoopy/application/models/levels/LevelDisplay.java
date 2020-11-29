@@ -60,6 +60,10 @@ public class LevelDisplay {
     Structure levelNbDixaine;
     Structure levelNbCentaine;
 
+    /**Stock les structures des scores*/
+    List<Structure> scoreStructures = new ArrayList<>();
+    List<Structure> highscoreStructures = new ArrayList<>();
+
     /**  Le niveau est en pause*/
     boolean isPause = false;
 
@@ -78,6 +82,8 @@ public class LevelDisplay {
     /** Timer **/
     Timer timer;
 
+    /** timeline de l'affichage du score*/
+    Timeline scoreTimeline;
     /**
      * window
      */
@@ -198,6 +204,8 @@ public class LevelDisplay {
 
         displayLifes();
         displayActualLevel();
+        displayAnimatedBalls();
+        initScore(window.getSauvegarde().getPlayer().getScore(), window.getSauvegarde().getPlayer().getHighscore());
     }
 
     /**
@@ -236,6 +244,8 @@ public class LevelDisplay {
 
         displayLifes();
         displayActualLevel();
+        displayAnimatedBalls();
+        displayAnimatedScore();
     }
 
     /** Affiche les éléments relatifs à la défaite*/
@@ -271,8 +281,9 @@ public class LevelDisplay {
                 cursor
         );
         displayActualPassword();
-
+        initScore(window.getSauvegarde().getPlayer().getScore(), window.getSauvegarde().getPlayer().getHighscore());
     }
+
 
     /**
      * Déclencher lors de la victoire
@@ -282,6 +293,7 @@ public class LevelDisplay {
         //Animation de victoire
         //Affichage du score
         //Passage au niveau suivant
+
         System.out.println("victoire !!");
 
         //Il a compléter le level actuel
@@ -289,6 +301,7 @@ public class LevelDisplay {
 
         isWin = true;
         isPause = true;
+
         showWinScreen();
 
     }
@@ -330,21 +343,21 @@ public class LevelDisplay {
 
         if(vie < 9){
             vieDixaine = new Structure(
-                    new Point2D(162*SnoopyWindow.SCALE + levelEndBackground.getX(), 210*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    new Point2D(162*SnoopyWindow.SCALE + levelEndBackground.getX(), 222*SnoopyWindow.SCALE + levelEndBackground.getY()),
                     Structures.ZERO
             );
             vieUnite = new Structure(
-                    new Point2D(178* SnoopyWindow.SCALE + levelEndBackground.getX(), 210*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    new Point2D(178* SnoopyWindow.SCALE + levelEndBackground.getX(), 222*SnoopyWindow.SCALE + levelEndBackground.getY()),
                     Structures.getStructuresFromSymbol(String.valueOf(vie).charAt(0))
             );
 
         }else{
             vieDixaine = new Structure(
-                    new Point2D(162* SnoopyWindow.SCALE + levelEndBackground.getX(), 210*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    new Point2D(162* SnoopyWindow.SCALE + levelEndBackground.getX(), 222*SnoopyWindow.SCALE + levelEndBackground.getY()),
                     Structures.getStructuresFromSymbol(String.valueOf(vie).charAt(0))
             );
             vieUnite = new Structure(
-                    new Point2D(178* SnoopyWindow.SCALE + levelEndBackground.getX(), 210*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                    new Point2D(178* SnoopyWindow.SCALE + levelEndBackground.getX(), 222*SnoopyWindow.SCALE + levelEndBackground.getY()),
                     Structures.getStructuresFromSymbol(String.valueOf(vie).charAt(1))
             );
         }
@@ -522,6 +535,499 @@ public class LevelDisplay {
     }
 
     /**
+     * Gère l'affichage des boules animées sur les écrans de fin
+     */
+    private void displayAnimatedBalls(){
+
+        int deplacement = 50*SnoopyWindow.SCALE;
+        Duration duration = Duration.millis(700);
+
+        Structure boule1 = new Structure(new Point2D(30*SnoopyWindow.SCALE, 250*SnoopyWindow.SCALE), Structures.BALL_STATE1);
+        Structure boule2 = new Structure(new Point2D(260*SnoopyWindow.SCALE, 250*SnoopyWindow.SCALE), Structures.BALL_STATE1);
+        Structure ombre1 = new Structure(new Point2D(30*SnoopyWindow.SCALE, 266*SnoopyWindow.SCALE), Structures.SHADOW_STATE1);
+        Structure ombre2 = new Structure(new Point2D(260*SnoopyWindow.SCALE, 266*SnoopyWindow.SCALE), Structures.SHADOW_STATE1);
+
+
+        window.addAllNode(
+                boule1.getImageView(),
+                boule2.getImageView(),
+                ombre1.getImageView(),
+                ombre2.getImageView()
+        );
+
+
+        Timeline timeline = new Timeline();
+
+        for(int i = 0; i < deplacement*6; i++){
+
+            if(i <= deplacement){
+
+                final KeyFrame keyFrame = new KeyFrame(Duration.millis(i), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+
+                        boule1.getImageView().setY(boule1.getImageView().getY()-1);
+                        boule2.getImageView().setY(boule2.getImageView().getY()-1);
+
+                        boule1.setImage(Structures.BALL_STATE1);
+                        boule2.setImage(Structures.BALL_STATE1);
+                        ombre1.setImage(Structures.SHADOW_STATE1);
+                        ombre2.setImage(Structures.SHADOW_STATE1);
+                        boule1.getImageView().toFront();
+                        boule2.getImageView().toFront();
+
+                    }
+                });
+
+                timeline.getKeyFrames().add(keyFrame);
+
+            }else if(i < deplacement*2){
+
+                final KeyFrame keyFrame = new KeyFrame(Duration.millis(i), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+
+                        boule1.getImageView().setY(boule1.getImageView().getY()-1);
+                        boule2.getImageView().setY(boule2.getImageView().getY()-1);
+
+                        boule1.setImage(Structures.BALL_STATE2);
+                        boule2.setImage(Structures.BALL_STATE2);
+                        ombre1.setImage(Structures.SHADOW_STATE2);
+                        ombre2.setImage(Structures.SHADOW_STATE2);
+                        boule1.getImageView().toFront();
+                        boule2.getImageView().toFront();
+
+                    }
+                });
+
+                timeline.getKeyFrames().add(keyFrame);
+
+
+            }else if(i < deplacement*3){
+
+                final KeyFrame keyFrame = new KeyFrame(Duration.millis(i), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+
+                        boule1.getImageView().setY(boule1.getImageView().getY()-1);
+                        boule2.getImageView().setY(boule2.getImageView().getY()-1);
+
+                        boule1.setImage(Structures.BALL_STATE3);
+                        boule2.setImage(Structures.BALL_STATE3);
+                        ombre1.setImage(Structures.SHADOW_STATE3);
+                        ombre2.setImage(Structures.SHADOW_STATE3);
+                        boule1.getImageView().toFront();
+                        boule2.getImageView().toFront();
+
+                    }
+                });
+
+                timeline.getKeyFrames().add(keyFrame);
+
+            }else if(i < deplacement*4){
+
+                final KeyFrame keyFrame = new KeyFrame(Duration.millis(i), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+
+                        boule1.getImageView().setY(boule1.getImageView().getY()+1);
+                        boule2.getImageView().setY(boule2.getImageView().getY()+1);
+                        boule1.getImageView().toFront();
+                        boule2.getImageView().toFront();
+
+                    }
+                });
+
+                timeline.getKeyFrames().add(keyFrame);
+
+            }else if(i < deplacement*5){
+
+                final KeyFrame keyFrame = new KeyFrame(Duration.millis(i), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+
+                        boule1.getImageView().setY(boule1.getImageView().getY()+1);
+                        boule2.getImageView().setY(boule2.getImageView().getY()+1);
+
+                        boule1.setImage(Structures.BALL_STATE2);
+                        boule2.setImage(Structures.BALL_STATE2);
+                        ombre1.setImage(Structures.SHADOW_STATE2);
+                        ombre2.setImage(Structures.SHADOW_STATE2);
+                        boule1.getImageView().toFront();
+                        boule2.getImageView().toFront();
+
+                    }
+                });
+
+                timeline.getKeyFrames().add(keyFrame);
+
+            }else{
+
+                final KeyFrame keyFrame = new KeyFrame(Duration.millis(i), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+
+                        boule1.getImageView().setY(boule1.getImageView().getY()+1);
+                        boule2.getImageView().setY(boule2.getImageView().getY()+1);
+
+                        boule1.setImage(Structures.BALL_STATE1);
+                        boule2.setImage(Structures.BALL_STATE1);
+                        ombre1.setImage(Structures.SHADOW_STATE1);
+                        ombre2.setImage(Structures.SHADOW_STATE1);
+                        boule1.getImageView().toFront();
+                        boule2.getImageView().toFront();
+
+                    }
+                });
+
+                timeline.getKeyFrames().add(keyFrame);
+
+            }
+
+        }
+
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.setRate(0.45);
+        timeline.playFromStart();
+
+
+        /*
+        //snoopy qui saute
+        final KeyFrame keyFrame1 = new KeyFrame(Duration.millis(0), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                final TranslateTransition translateAnimation1 = new TranslateTransition(
+                        duration, boule1.getImageView());
+
+                translateAnimation1.setByY(-deplacement);
+                translateAnimation1.playFromStart();
+
+                final TranslateTransition translateAnimation2 = new TranslateTransition(
+                        duration, boule2.getImageView());
+
+                translateAnimation2.setByY(-deplacement);
+                translateAnimation2.playFromStart();
+            }
+        });
+        final KeyFrame keyFrame2 = new KeyFrame(Duration.millis(700), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                boule1.setImage(Structures.BALL_STATE2);
+                boule2.setImage(Structures.BALL_STATE2);
+
+                final TranslateTransition translateAnimation1 = new TranslateTransition(
+                        duration, boule1.getImageView());
+
+                translateAnimation1.setByY(-deplacement);
+                translateAnimation1.playFromStart();
+
+                final TranslateTransition translateAnimation2 = new TranslateTransition(
+                        duration, boule2.getImageView());
+
+                translateAnimation2.setByY(-deplacement);
+                translateAnimation2.playFromStart();
+            }
+        });
+        final KeyFrame keyFrame3 = new KeyFrame(Duration.millis(1400), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                boule1.setImage(Structures.BALL_STATE3);
+                boule2.setImage(Structures.BALL_STATE3);
+
+                final TranslateTransition translateAnimation1 = new TranslateTransition(
+                        duration, boule1.getImageView());
+
+                translateAnimation1.setByY(-deplacement);
+                translateAnimation1.playFromStart();
+
+                final TranslateTransition translateAnimation2 = new TranslateTransition(
+                        duration, boule2.getImageView());
+
+                translateAnimation2.setByY(-deplacement);
+                translateAnimation2.playFromStart();
+            }
+        });
+        final KeyFrame keyFrame4 = new KeyFrame(Duration.millis(2100), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                final TranslateTransition translateAnimation1 = new TranslateTransition(
+                        duration, boule1.getImageView());
+
+                translateAnimation1.setByY(deplacement);
+                translateAnimation1.playFromStart();
+
+                final TranslateTransition translateAnimation2 = new TranslateTransition(
+                        duration, boule2.getImageView());
+
+                translateAnimation2.setByY(deplacement);
+                translateAnimation2.playFromStart();
+            }
+        });
+        final KeyFrame keyFrame5 = new KeyFrame(Duration.millis(2800), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                boule1.setImage(Structures.BALL_STATE2);
+                boule2.setImage(Structures.BALL_STATE2);
+
+                final TranslateTransition translateAnimation1 = new TranslateTransition(
+                        duration, boule1.getImageView());
+
+                translateAnimation1.setByY(deplacement);
+                translateAnimation1.playFromStart();
+                final TranslateTransition translateAnimation2 = new TranslateTransition(
+                        duration, boule2.getImageView());
+
+                translateAnimation2.setByY(deplacement);
+                translateAnimation2.playFromStart();
+            }
+        });
+        final KeyFrame keyFrame6 = new KeyFrame(Duration.millis(3500), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    boule1.setImage(Structures.BALL_STATE1);
+                    boule2.setImage(Structures.BALL_STATE1);
+
+                    final TranslateTransition translateAnimation1 = new TranslateTransition(
+                            duration, boule1.getImageView());
+
+                    translateAnimation1.setByY(deplacement);
+                    translateAnimation1.playFromStart();
+
+                    final TranslateTransition translateAnimation2 = new TranslateTransition(
+                            duration, boule2.getImageView());
+
+                    translateAnimation2.setByY(deplacement);
+                    translateAnimation2.playFromStart();
+                }
+        });
+        final KeyFrame keyFrame7 = new KeyFrame(Duration.millis(4200), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            }
+        });
+
+        Timeline timeline = new Timeline(keyFrame1,keyFrame2,keyFrame3,keyFrame4,keyFrame5,keyFrame6,keyFrame7);
+
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.setRate(2);
+        timeline.playFromStart();
+
+         */
+
+
+    }
+
+    /**
+     * Affiche l'augmentation du score
+     */
+    private void displayAnimatedScore(){
+
+        final int[] highscore = {window.getSauvegarde().getPlayer().getHighscore()};
+
+        final int[] actualscore = {window.getSauvegarde().getPlayer().getScore()};
+        int finalscore = actualscore[0] + timer.getTimerScore();
+
+        initScore(actualscore[0], highscore[0]);
+
+        scoreTimeline = new Timeline(new KeyFrame(Duration.millis(30), new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+
+                if(actualscore[0] <= finalscore){
+                    changeScore(actualscore[0]);
+
+
+                    if(actualscore[0] == highscore[0]){
+
+                        changeHighcore(highscore[0]);
+                        highscore[0] = highscore[0] +100;
+
+                    }
+                    actualscore[0] = actualscore[0]+100;
+                }else{
+                    scoreTimeline.stop();
+                    window.getSauvegarde().getPlayer().setScore(actualscore[0]);
+                    window.getSauvegarde().getPlayer().setHighscore(highscore[0]);
+                    window.getSauvegarde().save();
+                }
+
+            }
+
+        }));
+
+        scoreTimeline.setCycleCount(Animation.INDEFINITE);
+        scoreTimeline.play();
+
+    }
+
+    /**Affiche le score*/
+    private void initScore(int score, int highscore){
+
+        int x = 109;
+        int highscoreY= 111;
+        int scoreY = 154;
+
+        if(isLoose){
+            highscoreY = highscoreY-26;
+            scoreY = scoreY-21;
+        }
+
+        String convertedScore = convertScore(score);
+        String convertedHighscore = convertScore(highscore);
+
+        Structure highscore1 = new Structure(
+                new Point2D(x*SnoopyWindow.SCALE + levelEndBackground.getX(), highscoreY*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                Structures.getStructuresFromSymbol(convertedHighscore.charAt(0))
+        );
+        Structure highscore2 = new Structure(
+                new Point2D((x+16)*SnoopyWindow.SCALE + levelEndBackground.getX(), highscoreY*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                Structures.getStructuresFromSymbol(convertedHighscore.charAt(1))
+        );
+        Structure highscore3 = new Structure(
+                new Point2D((x+32)* SnoopyWindow.SCALE + levelEndBackground.getX(), highscoreY*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                Structures.getStructuresFromSymbol(convertedHighscore.charAt(2))
+        );
+        Structure highscore4 = new Structure(
+                new Point2D((x+48)* SnoopyWindow.SCALE + levelEndBackground.getX(), highscoreY*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                Structures.getStructuresFromSymbol(convertedHighscore.charAt(3))
+        );
+        Structure highscore5 = new Structure(
+                new Point2D((x+64)* SnoopyWindow.SCALE + levelEndBackground.getX(), highscoreY*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                Structures.getStructuresFromSymbol(convertedHighscore.charAt(4))
+        );
+        Structure highscore6 = new Structure(
+                new Point2D((x+80)* SnoopyWindow.SCALE + levelEndBackground.getX(), highscoreY*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                Structures.getStructuresFromSymbol(convertedHighscore.charAt(5))
+        );
+        Structure highscore7 = new Structure(
+                new Point2D((x+96)* SnoopyWindow.SCALE + levelEndBackground.getX(), highscoreY*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                Structures.getStructuresFromSymbol(convertedHighscore.charAt(6))
+        );
+        Structure highscore8 = new Structure(
+                new Point2D((x+112)* SnoopyWindow.SCALE + levelEndBackground.getX(), highscoreY*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                Structures.getStructuresFromSymbol(convertedHighscore.charAt(7))
+        );
+
+        highscoreStructures.add(highscore1);
+        highscoreStructures.add(highscore2);
+        highscoreStructures.add(highscore3);
+        highscoreStructures.add(highscore4);
+        highscoreStructures.add(highscore5);
+        highscoreStructures.add(highscore6);
+        highscoreStructures.add(highscore7);
+        highscoreStructures.add(highscore8);
+
+
+        Structure score1 = new Structure(
+                new Point2D(x*SnoopyWindow.SCALE + levelEndBackground.getX(), scoreY*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                Structures.getStructuresFromSymbol(convertedScore.charAt(0))
+        );
+        Structure score2 = new Structure(
+                new Point2D((x+16)*SnoopyWindow.SCALE + levelEndBackground.getX(), scoreY*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                Structures.getStructuresFromSymbol(convertedScore.charAt(1))
+        );
+        Structure score3 = new Structure(
+                new Point2D((x+32)* SnoopyWindow.SCALE + levelEndBackground.getX(), scoreY*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                Structures.getStructuresFromSymbol(convertedScore.charAt(2))
+        );
+        Structure score4 = new Structure(
+                new Point2D((x+48)* SnoopyWindow.SCALE + levelEndBackground.getX(), scoreY*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                Structures.getStructuresFromSymbol(convertedScore.charAt(3))
+        );
+        Structure score5 = new Structure(
+                new Point2D((x+64)* SnoopyWindow.SCALE + levelEndBackground.getX(), scoreY*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                Structures.getStructuresFromSymbol(convertedScore.charAt(4))
+        );
+        Structure score6 = new Structure(
+                new Point2D((x+80)* SnoopyWindow.SCALE + levelEndBackground.getX(), scoreY*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                Structures.getStructuresFromSymbol(convertedScore.charAt(5))
+        );
+        Structure score7 = new Structure(
+                new Point2D((x+96)* SnoopyWindow.SCALE + levelEndBackground.getX(), scoreY*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                Structures.getStructuresFromSymbol(convertedScore.charAt(6))
+        );
+        Structure score8 = new Structure(
+                new Point2D((x+112)* SnoopyWindow.SCALE + levelEndBackground.getX(), scoreY*SnoopyWindow.SCALE + levelEndBackground.getY()),
+                Structures.getStructuresFromSymbol(convertedScore.charAt(7))
+        );
+
+        scoreStructures.add(score1);
+        scoreStructures.add(score2);
+        scoreStructures.add(score3);
+        scoreStructures.add(score4);
+        scoreStructures.add(score5);
+        scoreStructures.add(score6);
+        scoreStructures.add(score7);
+        scoreStructures.add(score8);
+
+        highscoreStructures.forEach(item -> window.addAllNode(item.getImageView()));
+        scoreStructures.forEach(item -> window.addAllNode(item.getImageView()));
+
+    }
+
+    /** Change le score*/
+    public void changeScore(int score){
+
+        //TODO: ajouter bruitage
+        String convertedScore = convertScore(score);
+
+        scoreStructures.get(0).setImage(Structures.getStructuresFromSymbol(convertedScore.charAt(0)));
+        scoreStructures.get(1).setImage(Structures.getStructuresFromSymbol(convertedScore.charAt(1)));
+        scoreStructures.get(2).setImage(Structures.getStructuresFromSymbol(convertedScore.charAt(2)));
+        scoreStructures.get(3).setImage(Structures.getStructuresFromSymbol(convertedScore.charAt(3)));
+        scoreStructures.get(4).setImage(Structures.getStructuresFromSymbol(convertedScore.charAt(4)));
+        scoreStructures.get(5).setImage(Structures.getStructuresFromSymbol(convertedScore.charAt(5)));
+        scoreStructures.get(6).setImage(Structures.getStructuresFromSymbol(convertedScore.charAt(6)));
+        scoreStructures.get(7).setImage(Structures.getStructuresFromSymbol(convertedScore.charAt(7)));
+
+    }
+
+    /** Change le highscore*/
+    public void changeHighcore(int highScore){
+
+        String convertedHighscore = convertScore(highScore);
+
+        highscoreStructures.get(0).setImage(Structures.getStructuresFromSymbol(convertedHighscore.charAt(0)));
+        highscoreStructures.get(1).setImage(Structures.getStructuresFromSymbol(convertedHighscore.charAt(1)));
+        highscoreStructures.get(2).setImage(Structures.getStructuresFromSymbol(convertedHighscore.charAt(2)));
+        highscoreStructures.get(3).setImage(Structures.getStructuresFromSymbol(convertedHighscore.charAt(3)));
+        highscoreStructures.get(4).setImage(Structures.getStructuresFromSymbol(convertedHighscore.charAt(4)));
+        highscoreStructures.get(5).setImage(Structures.getStructuresFromSymbol(convertedHighscore.charAt(5)));
+        highscoreStructures.get(6).setImage(Structures.getStructuresFromSymbol(convertedHighscore.charAt(6)));
+        highscoreStructures.get(7).setImage(Structures.getStructuresFromSymbol(convertedHighscore.charAt(7)));
+
+    }
+
+    public  String convertScore(int score){
+
+        String convertedScore = "";
+
+        if (score < 10){
+            convertedScore = "0000000" + score;
+        }else if(score < 100){
+            convertedScore = "000000" + score;
+        }else if(score < 1000){
+            convertedScore = "00000" + score;
+        }else if(score < 10000){
+            convertedScore = "0000" + score;
+        }else if(score < 100000){
+            convertedScore = "000" + score;
+        }else if(score < 1000000){
+            convertedScore = "00" + score;
+        }else if(score < 10000000){
+            convertedScore = "0" + score;
+        }else{
+            convertedScore = String.valueOf(score);
+        }
+
+        return convertedScore;
+    }
+    /**
      * Ajoute une structure au niveau
      * @param structure structure
      */
@@ -619,7 +1125,6 @@ public class LevelDisplay {
 
         if(birdsRemaining == 0){ // -> VICTOIRE
 
-            isPause = true;
             window.getLevelDisplay().getPersonnage().animateVictory();
 
         }
@@ -713,6 +1218,7 @@ public class LevelDisplay {
                 }else if(alert.getResult() == ButtonType.NO){
 
                     alert.close();
+
                     isPause = false;
 
                 }
