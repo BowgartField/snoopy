@@ -424,7 +424,7 @@ public class Personnage extends Structure {
 
             }
         });
-        final KeyFrame keyFrame2 = new KeyFrame(Duration.millis(300), new EventHandler<ActionEvent>() {
+        final KeyFrame keyFrame2 = new KeyFrame(Duration.millis(200), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
 
@@ -432,7 +432,7 @@ public class Personnage extends Structure {
 
             }
         });
-        final KeyFrame keyFrame3 = new KeyFrame(Duration.millis(600), new EventHandler<ActionEvent>() {
+        final KeyFrame keyFrame3 = new KeyFrame(Duration.millis(400), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
 
@@ -440,7 +440,7 @@ public class Personnage extends Structure {
 
             }
         });
-        final KeyFrame keyFrame4 = new KeyFrame(Duration.millis(900), new EventHandler<ActionEvent>() {
+        final KeyFrame keyFrame4 = new KeyFrame(Duration.millis(600), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
 
@@ -449,7 +449,7 @@ public class Personnage extends Structure {
 
             }
         });
-        final KeyFrame keyFrame5 = new KeyFrame(Duration.millis(1200), new EventHandler<ActionEvent>() {
+        final KeyFrame keyFrame5 = new KeyFrame(Duration.millis(800), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
 
@@ -457,7 +457,7 @@ public class Personnage extends Structure {
 
             }
         });
-        final KeyFrame keyFrame6 = new KeyFrame(Duration.millis(1800), new EventHandler<ActionEvent>() {
+        final KeyFrame keyFrame6 = new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
 

@@ -153,6 +153,7 @@ public class PasswordDisplay extends MenuDisplay {
                     isChoosingPass = true; // Spécifie qu'on est entrain de sélectionner le mot de passe
                 }else if (keyCode.equals(KeyCode.ENTER) && !isOption1){
 
+                    window.getSauvegarde().resetAll();
                     window.loadNewDisplay(Displays.GameDisplay);
 
                 }else if (keyCode.equals(KeyCode.ENTER)) {

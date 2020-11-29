@@ -274,7 +274,6 @@ public class LevelDisplay {
 
     }
 
-
     /**
      * Déclencher lors de la victoire
      */
@@ -283,8 +282,10 @@ public class LevelDisplay {
         //Animation de victoire
         //Affichage du score
         //Passage au niveau suivant
-
         System.out.println("victoire !!");
+
+        //Il a compléter le level actuel
+        window.getSauvegarde().getPlayer().setLevel(Levels.findLevelsFromLevelNumber(level.getLevelNumber()+1));
 
         isWin = true;
         isPause = true;
@@ -618,6 +619,7 @@ public class LevelDisplay {
 
         if(birdsRemaining == 0){ // -> VICTOIRE
 
+            isPause = true;
             window.getLevelDisplay().getPersonnage().animateVictory();
 
         }
@@ -711,7 +713,6 @@ public class LevelDisplay {
                 }else if(alert.getResult() == ButtonType.NO){
 
                     alert.close();
-
                     isPause = false;
 
                 }
@@ -731,8 +732,9 @@ public class LevelDisplay {
             }
             if (isWin && keyCode.equals(KeyCode.ENTER)){
 
-                level = Levels.findLevelsFromLevelNumber(level.getLevelNumber()+1);
-                window.loadNewLevelDisplay(level);
+                //On est sur un écran de victoire + on a presser la touche "entrer"
+
+                window.loadNewLevelDisplay(Levels.findLevelsFromLevelNumber(level.getLevelNumber()+1));
 
                 isPause = false;
                 isWin = false;

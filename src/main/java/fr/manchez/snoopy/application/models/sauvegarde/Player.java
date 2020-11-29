@@ -53,7 +53,31 @@ public class Player {
 
     }
 
+    /** Important pour Jackson */
     public Player(){}
+
+    /**
+     * Réinitialise le joueur
+     */
+    public void reset(){
+
+        this.score = 0;
+        this.vie = Personnage.DEFAULT_VIE;
+        this.level = Levels.LEVEL_1;
+
+    }
+
+    /**
+     * Reset tout
+     */
+    public void resetAll(){
+
+        this.score = 0;
+        this.highscore = 0;
+        this.vie = Personnage.DEFAULT_VIE;
+        this.level = Levels.LEVEL_1;
+
+    }
 
 
     /*

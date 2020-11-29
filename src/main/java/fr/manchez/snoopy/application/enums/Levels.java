@@ -16,11 +16,6 @@ public enum Levels{
         this.levelNumber = levelNumber;
     }
 
-    @Override
-    public String toString() {
-        return this.Url;
-    }
-
     public static Levels findLevelsFromPassword(String password){
         Levels level = null;
 

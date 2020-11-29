@@ -119,6 +119,8 @@ public class SnoopyWindow{
         pane.setBackground(Background.EMPTY);
         pane.getChildren().clear();
 
+        System.out.println(pane.getChildren());
+
         //On charge notre level
         levelDisplay = new LevelDisplayLoader(levels,this).load();
 

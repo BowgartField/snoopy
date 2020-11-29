@@ -212,4 +212,13 @@ public class Timer {
 
     }
 
+    /**
+     * Récupére le score
+     */
+    public int getTimerScore(){
+
+        return (maxTimer-timerIndex)*100;
+
+    }
+
 }

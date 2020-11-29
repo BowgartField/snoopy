@@ -1,6 +1,4 @@
-- coder sauvegarde
-    - menu
-    - bouton continuer ou sauvegarder
+- save quand fini niveau
 
 - coder autres blocs
     -bloc poussage
@@ -24,6 +22,9 @@ FINI:
 - vie perso
     - niveau fini = vie + 1
     - 5 vie au départ
+- coder sauvegarde
+    - menu
+    - bouton continuer ou sauvegarder
 
 EN CONSTRUCTION:
 - code écran fin de niveau
