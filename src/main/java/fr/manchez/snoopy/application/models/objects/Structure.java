@@ -65,16 +65,18 @@ public class Structure extends Object {
         InputStream inputStream = getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/" + structure.getFileURL());
 
         return new Image(
-                inputStream,
-                structure.getWidth()*SnoopyWindow.SCALE,
-                structure.getHeight()*SnoopyWindow.SCALE,
-                false,
-                true);
+            inputStream,
+            structure.getWidth()*SnoopyWindow.SCALE,
+            structure.getHeight()*SnoopyWindow.SCALE,
+            false,
+            true
+        );
 
     }
 
     /**
      * Change l'image de la structure
+     * @param structure La structure dont on doit charger l'image
      */
     public void setImage(Structures structure){
 
@@ -83,8 +85,8 @@ public class Structure extends Object {
     }
 
     /**
-     *
-     * @return
+     * Renvoie la strcuture associé
+     * @return {Structures} la structure
      */
     public Structures getStructure(){
         return structure;
@@ -95,4 +97,7 @@ public class Structure extends Object {
         return structure.getSymbol();
     }
 
+    public Rectangle getHitbox() {
+        return hitbox;
+    }
 }

@@ -3,25 +3,39 @@ package fr.manchez.snoopy.application.models.objects;
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Structures;
 import javafx.animation.*;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.util.Map;
 
+/**
+ *
+ */
 public class Balle extends Structure{
 
+    /**
+     * Time animation de la balle
+     */
+    Timeline timeline;
+
+    /**
+     * Fenetre snoopyWindow
+     */
     SnoopyWindow window;
 
+    /**
+     * vecteur de déplacement de la balle
+     */
     private int stepX = 1;
     private int stepY = 1;
 
+    double random = Math.random();
+
     /**
      * Créer un object dans la fenêtre aux position x et y
+     * @param window SnoopyWindow
      */
     public Balle(SnoopyWindow window) {
 
@@ -29,19 +43,17 @@ public class Balle extends Structure{
 
         this.window = window;
 
-
         /*
             DEBUG
          */
 
-        hitbox.setFill(Color.BLUE);
-        hitbox.setOpacity(0.5);
-        window.addAllNode(hitbox);
+        //hitbox.setFill(Color.BLUE);
+        //hitbox.setOpacity(0.5);
+        //window.addAllNode(hitbox);
 
+        timeline = new Timeline(new KeyFrame(Duration.millis(7), event -> {
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+            System.out.println(random);
 
                 // si le niveau n'est pas en pause
                 if(!window.getLevelDisplay().isPause()){
@@ -67,9 +79,7 @@ public class Balle extends Structure{
 
                 }
 
-            }
-
-        }));
+            }));
 
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
@@ -84,6 +94,8 @@ public class Balle extends Structure{
         Personnage personnage = window.getLevelDisplay().getPersonnage();
 
         if(hitbox.intersects(personnage.hitbox.getLayoutBounds())){
+
+            personnage.setMoving(true);
 
             if(!personnage.isDefeating){
 
@@ -119,7 +131,9 @@ public class Balle extends Structure{
 
         for(Map.Entry<Rectangle,Structures> rectangle: window.getLevelDisplay().getColisionRectangle().entrySet()){
 
-            if(rectangle.getValue().getSymbol().equals(Structures.OBSTACLE.getSymbol()) || rectangle.getValue().getSymbol().equals(Structures.DESTRUCTIBLE.getSymbol())){
+            if(rectangle.getValue().getSymbol().equals(Structures.OBSTACLE.getSymbol())
+                    || rectangle.getValue().getSymbol().equals(Structures.DESTRUCTIBLE.getSymbol())
+                    ||rectangle.getValue().getSymbol().equals(Structures.DISPARITION_ENTIER.getSymbol())){
 
                 if(rectangle.getKey().intersects(hitbox.getLayoutBounds())){
 
@@ -252,12 +266,8 @@ public class Balle extends Structure{
     /**
      *
      */
-    public int chooseRandom(){
-
-        //int nombreAleatoire = Min + (int)(Math.random() * ((Max - Min) + 1));
-        int nombreAleatoire = 1 + (int)(Math.random() * ((2 - 1) + 1));
-        return nombreAleatoire;
-
+    public void stopAnimate(){
+        timeline.stop();
     }
 
 }

@@ -1,13 +1,12 @@
-- save quand fini niveau
+-bloc TP
+-bloc bloc qui apparait disparait
 
 - coder autres blocs
     -bloc poussage
     -bloc piégé
-    -bloc bloc qui apparait disparait
-    -bloc tapis roulant
-    -bloc TP
 
 - coder animation début du jeu
+- coder animation fin du jeu
 
 FINI:
 - coder balle qui passe a travers les débris
@@ -25,7 +24,10 @@ FINI:
 - coder sauvegarde
     - menu
     - bouton continuer ou sauvegarder
-
-EN CONSTRUCTION:
+    - save quand fini niveau
+-bloc tapis roulant
 - code écran fin de niveau
 - système de score
+
+EN CONSTRUCTION:
+

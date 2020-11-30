@@ -7,7 +7,8 @@ public enum Displays{
     PasswordDisplay("passwordMenu.png"),
     LevelDisplay(""),
     LevelEndDisplay("levelEnd.png"),
-    LooseDisplay("loose.png");
+    LooseDisplay("loose.png"),
+    FinishDisplay("finishGame.png");
 
     String backgroundURL;
 

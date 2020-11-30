@@ -1,6 +1,5 @@
 package fr.manchez.snoopy.application.models.objects;
 
-import fr.manchez.snoopy.application.Main;
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Sounds;
 import fr.manchez.snoopy.application.enums.Structures;
@@ -22,13 +21,23 @@ public class Personnage extends Structure {
      *
      * L'animation de perte de vie et de défaite est la même
      * */
-    Timeline timeline;
+    Timeline timelineLooseLifeAndDefeat;
+
+    /**
+     * Timeline d'animation disparition
+     */
+    Timeline timelineTpDisapeare;
+
+    /**
+     * Timeline animation tp apparition
+     */
+    Timeline timelineTpApeare;
 
     /** Vie du personnage **/
     private int vie;
 
     /** Vie par défaut */
-    public static int DEFAULT_VIE = 1;
+    public static int DEFAULT_VIE = 5;
 
     /** **/
     boolean isDefeating = false;
@@ -50,6 +59,9 @@ public class Personnage extends Structure {
 
     /**
      * Créer un Personnage dans la fenêtre aux position x et y
+     * @param point2D {Point2D} Coordonées d'apparition du personnage
+     * @param structure Structure du personnage
+     * @param window SnoopyWindow
      */
     public Personnage(Point2D point2D, Structures structure, SnoopyWindow window) {
 
@@ -60,7 +72,9 @@ public class Personnage extends Structure {
         this.window = window;
 
         //Initialise les animations
-        initAnimations();
+        initLooseLifeAndDefeatAnimations();
+        initTpDisapeareAnimation();
+        initTpApeareAnimation();
 
     }
 
@@ -394,11 +408,103 @@ public class Personnage extends Structure {
 
         }
 
+        //tapis roulant vers la droite
+        if(nextStructure.getStructure().getSymbol().equals(Structures.TAPIS_DROIT.getSymbol())){
+
+            moveRight();
+
+        }
+
+        //tapis roulant vers la gauche
+        if(nextStructure.getStructure().getSymbol().equals(Structures.TAPIS_GAUCHE.getSymbol())){
+
+            moveLeft();
+
+        }
+
+        //tapis roulant vers le haut
+        if(nextStructure.getStructure().getSymbol().equals(Structures.TAPIS_HAUT.getSymbol())){
+
+            moveUp();
+
+        }
+
+        //tapis roulant vers le bas
+        if(nextStructure.getStructure().getSymbol().equals(Structures.TAPIS_BAS.getSymbol())){
+
+            moveDown();
+
+        }
+
+        //tp1 (symbole Z)
+        if(nextStructure.getStructure().getSymbol().equals(Structures.TP1.getSymbol())){
+
+
+            //premier animation de disparition
+            timelineTpDisapeare.playFromStart();
+
+            //
+            timelineTpDisapeare.setOnFinished(event -> {
+
+                //tp le personnage sur l'autre téléporteur
+                teleport(nextStructure);
+
+                //deuxième animation d'apparition
+                timelineTpApeare.playFromStart();
+
+                //timelineTpDisapeare.stop();
+                //timelineTpApeare.stop();
+
+            });
+
+        }
+
+    }
+
+    /**
+     * Teleporte le personnage
+     *
+     * Récupére le symbole du teleporteur actuel, chercher les coordonées du deuxième téléporteur de même symbole
+     * et téléporte le personnage dessus
+     */
+    private void teleport(Structure teleporter){
+
+        int x = 0;
+        int y = 0;
+
+
+        List<List<Structure>> structuresLevelList = window.getLevelDisplay().getLevelStruture();
+
+        for(List<Structure> structureList: structuresLevelList){
+
+            for(Structure struc: structureList){
+
+                if(struc.getStructure().getSymbol().equals(teleporter.getStructure().getSymbol())
+                && struc.getImageView().getY() != teleporter.getImageView().getY()
+                && struc.getImageView().getX() != teleporter.getImageView().getX()){
+
+                    xProperty.set(struc.getImageView().getX());
+                    yProperty.set(struc.getImageView().getY());
+
+                    moveToX = x;
+                    moveToY = y;
+
+                }
+
+                x++;
+
+            }
+
+            y++;
+            x=0;
+
+        }
+
     }
 
     /**
      * Vérifie si le personnage est déjà en cours de déplacement
-     * @return
+     * @return boolean Le personnage bouge
      */
     public boolean isMoving(){
         return isMoving;
@@ -411,7 +517,7 @@ public class Personnage extends Structure {
     /**
      * Initialise les animations
      */
-    private void initAnimations(){
+    private void initLooseLifeAndDefeatAnimations(){
 
         //Tourne sur lui même puis est désamparé puis éclate
         final KeyFrame keyFrame1 = new KeyFrame(Duration.millis(0), new EventHandler<ActionEvent>() {
@@ -468,7 +574,134 @@ public class Personnage extends Structure {
             }
         });
 
-        timeline = new Timeline(keyFrame1,keyFrame2,keyFrame3,keyFrame4,keyFrame5,keyFrame6);
+        timelineLooseLifeAndDefeat = new Timeline(keyFrame1,keyFrame2,keyFrame3,keyFrame4,keyFrame5,keyFrame6);
+
+    }
+
+    /**
+     * Initialise animation disparition snoopy
+     */
+    private void initTpDisapeareAnimation(){
+
+        //snoopy qui dispparaite
+        final KeyFrame keyFrame1 = new KeyFrame(Duration.millis(0), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(getImage(Structures.SNOOPY_IMMOBILE));
+                isMoving = true;
+
+            }
+        });
+        final KeyFrame keyFrame2 = new KeyFrame(Duration.millis(150), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(null);
+
+            }
+        });
+        final KeyFrame keyFrame3 = new KeyFrame(Duration.millis(300), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(getImage(Structures.SNOOPY_IMMOBILE));
+
+            }
+        });
+        final KeyFrame keyFrame4 = new KeyFrame(Duration.millis(450), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(null);
+
+            }
+        });
+        final KeyFrame keyFrame5 = new KeyFrame(Duration.millis(600), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(getImage(Structures.SNOOPY_IMMOBILE));
+
+            }
+        });
+        final KeyFrame keyFrame6 = new KeyFrame(Duration.millis(750), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(null);
+                isMoving = false;
+
+            }
+        });
+
+        timelineTpDisapeare = new Timeline(keyFrame1,keyFrame2,keyFrame3,keyFrame4,keyFrame5,keyFrame6);
+        timelineTpApeare = new Timeline(keyFrame6,keyFrame5,keyFrame4,keyFrame3,keyFrame2,keyFrame1);
+
+    }
+
+    /**
+     * Initialise animation apararition snoopy
+     */
+    private void initTpApeareAnimation(){
+
+
+        //snoopy qui saute
+        final KeyFrame keyFrame1 = new KeyFrame(Duration.millis(0), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(null);
+                isMoving = true;
+
+            }
+        });
+        final KeyFrame keyFrame2 = new KeyFrame(Duration.millis(150), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(getImage(Structures.SNOOPY_IMMOBILE));
+
+            }
+        });
+        final KeyFrame keyFrame3 = new KeyFrame(Duration.millis(300), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(null);
+
+
+            }
+        });
+        final KeyFrame keyFrame4 = new KeyFrame(Duration.millis(450), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(getImage(Structures.SNOOPY_IMMOBILE));
+
+
+            }
+        });
+        final KeyFrame keyFrame5 = new KeyFrame(Duration.millis(600), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(null);
+
+
+            }
+        });
+        final KeyFrame keyFrame6 = new KeyFrame(Duration.millis(750), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                getImageView().setImage(getImage(Structures.SNOOPY_IMMOBILE));
+                isMoving = false;
+
+            }
+        });
+
+        timelineTpApeare = new Timeline(keyFrame1,keyFrame2,keyFrame3,keyFrame4,keyFrame5,keyFrame6);
 
     }
 
@@ -481,10 +714,9 @@ public class Personnage extends Structure {
         window.getSauvegarde().getPlayer().setVie(vie);
 
         isMoving = true;
-        timeline.playFromStart();
+        timelineLooseLifeAndDefeat.playFromStart();
 
-        //TODO: changer la cible
-        timeline.setOnFinished(even -> window.getLevelDisplay().looseLife());
+        timelineLooseLifeAndDefeat.setOnFinished(even -> window.getLevelDisplay().looseLife());
 
     }
 
@@ -495,10 +727,8 @@ public class Personnage extends Structure {
 
         isMoving = true;
 
-        timeline.playFromStart();
-
-        //TODO: changer la cible
-        timeline.setOnFinished(even -> window.getLevelDisplay().defeat());
+        timelineLooseLifeAndDefeat.playFromStart();
+        timelineLooseLifeAndDefeat.setOnFinished(even -> window.getLevelDisplay().defeat());
 
     }
 
@@ -577,9 +807,10 @@ public class Personnage extends Structure {
     /*
         COLISIONS
      */
-
     /**
      * Contrôle si le personnage est en colision avec un bloc du décor
+     * @param playerRectangle Hitbox du personnage
+     * @return Une colision est apparue
      */
     public boolean isColided(Rectangle playerRectangle){
 
@@ -606,7 +837,6 @@ public class Personnage extends Structure {
     /*
         GETTERS AND SETTERS
      */
-
     public int getVie() {
         return vie;
     }
@@ -619,5 +849,9 @@ public class Personnage extends Structure {
     }
     public void setDefeating(boolean defeating) {
         isDefeating = defeating;
+    }
+
+    public void setMoving(boolean moving) {
+        isMoving = moving;
     }
 }

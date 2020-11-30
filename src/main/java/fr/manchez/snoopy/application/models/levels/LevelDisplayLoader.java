@@ -5,11 +5,8 @@ import fr.manchez.snoopy.application.enums.Levels;
 import fr.manchez.snoopy.application.enums.Structures;
 import fr.manchez.snoopy.application.models.objects.Personnage;
 import fr.manchez.snoopy.application.models.objects.Structure;
-import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 
@@ -41,6 +38,7 @@ public class LevelDisplayLoader {
     /**
      * Constructeur par défaut
      * @param levels Niveau a chargé
+     * @param window SnoopyWindow
      */
     public LevelDisplayLoader(Levels levels, SnoopyWindow window){
         this.levels = levels;
@@ -51,6 +49,7 @@ public class LevelDisplayLoader {
 
     /**
      * Dessine le niveau dans la fenêtre
+     * @return LevelDisplay
      */
     public LevelDisplay load(){
 
@@ -128,9 +127,6 @@ public class LevelDisplayLoader {
      * Dessines les structres
      */
     private void createStructures(){
-
-        System.out.println("create structure");
-
         int index = 0;
 
         //on boucle sur les colonnes
@@ -154,8 +150,10 @@ public class LevelDisplayLoader {
 
                     structureList.add(new Structure(newPoint2D,structure));
 
-                    //La structure est un obstacle ou un destructible
-                    if(structure.getSymbol().equals(Structures.OBSTACLE.getSymbol()) || structure.getSymbol().equals(Structures.DESTRUCTIBLE.getSymbol())){
+                    //La structure est un obstacle ou un destructible ou un bloc disparition
+                    if(structure.getSymbol().equals(Structures.OBSTACLE.getSymbol())
+                            || structure.getSymbol().equals(Structures.DESTRUCTIBLE.getSymbol())
+                            || structure.getSymbol().equals(Structures.DISPARITION_ENTIER.getSymbol())){
 
                         Rectangle rectangleColision = new Rectangle(
                                 newPoint2D.getX(),

@@ -93,6 +93,10 @@ public class SnoopyWindow{
      */
     public void loadNewDisplay(Displays windowType){
 
+        if(levelDisplay != null){
+            levelDisplay.stopAllAnimate();
+        }
+
         levelDisplay = null;
 
         //Supprimer tous
@@ -105,6 +109,8 @@ public class SnoopyWindow{
         //On charge les éléments dans la scène
         display.draw();
 
+        System.gc();
+
     }
 
     /**
@@ -113,19 +119,24 @@ public class SnoopyWindow{
      */
     public void loadNewLevelDisplay(Levels levels){
 
+
+        if(levelDisplay != null){
+            levelDisplay.stopAllAnimate();
+        }
+
         display = null;
 
         //On créer une nouvelle stage et scène
         pane.setBackground(Background.EMPTY);
         pane.getChildren().clear();
 
-        System.out.println(pane.getChildren());
-
         //On charge notre level
         levelDisplay = new LevelDisplayLoader(levels,this).load();
 
         //On charge les éléments dans la scène
         levelDisplay.draw();
+
+        System.gc();
 
     }
 
@@ -149,16 +160,16 @@ public class SnoopyWindow{
     }
 
     /**
-     *
-     * @param nodes
+     * Permets d'ajouter des noeuds graphiques
+     * @param nodes Noeuds graphiques à ajouter
      */
     public void removeAllNode(Node... nodes){
         pane.getChildren().removeAll(nodes);
     }
 
     /**
-     *
-     * @param sound
+     * Joue le son
+     * @param sound Son a jouer
      */
     public void playSound(Sounds sound){
 

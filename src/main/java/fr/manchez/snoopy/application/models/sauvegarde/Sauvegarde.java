@@ -23,6 +23,7 @@ public class Sauvegarde {
 
     /**
      * Constructeur
+     * @param window Snoopywindow
      */
     public Sauvegarde(SnoopyWindow window){
 
@@ -38,7 +39,7 @@ public class Sauvegarde {
 
         File file = new File(fileName);
 
-        System.out.println(file.getAbsolutePath());
+
 
         try{
 
@@ -66,7 +67,6 @@ public class Sauvegarde {
 
                 save();
 
-                System.out.println("ici2");
 
             }
 
@@ -85,7 +85,6 @@ public class Sauvegarde {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        System.out.println(players);
 
         File file = new File(fileName);
 
@@ -132,7 +131,8 @@ public class Sauvegarde {
     }
 
     /**
-     * Retourne le joueur choisi
+     * Retourne le joueur actuel
+     * @return Joueur actuel
      */
     public Player getPlayer(){
 

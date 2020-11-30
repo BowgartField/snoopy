@@ -11,7 +11,7 @@ public class SauvegardeTest {
 
         sauvegarde.save();
 
-        System.out.println(sauvegarde.getPlayers());
+
 
          */
 

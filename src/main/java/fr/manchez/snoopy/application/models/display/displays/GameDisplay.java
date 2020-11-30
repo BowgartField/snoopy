@@ -56,7 +56,8 @@ public class  GameDisplay extends MenuDisplay {
                 isOption1 = true;
             }else if (keyCode.equals(KeyCode.ENTER) && isOption1){
 
-                window.loadNewLevelDisplay(Levels.LEVEL_1);
+                window.loadNewLevelDisplay(window.getSauvegarde().getPlayer().getLevel());
+                //window.loadNewLevelDisplay(Levels.LEVEL_4);
 
             }else if(keyCode.equals(KeyCode.ENTER) && !isOption1){
 

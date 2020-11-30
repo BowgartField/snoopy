@@ -28,6 +28,8 @@ public class Player {
      * @param player Type de joueur (PLAYER1 ou PLAYER2)
      * @param highscore Score le plus haut
      * @param score Score actuel
+     * @param level Niveau actuel du joueur
+     * @param vie Vie restant du personnage
      */
     public Player(PlayersType player, int highscore, int score, Levels level, int vie){
 

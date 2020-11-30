@@ -39,11 +39,18 @@ public enum Structures {
     SNOOPY_DOWN_1("","Personnages/Snoopy/down/down_1.png",32,32),
     SNOOPY_DOWN_2("","Personnages/Snoopy/down/down_2.png",32,32),
 
-
     OBSTACLE("O","Blocs/obstacle.png",30,30),
     DESTRUCTIBLE("D","Blocs/destructible2.png",30,30),
-
     DEBRIS("","Blocs/cassé.png",30,30),
+    TAPIS_HAUT("H","Blocs/tapis_haut.png",30,30),
+    TAPIS_BAS("B","Blocs/tapis_bas.png",30,30),
+    TAPIS_DROIT("R","Blocs/tapis_droite.png",30,30),
+    TAPIS_GAUCHE("L","Blocs/tapis_gauche.png",30,30),
+    DISPARITION_ENTIER("K","Blocs/disparition_entier.png",30,30),
+    DISPARITION_DEMI("","Blocs/disparition_demi.png",30,30),
+
+    TP1("Z","Blocs/teleporteur.png",30,30),
+    TP2("W","Blocs/teleporteur.png",30,30),
 
     CURSEUR("", "Details/curseur.png", 16, 16),
     CURSEURUP("", "Details/curseurUp.png", 16, 16),

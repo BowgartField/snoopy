@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     /**
-     * Fenêtre principale
+     * Fenêtre principal
      */
     private SnoopyWindow window;
 

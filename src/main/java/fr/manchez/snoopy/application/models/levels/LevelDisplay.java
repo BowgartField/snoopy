@@ -5,11 +5,16 @@ import fr.manchez.snoopy.application.enums.Displays;
 import fr.manchez.snoopy.application.enums.Levels;
 import fr.manchez.snoopy.application.enums.Sounds;
 import fr.manchez.snoopy.application.enums.Structures;
-import fr.manchez.snoopy.application.models.Timer;
+import fr.manchez.snoopy.application.models.objects.Timer;
 import fr.manchez.snoopy.application.models.objects.Balle;
 import fr.manchez.snoopy.application.models.objects.Personnage;
 import fr.manchez.snoopy.application.models.objects.Structure;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -17,7 +22,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
@@ -41,6 +45,9 @@ public class LevelDisplay {
 
     /** Image "pause" */
     ImageView pauseDisplay = new ImageView();
+
+    /** Help pause background */
+    ImageView helpPauseDisplay = new ImageView();
 
     /** Image de fin de niveau*/
     ImageView levelEndBackground = new ImageView();
@@ -79,11 +86,18 @@ public class LevelDisplay {
     /** La ligne 1 de l'écran de défaite est sélectionnée */
     boolean isOption1 = true;
 
+    /** L'aniamtion de score est en cours **/
+    boolean isScoreAnimating = false;
+
     /** Timer **/
     Timer timer;
 
     /** timeline de l'affichage du score*/
     Timeline scoreTimeline;
+
+    /** Timeline des ballees **/
+    Timeline ballsTimeline;
+
     /**
      * window
      */
@@ -126,14 +140,14 @@ public class LevelDisplay {
         this.level = level;
         timer = new Timer(window);
 
-        showPause();
+        initPause();
 
     }
 
     /**
      * Initialise les éléments relatifs au menu pause
      */
-    private void showPause() {
+    private void initPause() {
 
         //On récupére l'image correspondant à la structure
         InputStream pauseBgIS = getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/Fond/pausebg.png");
@@ -162,8 +176,27 @@ public class LevelDisplay {
                 )
         );
 
-        pauseDisplay.setY((window.getPane().getHeight()-Structures.PAUSE.getHeight()*SnoopyWindow.SCALE)/2);
+        pauseDisplay.setY(200);
         pauseDisplay.setX((window.getPane().getWidth()-Structures.PAUSE.getWidth()*SnoopyWindow.SCALE)/2);
+
+        //On récupére l'image du pause
+        InputStream helpImage = getClass().getResourceAsStream("/fr/manchez/snoopy/sprites/Fond/keyHelp.png");
+
+        double width = 426;
+
+        helpPauseDisplay = new ImageView(
+            new Image(
+                    helpImage,
+                    width,
+                    225
+                    ,false
+                    ,true
+            )
+        );
+
+        helpPauseDisplay.setOpacity(0.8);
+        helpPauseDisplay.setX((window.getPane().getWidth()-width)/2);
+        helpPauseDisplay.setY(150*SnoopyWindow.SCALE);
 
     }
 
@@ -284,7 +317,6 @@ public class LevelDisplay {
         initScore(window.getSauvegarde().getPlayer().getScore(), window.getSauvegarde().getPlayer().getHighscore());
     }
 
-
     /**
      * Déclencher lors de la victoire
      */
@@ -294,7 +326,10 @@ public class LevelDisplay {
         //Affichage du score
         //Passage au niveau suivant
 
-        System.out.println("victoire !!");
+
+        //On ajoute une vie
+        window.getLevelDisplay().getPersonnage().setVie(window.getLevelDisplay().getPersonnage().getVie()+1);
+        window.getSauvegarde().getPlayer().setVie(window.getLevelDisplay().getPersonnage().getVie());
 
         //Il a compléter le level actuel
         window.getSauvegarde().getPlayer().setLevel(Levels.findLevelsFromLevelNumber(level.getLevelNumber()+1));
@@ -311,8 +346,6 @@ public class LevelDisplay {
      */
     public void defeat(){
 
-        System.out.println("Défaite !!");
-
         isLoose = true;
         isPause = true;
 
@@ -324,8 +357,6 @@ public class LevelDisplay {
      * Déclencher lors de la perte de vie
      */
     public void looseLife(){
-
-        System.out.println("perte de vie !!");
 
         isLooseLife = true;
         isPause = true;
@@ -556,7 +587,7 @@ public class LevelDisplay {
         );
 
 
-        Timeline timeline = new Timeline();
+        ballsTimeline = new Timeline();
 
         for(int i = 0; i < deplacement*6; i++){
 
@@ -579,7 +610,7 @@ public class LevelDisplay {
                     }
                 });
 
-                timeline.getKeyFrames().add(keyFrame);
+                ballsTimeline.getKeyFrames().add(keyFrame);
 
             }else if(i < deplacement*2){
 
@@ -600,7 +631,7 @@ public class LevelDisplay {
                     }
                 });
 
-                timeline.getKeyFrames().add(keyFrame);
+                ballsTimeline.getKeyFrames().add(keyFrame);
 
 
             }else if(i < deplacement*3){
@@ -622,7 +653,7 @@ public class LevelDisplay {
                     }
                 });
 
-                timeline.getKeyFrames().add(keyFrame);
+                ballsTimeline.getKeyFrames().add(keyFrame);
 
             }else if(i < deplacement*4){
 
@@ -638,7 +669,7 @@ public class LevelDisplay {
                     }
                 });
 
-                timeline.getKeyFrames().add(keyFrame);
+                ballsTimeline.getKeyFrames().add(keyFrame);
 
             }else if(i < deplacement*5){
 
@@ -659,7 +690,7 @@ public class LevelDisplay {
                     }
                 });
 
-                timeline.getKeyFrames().add(keyFrame);
+                ballsTimeline.getKeyFrames().add(keyFrame);
 
             }else{
 
@@ -680,146 +711,22 @@ public class LevelDisplay {
                     }
                 });
 
-                timeline.getKeyFrames().add(keyFrame);
+                ballsTimeline.getKeyFrames().add(keyFrame);
 
             }
 
         }
 
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.setRate(0.45);
-        timeline.playFromStart();
-
-
-        /*
-        //snoopy qui saute
-        final KeyFrame keyFrame1 = new KeyFrame(Duration.millis(0), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-                final TranslateTransition translateAnimation1 = new TranslateTransition(
-                        duration, boule1.getImageView());
-
-                translateAnimation1.setByY(-deplacement);
-                translateAnimation1.playFromStart();
-
-                final TranslateTransition translateAnimation2 = new TranslateTransition(
-                        duration, boule2.getImageView());
-
-                translateAnimation2.setByY(-deplacement);
-                translateAnimation2.playFromStart();
-            }
-        });
-        final KeyFrame keyFrame2 = new KeyFrame(Duration.millis(700), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-                boule1.setImage(Structures.BALL_STATE2);
-                boule2.setImage(Structures.BALL_STATE2);
-
-                final TranslateTransition translateAnimation1 = new TranslateTransition(
-                        duration, boule1.getImageView());
-
-                translateAnimation1.setByY(-deplacement);
-                translateAnimation1.playFromStart();
-
-                final TranslateTransition translateAnimation2 = new TranslateTransition(
-                        duration, boule2.getImageView());
-
-                translateAnimation2.setByY(-deplacement);
-                translateAnimation2.playFromStart();
-            }
-        });
-        final KeyFrame keyFrame3 = new KeyFrame(Duration.millis(1400), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-                boule1.setImage(Structures.BALL_STATE3);
-                boule2.setImage(Structures.BALL_STATE3);
-
-                final TranslateTransition translateAnimation1 = new TranslateTransition(
-                        duration, boule1.getImageView());
-
-                translateAnimation1.setByY(-deplacement);
-                translateAnimation1.playFromStart();
-
-                final TranslateTransition translateAnimation2 = new TranslateTransition(
-                        duration, boule2.getImageView());
-
-                translateAnimation2.setByY(-deplacement);
-                translateAnimation2.playFromStart();
-            }
-        });
-        final KeyFrame keyFrame4 = new KeyFrame(Duration.millis(2100), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-                final TranslateTransition translateAnimation1 = new TranslateTransition(
-                        duration, boule1.getImageView());
-
-                translateAnimation1.setByY(deplacement);
-                translateAnimation1.playFromStart();
-
-                final TranslateTransition translateAnimation2 = new TranslateTransition(
-                        duration, boule2.getImageView());
-
-                translateAnimation2.setByY(deplacement);
-                translateAnimation2.playFromStart();
-            }
-        });
-        final KeyFrame keyFrame5 = new KeyFrame(Duration.millis(2800), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                boule1.setImage(Structures.BALL_STATE2);
-                boule2.setImage(Structures.BALL_STATE2);
-
-                final TranslateTransition translateAnimation1 = new TranslateTransition(
-                        duration, boule1.getImageView());
-
-                translateAnimation1.setByY(deplacement);
-                translateAnimation1.playFromStart();
-                final TranslateTransition translateAnimation2 = new TranslateTransition(
-                        duration, boule2.getImageView());
-
-                translateAnimation2.setByY(deplacement);
-                translateAnimation2.playFromStart();
-            }
-        });
-        final KeyFrame keyFrame6 = new KeyFrame(Duration.millis(3500), new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    boule1.setImage(Structures.BALL_STATE1);
-                    boule2.setImage(Structures.BALL_STATE1);
-
-                    final TranslateTransition translateAnimation1 = new TranslateTransition(
-                            duration, boule1.getImageView());
-
-                    translateAnimation1.setByY(deplacement);
-                    translateAnimation1.playFromStart();
-
-                    final TranslateTransition translateAnimation2 = new TranslateTransition(
-                            duration, boule2.getImageView());
-
-                    translateAnimation2.setByY(deplacement);
-                    translateAnimation2.playFromStart();
-                }
-        });
-        final KeyFrame keyFrame7 = new KeyFrame(Duration.millis(4200), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-            }
-        });
-
-        Timeline timeline = new Timeline(keyFrame1,keyFrame2,keyFrame3,keyFrame4,keyFrame5,keyFrame6,keyFrame7);
-
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.setRate(2);
-        timeline.playFromStart();
-
-         */
-
+        ballsTimeline.setCycleCount(Animation.INDEFINITE);
+        ballsTimeline.setRate(0.45);
+        ballsTimeline.playFromStart();
 
     }
+
+
+    /*
+        SCORES
+     */
 
     /**
      * Affiche l'augmentation du score
@@ -838,22 +745,27 @@ public class LevelDisplay {
             @Override
             public void handle(ActionEvent event) {
 
-                if(actualscore[0] <= finalscore){
-                    changeScore(actualscore[0]);
+                isScoreAnimating = true;
 
+                if(actualscore[0] <= finalscore){
 
                     if(actualscore[0] == highscore[0]){
 
-                        changeHighcore(highscore[0]);
                         highscore[0] = highscore[0] +100;
+                        changeHighcore(highscore[0]);
 
                     }
+
                     actualscore[0] = actualscore[0]+100;
+                    changeScore(actualscore[0]);
+
                 }else{
                     scoreTimeline.stop();
-                    window.getSauvegarde().getPlayer().setScore(actualscore[0]);
+                    window.getSauvegarde().getPlayer().setScore(finalscore);
                     window.getSauvegarde().getPlayer().setHighscore(highscore[0]);
                     window.getSauvegarde().save();
+
+                    isScoreAnimating = false;
                 }
 
             }
@@ -970,10 +882,13 @@ public class LevelDisplay {
 
     }
 
-    /** Change le score*/
+    /**
+     * Change le score
+     * @param score Score a afficher
+     */
     public void changeScore(int score){
 
-        //TODO: ajouter bruitage
+        window.playSound(Sounds.SCORE);
         String convertedScore = convertScore(score);
 
         scoreStructures.get(0).setImage(Structures.getStructuresFromSymbol(convertedScore.charAt(0)));
@@ -987,7 +902,10 @@ public class LevelDisplay {
 
     }
 
-    /** Change le highscore*/
+    /**
+     * Change le highscore
+     * @param highScore highScore a afficher
+     */
     public void changeHighcore(int highScore){
 
         String convertedHighscore = convertScore(highScore);
@@ -1003,6 +921,11 @@ public class LevelDisplay {
 
     }
 
+    /**
+     * Converti les scores
+     * @param score Score à convertir
+     * @return String converti
+     */
     public  String convertScore(int score){
 
         String convertedScore = "";
@@ -1027,6 +950,10 @@ public class LevelDisplay {
 
         return convertedScore;
     }
+
+    /*
+        STRUCTURES AND COLISIONS
+     */
     /**
      * Ajoute une structure au niveau
      * @param structure structure
@@ -1038,13 +965,15 @@ public class LevelDisplay {
     /**
      * Ajoute les colisions au niveau
      * @param rectangleColision Colision à ajouter
+     * @param structures Structure
      */
     public void addColisionStructure(Structures structures, Rectangle rectangleColision){
         colisionRectangle.put(rectangleColision,structures);
     }
 
     /**
-     * Ajoute snoopy
+     * Ajoute snoopy dans la scene
+     * @param snoopy Personnage snoopy
      */
     public void addSnoopy(Personnage snoopy){
 
@@ -1054,9 +983,9 @@ public class LevelDisplay {
 
     /**
      * On affiche les structure du niveau à l'intérieur de la fenêtre
-     * -> Les structures du niveau
-     * -> Le personnage
-     * -> La balle
+     * Les structures du niveau
+     * Le personnage
+     * La balle
      */
     public void draw(){
 
@@ -1094,10 +1023,13 @@ public class LevelDisplay {
         balle = new Balle(window);
         window.addAllNode(balle.getImageView());
 
+        initDisparitionBloc();
+
     }
 
     /**
      * Animation déclenché au passage de Snoopy sur un l'oiseau
+     * @param bird Animation de l'oiseau
      */
     public void animateGetBird(Structure bird){
 
@@ -1125,6 +1057,8 @@ public class LevelDisplay {
 
         if(birdsRemaining == 0){ // -> VICTOIRE
 
+            isPause = true;
+
             window.getLevelDisplay().getPersonnage().animateVictory();
 
         }
@@ -1133,6 +1067,7 @@ public class LevelDisplay {
 
     /**
      * Ajoute des colisions à supprimer à la liste
+     * @param rectangle Rectangles a supprimer
      */
     public void setColisionToRemove(Rectangle rectangle){
         colisionToRemove.add(rectangle);
@@ -1197,7 +1132,11 @@ public class LevelDisplay {
             }
 
             //Si on appuye sur le "p" -> pause
-            if(keyCode.equals(KeyCode.P)){ showPause(); }
+            if(keyCode.equals(KeyCode.P)){
+
+                setPause();
+
+            }
 
             //Si on appuye sur le "s" -> on sauvegarde
             if(keyCode.equals(KeyCode.S)){
@@ -1229,6 +1168,8 @@ public class LevelDisplay {
 
             //Si on appuye sur le "p" -> enleve la pause
             if(keyCode.equals(KeyCode.P)){ setPause(); }
+
+            //On recharge le même niveau
             if(isLooseLife && keyCode.equals(KeyCode.ENTER)){
 
                 window.loadNewLevelDisplay(level);
@@ -1236,15 +1177,33 @@ public class LevelDisplay {
                 isPause = false;
                 isLooseLife = false;
             }
-            if (isWin && keyCode.equals(KeyCode.ENTER)){
+
+            //On charge le niveau suivant
+            if (isWin && keyCode.equals(KeyCode.ENTER) && !isScoreAnimating){
 
                 //On est sur un écran de victoire + on a presser la touche "entrer"
 
-                window.loadNewLevelDisplay(Levels.findLevelsFromLevelNumber(level.getLevelNumber()+1));
+                if(Levels.findLevelsFromLevelNumber(level.getLevelNumber()+1) != null){
+
+                    balle.stopAnimate();
+                    timer.stopAnimate();
+
+                    window.loadNewLevelDisplay(Levels.findLevelsFromLevelNumber(level.getLevelNumber()+1));
+
+                }else{
+
+                    balle.stopAnimate();
+                    timer.stopAnimate();
+
+                    window.getSauvegarde().getPlayer().reset();
+                    window.loadNewDisplay(Displays.FinishDisplay);
+
+                }
 
                 isPause = false;
                 isWin = false;
             }
+
             if(isLoose){
                 if(keyCode.equals(KeyCode.UP) && isOption1){
                     cursor.setY(cursor.getY() + 34* SnoopyWindow.SCALE);
@@ -1258,17 +1217,25 @@ public class LevelDisplay {
                 }else if(keyCode.equals(KeyCode.DOWN)){
                     cursor.setY(cursor.getY() + -34*SnoopyWindow.SCALE);
                     isOption1 = true;
+
                 }else if (keyCode.equals(KeyCode.ENTER) && isOption1){
 
+                    balle.stopAnimate();
+                    timer.stopAnimate();
+
+                    //CONTINUE
                     window.loadNewDisplay(Displays.StartDisplay);
-                    isPause = false;
-                    isLoose = false;
 
                 }else if (keyCode.equals(KeyCode.ENTER)){
 
+                    balle.stopAnimate();
+                    timer.stopAnimate();
+
+                    //NEW GAME
                     window.loadNewLevelDisplay(Levels.LEVEL_1);
-                    isPause = false;
-                    isLoose = false;
+
+                    //Reset score mais pas highscore
+                    window.getSauvegarde().reset();
 
                 }
             }
@@ -1284,18 +1251,240 @@ public class LevelDisplay {
 
         if(!isPause){
 
+            //timer.stopAnimate();
+            //balle.stopAnimate();
+
             pauseBackground.toFront();
             pauseDisplay.toFront();
-            window.addAllNode(pauseBackground,pauseDisplay);
+            helpPauseDisplay.toFront();
+
+            window.addAllNode(pauseBackground,pauseDisplay,helpPauseDisplay);
 
             isPause = true;
 
         }else{
 
             //Enleve l'écran de pause
-            window.removeAllNode(pauseBackground,pauseDisplay);
+            window.removeAllNode(pauseBackground,pauseDisplay,helpPauseDisplay);
             isPause = false;
 
+        }
+
+    }
+
+    /**
+     *
+     */
+    public void initDisparitionBloc(){
+
+        //List contenant les structure de bloc a faire disparaîtref
+        List<Structure> disparitionBloc = new ArrayList<>();
+
+        for(List<Structure> structureList: levelStruture){
+
+            for(Structure structure: structureList){
+
+                if(structure.getStructure().getSymbol().equals(Structures.DISPARITION_ENTIER.getSymbol())){
+                    disparitionBloc.add(structure);
+                }
+
+            }
+
+        }
+
+
+        final KeyFrame keyFrame1 = new KeyFrame(Duration.millis(0), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                for(Structure structure : disparitionBloc){
+
+                    structure.setImage(Structures.DISPARITION_DEMI);
+
+                }
+
+            }
+        });
+        final KeyFrame keyFrame2 = new KeyFrame(Duration.millis(150), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                for(Structure structure : disparitionBloc){
+
+                    structure.getImageView().setImage(null);
+
+                }
+
+            }
+        });
+        final KeyFrame keyFrame3 = new KeyFrame(Duration.millis(300), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                for(Structure structure : disparitionBloc){
+
+                    structure.setImage(Structures.DISPARITION_DEMI);
+
+                }
+
+            }
+        });
+        final KeyFrame keyFrame4 = new KeyFrame(Duration.millis(450), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                for(Structure structure : disparitionBloc){
+
+                    structure.getImageView().setImage(null);
+
+                }
+
+            }
+        });
+        final KeyFrame keyFrame5 = new KeyFrame(Duration.millis(600), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                for(Structure structure : disparitionBloc){
+
+                    structure.setImage(Structures.DISPARITION_DEMI);
+
+                }
+
+            }
+        });
+        final KeyFrame keyFrame6 = new KeyFrame(Duration.millis(750), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                List<Rectangle> toRemove = new ArrayList<>();
+
+                for(Structure structure : disparitionBloc){
+
+                    structure.getImageView().setImage(null);
+
+
+                    for(Map.Entry<Rectangle,Structures> colisionMap: colisionRectangle.entrySet()){
+
+                        if(colisionMap.getKey().getX() == structure.getHitbox().getX()
+                            && colisionMap.getKey().getY() == structure.getHitbox().getY()){
+                            toRemove.add(colisionMap.getKey());
+                        }
+
+                    }
+
+                }
+
+                toRemove.forEach(item -> colisionRectangle.remove(item));
+
+            }
+        });
+        final KeyFrame keyFrame7 = new KeyFrame(Duration.millis(3750), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                for(Structure structure : disparitionBloc){
+
+                    structure.setImage(Structures.DISPARITION_DEMI);
+
+                }
+
+            }
+        });
+        final KeyFrame keyFrame8 = new KeyFrame(Duration.millis(3900), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                for(Structure structure : disparitionBloc){
+
+
+                    structure.getImageView().setImage(null);
+                }
+
+            }
+        });
+        final KeyFrame keyFrame9 = new KeyFrame(Duration.millis(4050), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                for(Structure structure : disparitionBloc){
+
+                    structure.setImage(Structures.DISPARITION_DEMI);
+
+                }
+
+            }
+        });
+        final KeyFrame keyFrame10 = new KeyFrame(Duration.millis(4200), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                for(Structure structure : disparitionBloc){
+
+                    structure.getImageView().setImage(null);
+
+                }
+
+            }
+        });
+        final KeyFrame keyFrame11 = new KeyFrame(Duration.millis(4350), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                for(Structure structure : disparitionBloc){
+
+                    structure.setImage(Structures.DISPARITION_DEMI);
+
+                }
+
+            }
+        });
+        final KeyFrame keyFrame12 = new KeyFrame(Duration.millis(4500), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                for(Structure structure : disparitionBloc){
+
+                    structure.getImageView().setImage(null);
+
+                }
+
+            }
+        });
+        final KeyFrame keyFrame13 = new KeyFrame(Duration.millis(4650), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                for(Structure structure : disparitionBloc){
+
+                    structure.setImage(Structures.DISPARITION_ENTIER);
+                    colisionRectangle.put(structure.getHitbox(),Structures.DISPARITION_ENTIER);
+
+                }
+
+            }
+        });
+        final KeyFrame keyFrame14 = new KeyFrame(Duration.millis(6650), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                for(Structure structure : disparitionBloc){
+
+                    structure.setImage(Structures.DISPARITION_ENTIER);
+
+                }
+
+            }
+        });
+
+
+        Timeline timeline = new Timeline(keyFrame1,keyFrame2,keyFrame3,keyFrame4,keyFrame5,keyFrame6,
+                keyFrame7,keyFrame8,keyFrame9,keyFrame10,keyFrame11,keyFrame12,keyFrame13,keyFrame14);
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.setDelay(Duration.millis(2200));
+
+        if(disparitionBloc.size() != 0){
+            timeline.playFromStart();
         }
 
     }
@@ -1305,31 +1494,46 @@ public class LevelDisplay {
      */
 
     /**
-     *
+     * Récupére le personnage
+     * @return Personnage
      */
     public Personnage getPersonnage(){
         return snoopy;
     }
 
     /**
-     *
+     * Récupére les colisions
+     * @return List des colisions
      */
     public HashMap<Rectangle,Structures> getColisionRectangle(){
         return colisionRectangle;
     }
 
     /**
-     *
+     * Récupére les levels
+     * @return Retourne les levels
      */
     public List<List<Structure>> getLevelStruture(){
         return levelStruture;
     }
 
     /**
-     *
-     * @return
+     * Retourne si le jeu est en pause
+     * @return boolean si le jeu est en pause
      */
     public boolean isPause() {
         return isPause;
     }
+
+    /**
+     * Stop toutes les animations
+     */
+    public void stopAllAnimate() {
+
+        balle.stopAnimate();
+        timer.stopAnimate();
+        ballsTimeline.stop();
+
+    }
+
 }

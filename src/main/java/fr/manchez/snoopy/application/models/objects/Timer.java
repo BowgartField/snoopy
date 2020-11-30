@@ -1,8 +1,7 @@
-package fr.manchez.snoopy.application.models;
+package fr.manchez.snoopy.application.models.objects;
 
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Structures;
-import fr.manchez.snoopy.application.models.objects.Structure;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -11,7 +10,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +73,6 @@ public class Timer {
 
                         }else{
                             timerIndex=timerIndex+2;
-                            System.out.println(timerIndex);
                             timer.get(timerIndex).setImage(Structures.TIMER_HORI_OFF);
                         }
 
@@ -214,10 +211,20 @@ public class Timer {
 
     /**
      * Récupére le score
+     * @return int Retourne le score (calculé) du timer
      */
     public int getTimerScore(){
 
         return (maxTimer-timerIndex)*100;
+
+    }
+
+    /**
+     *
+     */
+    public void stopAnimate(){
+
+        timeline.stop();
 
     }
 }

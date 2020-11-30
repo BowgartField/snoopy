@@ -90,6 +90,7 @@ public class PasswordDisplay extends MenuDisplay {
 
     }
 
+    /** Gère l'affichage du mot de passe en temps réel*/
     private void increment(boolean aug){
         int toAdd = 0;
 
