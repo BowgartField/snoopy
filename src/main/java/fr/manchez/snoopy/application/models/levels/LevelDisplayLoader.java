@@ -148,7 +148,9 @@ public class LevelDisplayLoader {
                 //La structure n'est pas le player
                 if(!String.valueOf(character).equals(Structures.SNOOPY_IMMOBILE.getSymbol())){
 
-                    structureList.add(new Structure(newPoint2D,structure));
+                    Structure structureToAdd = new Structure(newPoint2D,structure);
+
+                    structureList.add(structureToAdd);
 
                     //La structure est un obstacle ou un destructible ou un bloc disparition
                     if(structure.getSymbol().equals(Structures.OBSTACLE.getSymbol())
@@ -169,7 +171,7 @@ public class LevelDisplayLoader {
                     //La structure est un oiseau
                     if(structure.getSymbol().equals(Structures.BIRD.getSymbol())){
 
-                        level.addBirds();
+                        level.addBirds(structureToAdd);
 
                     }
 

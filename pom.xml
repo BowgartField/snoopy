@@ -6,7 +6,7 @@
 
     <groupId>fr.manchez.snoopy</groupId>
     <artifactId>Snoopy</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <!-- dependences -->
     <dependencies>

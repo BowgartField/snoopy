@@ -31,8 +31,6 @@ public class Balle extends Structure{
     private int stepX = 1;
     private int stepY = 1;
 
-    double random = Math.random();
-
     /**
      * Créer un object dans la fenêtre aux position x et y
      * @param window SnoopyWindow
@@ -52,8 +50,6 @@ public class Balle extends Structure{
         //window.addAllNode(hitbox);
 
         timeline = new Timeline(new KeyFrame(Duration.millis(7), event -> {
-
-            System.out.println(random);
 
                 // si le niveau n'est pas en pause
                 if(!window.getLevelDisplay().isPause()){

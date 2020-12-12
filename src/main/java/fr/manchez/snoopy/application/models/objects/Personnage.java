@@ -843,15 +843,22 @@ public class Personnage extends Structure {
     public void setVie(int vie) {
         this.vie = vie;
     }
-
     public boolean isDefeating() {
         return isDefeating;
     }
     public void setDefeating(boolean defeating) {
         isDefeating = defeating;
     }
-
     public void setMoving(boolean moving) {
         isMoving = moving;
     }
+
+
+    public int getMoveToX() {
+        return moveToX;
+    }
+    public int getMoveToY() {
+        return moveToY;
+    }
+
 }

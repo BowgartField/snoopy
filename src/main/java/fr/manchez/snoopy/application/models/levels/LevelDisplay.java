@@ -1,5 +1,6 @@
 package fr.manchez.snoopy.application.models.levels;
 
+import fr.manchez.snoopy.application.AI.AI;
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Displays;
 import fr.manchez.snoopy.application.enums.Levels;
@@ -38,6 +39,10 @@ import java.util.Map;
  */
 public class LevelDisplay {
 
+    /** Ai **/
+    AI ai;
+
+    /** Level **/
     Levels level;
 
     /** Image de pause */
@@ -70,6 +75,9 @@ public class LevelDisplay {
     /**Stock les structures des scores*/
     List<Structure> scoreStructures = new ArrayList<>();
     List<Structure> highscoreStructures = new ArrayList<>();
+
+    /** Liste des oiseau **/
+    private List<Structure> birdList = new ArrayList<>();
 
     /**  Le niveau est en pause*/
     boolean isPause = false;
@@ -141,6 +149,8 @@ public class LevelDisplay {
         timer = new Timer(window);
 
         initPause();
+
+        ai = new AI(this, window);
 
     }
 
@@ -1020,8 +1030,8 @@ public class LevelDisplay {
         window.addAllNode(snoopy.getImageView());
 
         //On affiche la balle
-        balle = new Balle(window);
-        window.addAllNode(balle.getImageView());
+        //balle = new Balle(window);
+        //window.addAllNode(balle.getImageView());
 
         initDisparitionBloc();
 
@@ -1101,7 +1111,9 @@ public class LevelDisplay {
     /**
      * Ajoute un oiseau en plus
      */
-    public void addBirds(){
+    public void addBirds(Structure structureToAdd){
+
+        birdList.add(structureToAdd);
 
         birdsRemaining++;
 
@@ -1164,6 +1176,14 @@ public class LevelDisplay {
 
             }
 
+            //Si on appuye sur le "a" -> on passe en mode automatique
+            if(keyCode.equals(KeyCode.A)){
+
+                System.out.println("démarre le mode automatique");
+
+                ai.start();
+            }
+
         }else{
 
             //Si on appuye sur le "p" -> enleve la pause
@@ -1185,15 +1205,13 @@ public class LevelDisplay {
 
                 if(Levels.findLevelsFromLevelNumber(level.getLevelNumber()+1) != null){
 
-                    balle.stopAnimate();
-                    timer.stopAnimate();
+                    stopAllAnimate();
 
                     window.loadNewLevelDisplay(Levels.findLevelsFromLevelNumber(level.getLevelNumber()+1));
 
                 }else{
 
-                    balle.stopAnimate();
-                    timer.stopAnimate();
+                    stopAllAnimate();
 
                     window.getSauvegarde().getPlayer().reset();
                     window.loadNewDisplay(Displays.FinishDisplay);
@@ -1220,8 +1238,7 @@ public class LevelDisplay {
 
                 }else if (keyCode.equals(KeyCode.ENTER) && isOption1){
 
-                    balle.stopAnimate();
-                    timer.stopAnimate();
+                    stopAllAnimate();
 
                     //CONTINUE
                     window.loadNewDisplay(Displays.StartDisplay);
@@ -1532,8 +1549,19 @@ public class LevelDisplay {
 
         balle.stopAnimate();
         timer.stopAnimate();
-        ballsTimeline.stop();
 
     }
 
+    /** Récupérer les oiseaux **/
+    public List<Structure> getBirdList(){
+        return birdList;
+    }
+
+    public int getBirdsRemaining() {
+        return birdsRemaining;
+    }
+
+    public void setBirdsRemaining(int birdsRemaining) {
+        this.birdsRemaining = birdsRemaining;
+    }
 }
