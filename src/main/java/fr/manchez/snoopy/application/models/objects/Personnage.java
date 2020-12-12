@@ -441,6 +441,7 @@ public class Personnage extends Structure {
 
 
             //premier animation de disparition
+            window.playSound(Sounds.TELEPORT);
             timelineTpDisapeare.playFromStart();
 
             //
@@ -456,6 +457,12 @@ public class Personnage extends Structure {
                 //timelineTpApeare.stop();
 
             });
+        }
+
+        //bloc piégé
+        if(nextStructure.getStructure().getSymbol().equals(Structures.PIEGE.getSymbol())){
+
+            animateDefeate();
 
         }
 

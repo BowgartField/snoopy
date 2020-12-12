@@ -46,6 +46,7 @@ public enum Structures {
     TAPIS_BAS("B","Blocs/tapis_bas.png",30,30),
     TAPIS_DROIT("R","Blocs/tapis_droite.png",30,30),
     TAPIS_GAUCHE("L","Blocs/tapis_gauche.png",30,30),
+    PIEGE("T","Blocs/piege.png",30,30),
     DISPARITION_ENTIER("K","Blocs/disparition_entier.png",30,30),
     DISPARITION_DEMI("","Blocs/disparition_demi.png",30,30),
 

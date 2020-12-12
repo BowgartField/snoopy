@@ -1,10 +1,7 @@
 package fr.manchez.snoopy.application.models.levels;
 
 import fr.manchez.snoopy.application.SnoopyWindow;
-import fr.manchez.snoopy.application.enums.Displays;
-import fr.manchez.snoopy.application.enums.Levels;
-import fr.manchez.snoopy.application.enums.Sounds;
-import fr.manchez.snoopy.application.enums.Structures;
+import fr.manchez.snoopy.application.enums.*;
 import fr.manchez.snoopy.application.models.objects.Timer;
 import fr.manchez.snoopy.application.models.objects.Balle;
 import fr.manchez.snoopy.application.models.objects.Personnage;
@@ -140,6 +137,7 @@ public class LevelDisplay {
         this.level = level;
         timer = new Timer(window);
 
+        window.playTheme(Themes.getRandomTheme());
         initPause();
 
     }
@@ -1061,6 +1059,8 @@ public class LevelDisplay {
 
             window.getLevelDisplay().getPersonnage().animateVictory();
 
+            window.playTheme(Themes.WIN_THEME);
+
         }
 
     }
@@ -1532,7 +1532,10 @@ public class LevelDisplay {
 
         balle.stopAnimate();
         timer.stopAnimate();
-        ballsTimeline.stop();
+
+        if(ballsTimeline != null) {
+            ballsTimeline.stop();
+        }
 
     }
 

@@ -53,8 +53,6 @@ public class Balle extends Structure{
 
         timeline = new Timeline(new KeyFrame(Duration.millis(7), event -> {
 
-            System.out.println(random);
-
                 // si le niveau n'est pas en pause
                 if(!window.getLevelDisplay().isPause()){
 

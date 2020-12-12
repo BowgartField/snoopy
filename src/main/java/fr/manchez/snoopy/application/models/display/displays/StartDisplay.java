@@ -3,6 +3,8 @@ package fr.manchez.snoopy.application.models.display.displays;
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Displays;
 import fr.manchez.snoopy.application.enums.PlayersType;
+import fr.manchez.snoopy.application.enums.Sounds;
+import fr.manchez.snoopy.application.enums.Themes;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -33,7 +35,8 @@ public class StartDisplay extends MenuDisplay {
                 )
         );
 
-        //TODO: charger musique du jeu
+
+        window.playTheme(Themes.MAIN_THEME);
         /*
         try{
 
