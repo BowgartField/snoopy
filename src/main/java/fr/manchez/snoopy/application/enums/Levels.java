@@ -5,7 +5,8 @@ public enum Levels{
     LEVEL_1("level1.txt", "6523", 001),
     LEVEL_2("level2.txt", "0002", 002),
     LEVEL_3("level3.txt", "0003", 003),
-    LEVEL_4("level4.txt", "0004", 004);
+    LEVEL_4("level4.txt", "0004", 004),
+    LEVEL_5("level5.txt", "0005", 005);
 
     private String Url;
     private String password;

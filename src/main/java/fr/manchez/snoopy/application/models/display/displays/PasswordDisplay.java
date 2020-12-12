@@ -59,7 +59,6 @@ public class PasswordDisplay extends MenuDisplay {
     @Override
     public void drawOther(){
 
-        /** Affichage du curseur et des numéros permettant de composer le mot de passe */
         curseurUp = new Structure(
                 new Point2D(96* SnoopyWindow.SCALE, 232*SnoopyWindow.SCALE),
                 Structures.CURSEURUP

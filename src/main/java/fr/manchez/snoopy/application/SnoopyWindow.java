@@ -1,9 +1,6 @@
 package fr.manchez.snoopy.application;
 
-import fr.manchez.snoopy.application.enums.Displays;
-import fr.manchez.snoopy.application.enums.Levels;
-import fr.manchez.snoopy.application.enums.PlayersType;
-import fr.manchez.snoopy.application.enums.Sounds;
+import fr.manchez.snoopy.application.enums.*;
 import fr.manchez.snoopy.application.models.display.Display;
 import fr.manchez.snoopy.application.models.display.DisplayLoader;
 import fr.manchez.snoopy.application.models.levels.LevelDisplay;
@@ -25,7 +22,8 @@ public class SnoopyWindow{
     private final Sauvegarde sauvegarde;
 
     /** Media player **/
-    AudioClip audioClip;
+    AudioClip themeClip;
+    AudioClip soundClip;
 
     /** Stage de la fenêtre **/
     private Stage stage;
@@ -168,15 +166,35 @@ public class SnoopyWindow{
     }
 
     /**
-     * Joue le son
+     * Joue les themes
+     * @param themes Son a jouer
+     */
+    public void playTheme(Themes themes){
+
+        try{
+
+            if (themeClip != null){
+                themeClip.stop();
+            }
+            themeClip = new AudioClip(getClass().getResource("/fr/manchez/snoopy/sounds/" + themes.getUrl()).toURI().toString());
+            themeClip.play();
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    /**
+     * Joue les sons
      * @param sound Son a jouer
      */
     public void playSound(Sounds sound){
 
         try{
 
-            audioClip = new AudioClip(getClass().getResource("/fr/manchez/snoopy/sounds/" + sound.getUrl()).toURI().toString());
-            audioClip.play();
+            soundClip = new AudioClip(getClass().getResource("/fr/manchez/snoopy/sounds/effects/" + sound.getUrl()).toURI().toString());
+            soundClip.play();
 
         }catch (Exception e){
             System.out.println(e.getMessage());

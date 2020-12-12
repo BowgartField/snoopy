@@ -1,11 +1,7 @@
 package fr.manchez.snoopy.application.models.levels;
 
-import fr.manchez.snoopy.application.AI.AI;
 import fr.manchez.snoopy.application.SnoopyWindow;
-import fr.manchez.snoopy.application.enums.Displays;
-import fr.manchez.snoopy.application.enums.Levels;
-import fr.manchez.snoopy.application.enums.Sounds;
-import fr.manchez.snoopy.application.enums.Structures;
+import fr.manchez.snoopy.application.enums.*;
 import fr.manchez.snoopy.application.models.objects.Timer;
 import fr.manchez.snoopy.application.models.objects.Balle;
 import fr.manchez.snoopy.application.models.objects.Personnage;
@@ -76,9 +72,6 @@ public class LevelDisplay {
     List<Structure> scoreStructures = new ArrayList<>();
     List<Structure> highscoreStructures = new ArrayList<>();
 
-    /** Liste des oiseau **/
-    private List<Structure> birdList = new ArrayList<>();
-
     /**  Le niveau est en pause*/
     boolean isPause = false;
 
@@ -148,6 +141,7 @@ public class LevelDisplay {
         this.level = level;
         timer = new Timer(window);
 
+        window.playTheme(Themes.getRandomTheme());
         initPause();
 
         ai = new AI(this, window);
@@ -1030,8 +1024,8 @@ public class LevelDisplay {
         window.addAllNode(snoopy.getImageView());
 
         //On affiche la balle
-        //balle = new Balle(window);
-        //window.addAllNode(balle.getImageView());
+        balle = new Balle(window);
+        window.addAllNode(balle.getImageView());
 
         initDisparitionBloc();
 
@@ -1070,6 +1064,8 @@ public class LevelDisplay {
             isPause = true;
 
             window.getLevelDisplay().getPersonnage().animateVictory();
+
+            window.playTheme(Themes.WIN_THEME);
 
         }
 
@@ -1550,7 +1546,9 @@ public class LevelDisplay {
         balle.stopAnimate();
         timer.stopAnimate();
 
-    }
+        if(ballsTimeline != null) {
+            ballsTimeline.stop();
+        }
 
     /** Récupérer les oiseaux **/
     public List<Structure> getBirdList(){
