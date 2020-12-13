@@ -3,6 +3,8 @@
 - coder animation début du jeu
 - coder animation fin du jeu
 
+- Toucher balle = stop animation AI
+
 FINI:
 - coder balle qui passe a travers les débris
 - recoder le timer

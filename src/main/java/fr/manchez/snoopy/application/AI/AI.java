@@ -64,7 +64,7 @@ public class AI {
 
         //Cherche le chemin le plus court
 
-        test();
+        selectShortestPathToNereastBird();
 
     }
 
@@ -159,9 +159,7 @@ public class AI {
     }
 
 
-    private void test(){
-
-                List<Rectangle> path = new ArrayList<>();
+    private void selectShortestPathToNereastBird(){
 
         List<List<Direction>> pathAlreadyCalculatePath = new ArrayList<>();
 
@@ -178,15 +176,15 @@ public class AI {
 
             getNereastBird();
 
-            System.out.println("---------------------------------------------------------------------------------------");
+            //System.out.println("---------------------------------------------------------------------------------------");
 
-            printObject(pathAlreadyCalculatePath);
-            System.out.println("actualPath: " + actualPath);
+            //printObject(pathAlreadyCalculatePath);
+            //System.out.println("actualPath: " + actualPath);
 
             //Récupére les quatres structures
             nearbyStructure = scanNearbyEnvironement();
 
-            System.out.println("Nearby Directions: " + nearbyStructure);
+            //System.out.println("Nearby Directions: " + nearbyStructure);
 
             double actualDistanceChoosed = -1;
             Direction directionChoosed = null;
@@ -206,19 +204,18 @@ public class AI {
                     for(Direction direction: actualPath){
 
                         if(direction.getStructure().equals(nearbyDirection.getStructure())){
-                            System.out.println("ok");
                             finded = true;
                             break;
                         }
                     }
 
+                    //on vérifie que l'on est pas
                     if(finded
                         || (actualPath.size() > 0 && getInverse(nearbyDirection).equals(actualPath.get(actualPath.size()-1).getMoves()))
                         || (actualPath.size() > 1 && getInverse(nearbyDirection).equals(actualPath.get(actualPath.size()-2).getMoves()))
                     ){
                         continue;
                     }
-
 
                     //On récupére les chemin déjà calculé qui ressemble a celui ou l'on est actuellement
                     List<List<Direction>> potentialAlreadyCalculatedPaths = getPotentialAlreadyCalculatedPaths(actualPath,pathAlreadyCalculatePath);
@@ -279,10 +276,20 @@ public class AI {
             if(directionChoosed != null){
 
                 //System.out.println("ENTRE distance: " + actualDistanceChoosed);
-                System.out.println("ENTRE direction: " + directionChoosed);
+                //System.out.println("ENTRE direction: " + directionChoosed);
 
                 increment(directionChoosed);
                 actualPath.add(directionChoosed);
+
+                //TODO: TP de l'IA
+                /*
+                if(directionChoosed.getStructure().getStructure().equals(Structures.TP1) || ){
+
+
+
+                }
+
+                 */
 
                 /*
                 Rectangle rectangle = levelDisplay.getLevelStruture().get(y).get(x).getHitbox();
@@ -299,28 +306,12 @@ public class AI {
                 pathAlreadyCalculatePath.add(actualPath);
                 actualPath = new ArrayList<>();
 
-                /*
-                path.forEach(item -> window.removeAllNode(item));
-                path.clear();
-
-                 */
-
-                //TODO: Depende des coordonées de snoopy (multi oiseau)
                 x = window.getLevelDisplay().getPersonnage().getMoveToX();
                 y = window.getLevelDisplay().getPersonnage().getMoveToY();
 
             }
 
-            /*
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-             */
-
-            System.out.println("--------------------------------------------------------------------------------------");
+            //System.out.println("--------------------------------------------------------------------------------------");
 
 
         }while (!containBird(actualPath));
@@ -329,9 +320,6 @@ public class AI {
 
         goToNearestBird();
 
-        /*
-         * FIN BOUCLE
-         */
     }
 
     /**
@@ -373,7 +361,7 @@ public class AI {
 
     /**
      * Incrémente la position fictive de snoopy
-     * @param direction
+     * @param direction direction pris par snoopy
      */
     private void increment(Direction direction){
 
@@ -395,9 +383,9 @@ public class AI {
     }
 
     /**
-     *
-     * @param direction
-     * @return
+     * Retourne l'inverse de la direction
+     * @param direction Direction
+     * @return Inverse de la direction
      */
     private Moves getInverse(Direction direction){
 
@@ -423,9 +411,9 @@ public class AI {
     }
 
     /**
-     *
-     * @param directions
-     */
+     * Affiche un objet
+     * @param directions Objet à afficher
+      */
     private void printObject(List<List<Direction>> directions){
 
         directions.forEach(item -> System.out.println("calculated Paths:" + directions));
@@ -542,7 +530,7 @@ public class AI {
         levelDisplay.getBirdList().remove(birdToGo);
 
         if(levelDisplay.getBirdsRemaining() != 0){
-            test();
+            selectShortestPathToNereastBird();
         }
 
     }

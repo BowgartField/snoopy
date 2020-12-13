@@ -1,5 +1,6 @@
 package fr.manchez.snoopy.application.models.levels;
 
+import fr.manchez.snoopy.application.AI.AI;
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.*;
 import fr.manchez.snoopy.application.models.objects.Timer;
@@ -71,6 +72,9 @@ public class LevelDisplay {
     /**Stock les structures des scores*/
     List<Structure> scoreStructures = new ArrayList<>();
     List<Structure> highscoreStructures = new ArrayList<>();
+
+    /** Liste des oiseau **/
+    private List<Structure> birdList = new ArrayList<>();
 
     /**  Le niveau est en pause*/
     boolean isPause = false;
@@ -350,10 +354,12 @@ public class LevelDisplay {
      */
     public void defeat(){
 
-        isLoose = true;
         isPause = true;
 
-        showLooseScreen();
+        if(!isLoose){
+            isLoose = true;
+            showLooseScreen();
+        }
 
     }
 
@@ -1398,6 +1404,9 @@ public class LevelDisplay {
 
                 for(Structure structure : disparitionBloc){
 
+                    //test si snoopy est sur le bloc
+                    snoopyIsOnDisparitionBloc(structure);
+
                     structure.setImage(Structures.DISPARITION_DEMI);
 
                 }
@@ -1423,6 +1432,7 @@ public class LevelDisplay {
                 for(Structure structure : disparitionBloc){
 
                     structure.setImage(Structures.DISPARITION_DEMI);
+                    snoopyIsOnDisparitionBloc(structure);
 
                 }
 
@@ -1447,6 +1457,7 @@ public class LevelDisplay {
                 for(Structure structure : disparitionBloc){
 
                     structure.setImage(Structures.DISPARITION_DEMI);
+                    snoopyIsOnDisparitionBloc(structure);
 
                 }
 
@@ -1472,6 +1483,7 @@ public class LevelDisplay {
 
                     structure.setImage(Structures.DISPARITION_ENTIER);
                     colisionRectangle.put(structure.getHitbox(),Structures.DISPARITION_ENTIER);
+                    snoopyIsOnDisparitionBloc(structure);
 
                 }
 
@@ -1484,6 +1496,7 @@ public class LevelDisplay {
                 for(Structure structure : disparitionBloc){
 
                     structure.setImage(Structures.DISPARITION_ENTIER);
+                    snoopyIsOnDisparitionBloc(structure);
 
                 }
 
@@ -1523,6 +1536,23 @@ public class LevelDisplay {
     }
 
     /**
+     *
+     */
+    public void snoopyIsOnDisparitionBloc(Structure structure){
+
+        if(structure.getImageView().getY() == snoopy.getImageView().getY()
+            && structure.getImageView().getX() == snoopy.getImageView().getX()){
+
+            System.out.println("ok");
+
+            snoopy.animateLooseLife();
+
+        }
+
+
+    }
+
+    /**
      * Récupére les levels
      * @return Retourne les levels
      */
@@ -1546,9 +1576,11 @@ public class LevelDisplay {
         balle.stopAnimate();
         timer.stopAnimate();
 
-        if(ballsTimeline != null) {
+        if (ballsTimeline != null) {
             ballsTimeline.stop();
         }
+
+    }
 
     /** Récupérer les oiseaux **/
     public List<Structure> getBirdList(){
@@ -1562,4 +1594,5 @@ public class LevelDisplay {
     public void setBirdsRemaining(int birdsRemaining) {
         this.birdsRemaining = birdsRemaining;
     }
+
 }

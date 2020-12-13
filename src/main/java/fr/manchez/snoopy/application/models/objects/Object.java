@@ -30,6 +30,4 @@ public abstract class Object {
     public DoubleProperty xPropertyProperty() {
         return xProperty;
     }
-
-
 }

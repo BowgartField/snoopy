@@ -8,12 +8,24 @@ import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
  *
  */
 public class Balle extends Structure{
+
+    /**
+     *
+     */
+    private boolean isBallStop = false;
+
+    /**
+     *
+     */
+    List<Structure> teleportersList = new ArrayList<>();
 
     /**
      * Time animation de la balle
@@ -41,6 +53,8 @@ public class Balle extends Structure{
 
         this.window = window;
 
+        this.getTeleporters();
+
         /*
             DEBUG
          */
@@ -52,7 +66,7 @@ public class Balle extends Structure{
         timeline = new Timeline(new KeyFrame(Duration.millis(7), event -> {
 
                 // si le niveau n'est pas en pause
-                if(!window.getLevelDisplay().isPause()){
+                if(!window.getLevelDisplay().isPause() || !isBallStop){
 
                     xProperty.set(xProperty.get()+stepX);
                     yProperty.set(yProperty.get()+stepY);
@@ -73,6 +87,9 @@ public class Balle extends Structure{
                     //cloision avec personnage
                     isColidedWithPlayer();
 
+                    //On vérifie si la balle est sur un teleporteur
+                    isOnTeleport();
+
                 }
 
             }));
@@ -85,7 +102,7 @@ public class Balle extends Structure{
     /**
      * Gére les colisions entre le personnage et la balle
      */
-    public void isColidedWithPlayer() {
+    private void isColidedWithPlayer() {
 
         Personnage personnage = window.getLevelDisplay().getPersonnage();
 
@@ -121,7 +138,7 @@ public class Balle extends Structure{
     /**
      * Gére les colisions avec les blocs
      */
-    public void isColided(){
+    private void isColided(){
 
         //TODO: copier le tableau pour eviter ConccurentException
 
@@ -256,6 +273,63 @@ public class Balle extends Structure{
         }
 
         window.getLevelDisplay().removeColision();
+
+    }
+
+    /**
+     * Vérifie si la balle est sur un teleporteur
+     */
+    private void isOnTeleport(){
+
+        for(Structure structure: teleportersList){
+
+            if(structure.getHitbox().intersects(getHitbox().getBoundsInLocal())){
+
+                isBallStop = true;
+
+                getPairTeleporter(structure);
+
+            }
+        }
+
+    }
+
+    /**
+     * Récupére les téléporters du niveau
+     */
+    private void getTeleporters(){
+
+        for(List<Structure> structureList: window.getLevelDisplay().getLevelStruture()){
+
+            for(Structure structure: structureList){
+
+
+                if(structure.getStructure().equals(Structures.TP1) ||structure.getStructure().equals(Structures.TP2)){
+
+                    teleportersList.add(structure);
+
+                }
+
+            }
+
+        }
+
+    }
+
+    /**
+     *
+     */
+    private void getPairTeleporter(Structure teleporter){
+
+        for(Structure structure: teleportersList){
+
+            if(structure.getStructure().equals(teleporter.getStructure()) && !structure.equals(teleporter)){
+
+
+
+            }
+
+        }
 
     }
 
