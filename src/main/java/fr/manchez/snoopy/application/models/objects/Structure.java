@@ -14,7 +14,7 @@ public class Structure extends Object {
     /**
      * Hitbox pour gérer les collisions
      */
-    protected final Rectangle hitbox;
+    protected Rectangle hitbox;
 
     /** Image de la structure **/
 
@@ -41,13 +41,17 @@ public class Structure extends Object {
         imageView.xProperty().bindBidirectional(xProperty);
         imageView.yProperty().bindBidirectional(yProperty);
 
+        bind();
+
+    }
+
+    protected void bind(){
         //On créer la hitbox
         hitbox = new Rectangle(
                 structure.getWidth()* SnoopyWindow.SCALE,
                 structure.getHeight()*SnoopyWindow.SCALE);
         hitbox.xProperty().bindBidirectional(xProperty);
         hitbox.yProperty().bindBidirectional(yProperty);
-
     }
 
     public ImageView getImageView(){
@@ -80,7 +84,11 @@ public class Structure extends Object {
      */
     public void setImage(Structures structure){
 
-        imageView.setImage(getImage(structure));
+        if(structure == null){
+            imageView.setImage(null);
+        }else{
+            imageView.setImage(getImage(structure));
+        }
 
     }
 

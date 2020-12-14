@@ -359,6 +359,7 @@ public class LevelDisplay {
         if(!isLoose){
             isLoose = true;
             showLooseScreen();
+            ai.stop();
         }
 
     }
@@ -372,6 +373,7 @@ public class LevelDisplay {
         isPause = true;
 
         showLooseLifeScreen();
+        ai.stop();
 
     }
 
@@ -1022,9 +1024,10 @@ public class LevelDisplay {
             rec.setOpacity(0.3);
             window.addAllNode(rec);
         }
+        */
         //DEBUT Hitbox personnage
-        //window.getPane().getChildren().add(snoopy.getHitbox());
-         */
+        window.getPane().getChildren().add(snoopy.getHitbox());
+
 
         //On affiche le personnage
         window.addAllNode(snoopy.getImageView());

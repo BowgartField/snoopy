@@ -5,12 +5,14 @@ import fr.manchez.snoopy.application.enums.Sounds;
 import fr.manchez.snoopy.application.enums.Structures;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
+import javax.naming.Binding;
 import java.util.List;
 import java.util.Map;
 
@@ -57,6 +59,9 @@ public class Personnage extends Structure {
     /** Nombre de pixel de déplacement par frame, ici 5 frames */
     final double mov = 6.4; //->32/5
 
+    //retrecissement de la hitbox
+    final private int retrec = 5;
+
     /**
      * Créer un Personnage dans la fenêtre aux position x et y
      * @param point2D {Point2D} Coordonées d'apparition du personnage
@@ -69,12 +74,37 @@ public class Personnage extends Structure {
 
         vie = window.getSauvegarde().getPlayer().getVie();
 
+        //On réécrit
+        hitbox = new Rectangle(
+                (structure.getWidth()-retrec)* SnoopyWindow.SCALE,
+                (structure.getHeight()-retrec)*SnoopyWindow.SCALE);
+
+        hitbox.setX(imageView.getX()+retrec);
+        hitbox.setY(imageView.getY()+retrec);
+
         this.window = window;
 
         //Initialise les animations
         initLooseLifeAndDefeatAnimations();
         initTpDisapeareAnimation();
         initTpApeareAnimation();
+
+    }
+
+    @Override
+    protected void bind() {
+
+        xProperty.addListener(((observable, oldValue, newValue) -> {
+
+            hitbox.setX(newValue.doubleValue()+retrec);
+
+        }));
+
+        yProperty.addListener(((observable, oldValue, newValue) -> {
+
+            hitbox.setY(newValue.doubleValue()+retrec);
+
+        }));
 
     }
 

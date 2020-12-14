@@ -20,6 +20,16 @@ public class Balle extends Structure{
     /**
      *
      */
+    Timeline ballTeleportAparitionTimeline;
+
+    /**
+     *
+     */
+    Timeline ballTeleportDisparitionTimeline;
+
+    /**
+     *
+     */
     private boolean isBallStop = false;
 
     /**
@@ -38,10 +48,17 @@ public class Balle extends Structure{
     SnoopyWindow window;
 
     /**
+     * Teleport
+     */
+    int teleportDelayTime = -1;
+
+    /**
      * vecteur de déplacement de la balle
      */
     private int stepX = 1;
     private int stepY = 1;
+
+    int counter = 0;
 
     /**
      * Créer un object dans la fenêtre aux position x et y
@@ -53,6 +70,7 @@ public class Balle extends Structure{
 
         this.window = window;
 
+        this.initAnimations();
         this.getTeleporters();
 
         /*
@@ -65,34 +83,44 @@ public class Balle extends Structure{
 
         timeline = new Timeline(new KeyFrame(Duration.millis(7), event -> {
 
-                // si le niveau n'est pas en pause
-                if(!window.getLevelDisplay().isPause() || !isBallStop){
+            //System.out.println("isBallStop: " + !isBallStop);
+            //System.out.println("test: " + !window.getLevelDisplay().isPause());
 
-                    xProperty.set(xProperty.get()+stepX);
-                    yProperty.set(yProperty.get()+stepY);
+            // si le niveau n'est pas en pause
+            if(!window.getLevelDisplay().isPause() && !isBallStop){
 
-                    //If the ball reaches the left or right border make the step negative
-                    if(xProperty.get() <= 16*SnoopyWindow.SCALE || xProperty.get() >= 580){
-                        stepX = -stepX;
-                    }
+                xProperty.set(xProperty.get()+stepX);
+                yProperty.set(yProperty.get()+stepY);
 
-                    //If the ball reaches the bottom or top border make the step negative
-                    if(yProperty.get() <= 16*SnoopyWindow.SCALE || yProperty.get() >= 580){
-                        stepY = -stepY;
-                    }
-
-                    //colision avec blocs
-                    isColided();
-
-                    //cloision avec personnage
-                    isColidedWithPlayer();
-
-                    //On vérifie si la balle est sur un teleporteur
-                    isOnTeleport();
-
+                //If the ball reaches the left or right border make the step negative
+                if(xProperty.get() <= 16*SnoopyWindow.SCALE || xProperty.get() >= 580){
+                    stepX = -stepX;
                 }
 
-            }));
+                //If the ball reaches the bottom or top border make the step negative
+                if(yProperty.get() <= 16*SnoopyWindow.SCALE || yProperty.get() >= 580){
+                    stepY = -stepY;
+                }
+
+                //colision avec blocs
+                isColided();
+
+                //cloision avec personnage
+                isColidedWithPlayer();
+
+                //On vérifie si la balle est sur un teleporteur
+                if(teleportDelayTime == -1){
+                    isOnTeleport();
+                }else if(teleportDelayTime == 0){
+                    teleportDelayTime = -1;
+                }else{
+                    System.out.println(teleportDelayTime);
+                    teleportDelayTime--;
+                }
+
+            }
+
+        }));
 
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
@@ -165,6 +193,7 @@ public class Balle extends Structure{
 
                             //tape le bas du bloc
                             if(balleBounds.getMinY() == blocBounds.getMaxY()){
+
                                 stepY = -stepY;
                                 break;
                             }
@@ -241,6 +270,7 @@ public class Balle extends Structure{
                         //face droite et haut
 
                         if(balleBounds.getMaxY() == blocBounds.getMinY() && balleBounds.getMinX() == blocBounds.getMaxX()){
+
                             stepX = -stepX;
                             stepY = -stepY;
                             break;
@@ -285,12 +315,45 @@ public class Balle extends Structure{
 
             if(structure.getHitbox().intersects(getHitbox().getBoundsInLocal())){
 
-                isBallStop = true;
-
-                getPairTeleporter(structure);
+                if(counter < 40){
+                   counter++;
+                }else if(counter == 40){
+                    teleportBalle(structure);
+                }else if(!isBallStop){
+                    counter = 0;
+                }
 
             }
         }
+
+    }
+
+    /**
+     * Téléporte la bas aux coordonées de l'autre téléporteur
+     */
+    private void teleportBalle(Structure structure){
+
+        teleportDelayTime = (int) Math.sqrt(
+                Math.pow(Structures.TP1.getWidth()*SnoopyWindow.SCALE,2)
+                + Math.pow(Structures.TP1.getWidth()*SnoopyWindow.SCALE,2)
+        );
+
+        isBallStop = true;
+
+        Structure pairTeleporter = getPairTeleporter(structure);
+
+        ballTeleportDisparitionTimeline.playFromStart();
+        ballTeleportDisparitionTimeline.setOnFinished(event -> {
+
+            yProperty.set(pairTeleporter.imageView.getY()+10);
+            xProperty.set(pairTeleporter.imageView.getX()+10);
+
+            ballTeleportAparitionTimeline.playFromStart();
+            ballTeleportAparitionTimeline.setOnFinished(event1 -> {
+                isBallStop = false;
+            });
+
+        });
 
     }
 
@@ -317,19 +380,83 @@ public class Balle extends Structure{
     }
 
     /**
-     *
+     * Récupére le teleporteur pair
      */
-    private void getPairTeleporter(Structure teleporter){
+    private Structure getPairTeleporter(Structure teleporter){
+
+        Structure result = null;
 
         for(Structure structure: teleportersList){
 
             if(structure.getStructure().equals(teleporter.getStructure()) && !structure.equals(teleporter)){
 
-
+                result = structure;
 
             }
 
         }
+
+        return result;
+
+    }
+
+    /**
+     * Initialise les animations
+     */
+    private void initAnimations(){
+
+        initApartionAnimations();
+        initDispartionAnimations();
+
+    }
+
+    /**
+     * Initialise l'animation d'aparition
+     */
+    private void initApartionAnimations(){
+
+        KeyFrame keyFrame1 = new KeyFrame(Duration.millis(0),event -> {
+            setImage(Structures.BALLE);
+        });
+        KeyFrame keyFrame2 = new KeyFrame(Duration.millis(250),event -> {
+            setImage(null);
+        });
+        KeyFrame keyFrame3 = new KeyFrame(Duration.millis(500),event -> {
+            setImage(Structures.BALLE);
+        });
+        KeyFrame keyFrame4 = new KeyFrame(Duration.millis(750),event -> {
+            setImage(null);
+        });
+        KeyFrame keyFrame5 = new KeyFrame(Duration.millis(1000),event -> {
+            setImage(Structures.BALLE);
+        });
+
+        ballTeleportAparitionTimeline = new Timeline(keyFrame1,keyFrame2,keyFrame3,keyFrame4,keyFrame5);
+
+    }
+
+    /**
+     *
+     */
+    private void initDispartionAnimations(){
+
+        KeyFrame keyFrame1 = new KeyFrame(Duration.millis(0),event -> {
+            imageView.setImage(null);
+        });
+        KeyFrame keyFrame2 = new KeyFrame(Duration.millis(300),event -> {
+            setImage(Structures.BALLE);
+        });
+        KeyFrame keyFrame3 = new KeyFrame(Duration.millis(600),event -> {
+            imageView.setImage(null);
+        });
+        KeyFrame keyFrame4 = new KeyFrame(Duration.millis(900),event -> {
+            setImage(Structures.BALLE);
+        });
+        KeyFrame keyFrame5 = new KeyFrame(Duration.millis(1200),event -> {
+            imageView.setImage(null);
+        });
+
+        ballTeleportDisparitionTimeline = new Timeline(keyFrame1,keyFrame2,keyFrame3,keyFrame4,keyFrame5);
 
     }
 

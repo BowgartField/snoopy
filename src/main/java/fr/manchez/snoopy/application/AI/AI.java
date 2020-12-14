@@ -159,6 +159,9 @@ public class AI {
     }
 
 
+    /**
+     * Recherche le chemin le plus court vers les oiseaux
+     */
     private void selectShortestPathToNereastBird(){
 
         List<List<Direction>> pathAlreadyCalculatePath = new ArrayList<>();
@@ -280,25 +283,6 @@ public class AI {
 
                 increment(directionChoosed);
                 actualPath.add(directionChoosed);
-
-                //TODO: TP de l'IA
-                /*
-                if(directionChoosed.getStructure().getStructure().equals(Structures.TP1) || ){
-
-
-
-                }
-
-                 */
-
-                /*
-                Rectangle rectangle = levelDisplay.getLevelStruture().get(y).get(x).getHitbox();
-                rectangle.setFill(Color.BLACK);
-
-                window.addAllNode(rectangle);
-                path.add(rectangle);
-
-                 */
 
             }else{
 
@@ -532,6 +516,15 @@ public class AI {
         if(levelDisplay.getBirdsRemaining() != 0){
             selectShortestPathToNereastBird();
         }
+
+    }
+
+    /**
+     *
+     */
+    public void stop(){
+
+        animateSnoopyTimeline.stop();
 
     }
 
