@@ -24,6 +24,10 @@ public class Structure extends Object {
 
     protected Structures structure;
 
+
+
+    protected boolean hasBeenPushed = false;
+
     /**
      * Constructeur
      * @param point2D Point 2D, correspondant à la position de la structure dans l'espace
@@ -99,5 +103,13 @@ public class Structure extends Object {
 
     public Rectangle getHitbox() {
         return hitbox;
+    }
+
+    public boolean isHasBeenPushed() {
+        return hasBeenPushed;
+    }
+
+    public void setHasBeenPushed(boolean hasBeenPushed) {
+        this.hasBeenPushed = hasBeenPushed;
     }
 }

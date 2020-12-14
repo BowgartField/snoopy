@@ -146,7 +146,8 @@ public class Balle extends Structure{
 
             if(rectangle.getValue().getSymbol().equals(Structures.OBSTACLE.getSymbol())
                     || rectangle.getValue().getSymbol().equals(Structures.DESTRUCTIBLE.getSymbol())
-                    ||rectangle.getValue().getSymbol().equals(Structures.DISPARITION_ENTIER.getSymbol())){
+                    || rectangle.getValue().getSymbol().equals(Structures.DISPARITION_ENTIER.getSymbol())
+                    || rectangle.getValue().getSymbol().equals(Structures.POUSSABLE.getSymbol())){
 
                 if(rectangle.getKey().intersects(hitbox.getLayoutBounds())){
 

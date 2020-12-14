@@ -1,13 +1,16 @@
 package fr.manchez.snoopy.application.models.objects;
 
+import fr.manchez.snoopy.application.AI.Moves;
 import fr.manchez.snoopy.application.SnoopyWindow;
 import fr.manchez.snoopy.application.enums.Sounds;
 import fr.manchez.snoopy.application.enums.Structures;
+import fr.manchez.snoopy.application.models.levels.LevelDisplay;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
@@ -90,9 +93,12 @@ public class Personnage extends Structure {
                 (structure.getHeight()-2)*SnoopyWindow.SCALE
         );
 
+        Structure nextStructureBeforeMove = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX-1);
+        actionBeforeMove(nextStructureBeforeMove, Moves.LEFT);
         if(moveToX > 0 && !isColided(nextPlayerPosition)){
 
             moveToX--;
+            Structure nextStructure = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX);
 
             final KeyFrame keyFrame1 = new KeyFrame(Duration.millis(0), new EventHandler<ActionEvent>() {
                 @Override
@@ -138,7 +144,6 @@ public class Personnage extends Structure {
                     getImageView().setImage(getImage(Structures.SNOOPY_LEFT_2));
                     xProperty.set(xProperty.doubleValue()-mov*SnoopyWindow.SCALE);
 
-                    Structure nextStructure = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX);
                     actionWhenMove(nextStructure);
 
                     isMoving = false;
@@ -165,9 +170,13 @@ public class Personnage extends Structure {
                 (structure.getHeight()-2)*SnoopyWindow.SCALE
         );
 
+        Structure nextStructureBeforeMove = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX+1);
+        actionBeforeMove(nextStructureBeforeMove, Moves.RIGHT);
         if(moveToX < 8 && !isColided(nextPlayerPosition)){
 
             moveToX++;
+            Structure nextStructure = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX);
+
 
             final KeyFrame keyFrame1 = new KeyFrame(Duration.millis(0), new EventHandler<ActionEvent>() {
                 @Override
@@ -212,7 +221,6 @@ public class Personnage extends Structure {
                     getImageView().setImage(getImage(Structures.SNOOPY_RIGHT_2));
                     xProperty.set(xProperty.doubleValue()+mov*SnoopyWindow.SCALE);
 
-                    Structure nextStructure = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX);
                     actionWhenMove(nextStructure);
 
                     isMoving = false;
@@ -237,10 +245,13 @@ public class Personnage extends Structure {
                 (structure.getHeight()-2)*SnoopyWindow.SCALE
         );
 
+        Structure nextStructureBeforeMove = window.getLevelDisplay().getLevelStruture().get(moveToY-1).get(moveToX);
+        actionBeforeMove(nextStructureBeforeMove, Moves.UP);
+
         if(moveToY > 0 && !isColided(nextPlayerPosition)){
 
             moveToY--;
-
+            Structure nextStructure = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX);
             final KeyFrame keyFrame1 = new KeyFrame(Duration.millis(0), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -284,7 +295,6 @@ public class Personnage extends Structure {
                     getImageView().setImage(getImage(Structures.SNOOPY_UP_1));
                     yProperty.set(yProperty.doubleValue()-mov*SnoopyWindow.SCALE);
 
-                    Structure nextStructure = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX);
                     actionWhenMove(nextStructure);
 
                     isMoving = false;
@@ -311,9 +321,12 @@ public class Personnage extends Structure {
                 (structure.getHeight()-2)*SnoopyWindow.SCALE
         );
 
+        Structure nextStructureBeforeMove = window.getLevelDisplay().getLevelStruture().get(moveToY+1).get(moveToX);
+        actionBeforeMove(nextStructureBeforeMove, Moves.DOWN);
         if(moveToY < 8 && !isColided(nextPlayerPosition)){
 
             moveToY++;
+            Structure nextStructure = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX);
 
             final KeyFrame keyFrame1 = new KeyFrame(Duration.millis(0), new EventHandler<ActionEvent>() {
                 @Override
@@ -351,6 +364,7 @@ public class Personnage extends Structure {
                     yProperty.set(yProperty.doubleValue()+mov*SnoopyWindow.SCALE);
                 }
             });
+
             final KeyFrame keyFrame5 = new KeyFrame(Duration.millis(200), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -358,7 +372,6 @@ public class Personnage extends Structure {
                     getImageView().setImage(getImage(Structures.SNOOPY_DOWN_1));
                     yProperty.set(yProperty.doubleValue()+mov*SnoopyWindow.SCALE);
 
-                    Structure nextStructure = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX);
                     actionWhenMove(nextStructure);
 
                     isMoving = false;
@@ -465,6 +478,124 @@ public class Personnage extends Structure {
             animateDefeate();
 
         }
+
+    }
+
+    public void actionBeforeMove(Structure nextStructure, Moves direction) {
+
+
+        if(nextStructure.getStructure().getSymbol().equals(Structures.POUSSABLE.getSymbol())){
+            push(direction, nextStructure);
+        }
+
+    }
+    /**
+     *
+     * @param direction Direction vers laquelle le joueur se dirige
+     * @param nextStructure Structure vers laquelle le joueur se dirige
+     */
+    private void push(Moves direction, Structure nextStructure){
+
+        //Coordonées matricielles de l'endroit où déplacer le bloc
+        System.out.println(nextStructure.getStructure().getSymbol());
+        int x = getMoveToX();
+        int y = getMoveToY();
+
+        //Stock les coordonnées matricielles du bloc à déplacer
+        int Y = getMoveToY();
+        int X = getMoveToX();
+
+
+        //Vérifie la direction du joueur
+        switch (direction){
+            case UP:
+                Y = Y-1;
+                y = y-2;
+                moveStructure(nextStructure.getImageView().getY()-32*SnoopyWindow.SCALE, nextStructure.getImageView().getX(), nextStructure, y, x, Y, X);
+                break;
+            case DOWN:
+                Y = Y+1;
+                y = y+2;
+                moveStructure(nextStructure.getImageView().getY()+32*SnoopyWindow.SCALE, nextStructure.getImageView().getX(), nextStructure, y, x, Y, X);
+                break;
+            case LEFT:
+                X = X-1;
+                x = x-2;
+                moveStructure(nextStructure.getImageView().getY(), nextStructure.getImageView().getX()-32*SnoopyWindow.SCALE, nextStructure, y, x, Y, X);
+                break;
+            case RIGHT:
+                X = X+1;
+                x = x+2;
+                moveStructure(nextStructure.getImageView().getY(), nextStructure.getImageView().getX()+32*SnoopyWindow.SCALE, nextStructure, y, x, Y, X);
+                break;
+        }
+
+    }
+
+    /**
+     * Gère le déplacement du bloc poussable
+     * @param y Coordonnées de l'endroit ou déplacer la structure
+     * @param x Coordonnées de l'endroit ou déplacer la structure
+     * @param nextStructure La structure à déplacer
+     * @param newY Coordonnées matricielles de l'endroit ou déplacer la structure
+     * @param newX Coordonnées matricielles de l'endroit ou déplacer la structure
+     * @param originalX Coordonnées matricielles de la structure à déplacer
+     * @param originalY Coordonnées matricielles de la structure à déplacer
+     */
+    private void moveStructure(double y, double x, Structure nextStructure, int newY, int newX, int originalY, int originalX){
+
+        if (!nextStructure.isHasBeenPushed()){
+
+            //Vérifie qu'on ne sorte pas le bloc de la grille
+            if((newX >= 0 && newX <= 8)&&(newY >= 0 && newY <= 8)){
+
+                //Vérifie que le bloc soit bien poussé vers le vide
+                if(window.getLevelDisplay().getLevelStruture().get(newY).get(newX).getStructure().equals(Structures.EMPTY)){
+
+                    Structure bloc2 = window.getLevelDisplay().getLevelStruture().get(newY).get(newX);
+
+                    //Déplace la hitbox
+                    for(Map.Entry<Rectangle, Structures> entry: window.getLevelDisplay().getColisionRectangle().entrySet()){
+                        /*
+                        entry.getKey().setFill(Color.BLACK);
+                        window.addAllNode(entry.getKey());
+
+                         */
+                        if (entry.getKey().getX() == nextStructure.getImageView().getX() && entry.getKey().getY() == nextStructure.getImageView().getY()){
+                            entry.getKey().setX(x);
+                            entry.getKey().setY(y);
+                        }
+
+                    }
+
+                    //Déplace le bloc visuellement
+                    nextStructure.getImageView().setY(y);
+                    nextStructure.getImageView().setX(x);
+
+                    //Déplace le bloc matriciellement
+                    window.getLevelDisplay().getLevelStruture().get(newY).remove(newX);
+                    window.getLevelDisplay().getLevelStruture().get(newY).add(newX, nextStructure);
+                    window.getLevelDisplay().getLevelStruture().get(originalY).remove(originalX);
+                    window.getLevelDisplay().getLevelStruture().get(originalY).add(originalX, bloc2);
+                    nextStructure.setHasBeenPushed(true);
+
+                }/*
+                else{
+                    System.out.println("Vous ne poussez pas le bloc vers du vide");
+                }
+                */
+
+            }/*
+            else{
+                System.out.println("Vous tentez de pousser le bloc hors de la grille");
+            }
+            */
+
+        }/*
+        else {
+            System.out.println("Vous avez déjà poussé ce bloc");
+        }
+        */
 
     }
 

@@ -1,9 +1,7 @@
-- bloc poussage
-- L'IA retient les niveau qu'elle a appris
+- L'IA retient les niveaux qu'elle a appris
 - coder animation début du jeu
 - coder animation fin du jeu
 
-- Toucher balle = stop animation AI
 
 FINI:
 - coder balle qui passe a travers les débris
@@ -25,9 +23,11 @@ FINI:
 - bloc tapis roulant
 - bloc piégé
 - bloc TP
+- bloc poussage
 - bloc bloc qui apparait disparait
 - code écran fin de niveau
 - système de score
+- Toucher balle = stop animation AI
 
 EN CONSTRUCTION:
 

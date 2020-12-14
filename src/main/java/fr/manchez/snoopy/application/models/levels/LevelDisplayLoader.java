@@ -152,10 +152,11 @@ public class LevelDisplayLoader {
 
                     structureList.add(structureToAdd);
 
-                    //La structure est un obstacle ou un destructible ou un bloc disparition
+                    //La structure est un obstacle ou un destructible ou un bloc disparition ou un bloc poussable
                     if(structure.getSymbol().equals(Structures.OBSTACLE.getSymbol())
                             || structure.getSymbol().equals(Structures.DESTRUCTIBLE.getSymbol())
-                            || structure.getSymbol().equals(Structures.DISPARITION_ENTIER.getSymbol())){
+                            || structure.getSymbol().equals(Structures.DISPARITION_ENTIER.getSymbol())
+                            || structure.getSymbol().equals(Structures.POUSSABLE.getSymbol())){
 
                         Rectangle rectangleColision = new Rectangle(
                                 newPoint2D.getX(),
