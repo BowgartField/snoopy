@@ -213,6 +213,7 @@ public class Personnage extends Structure {
             moveToX++;
             Structure nextStructure = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX);
 
+
             final KeyFrame keyFrame1 = new KeyFrame(Duration.millis(0), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -522,9 +523,9 @@ public class Personnage extends Structure {
     }
 
     /**
-     *
-     * @param nextStructure
-     * @param direction
+     * Action à effectuer avant le déplacement du personnage
+     * @param nextStructure Structure vers laquelle le personnage se dirige
+     * @param direction Direction vers laquelle le personnage se dirige
      */
     public void actionBeforeMove(Structure nextStructure, Moves direction) {
 

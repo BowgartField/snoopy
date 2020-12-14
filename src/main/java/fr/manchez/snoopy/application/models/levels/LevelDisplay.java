@@ -39,7 +39,7 @@ public class LevelDisplay {
     /**
      * Deja ecrasé par un bloc
      */
-    boolean isEcrasé = false;
+    boolean isEcrase = false;
 
     /** Ai **/
     AI ai;
@@ -1028,9 +1028,10 @@ public class LevelDisplay {
             rec.setOpacity(0.3);
             window.addAllNode(rec);
         }
-        */
         //DEBUT Hitbox personnage
         window.getPane().getChildren().add(snoopy.getHitbox());
+        */
+
 
 
         //On affiche le personnage
@@ -1119,6 +1120,7 @@ public class LevelDisplay {
 
     /**
      * Ajoute un oiseau en plus
+     * @param structureToAdd Oiseau à ajouter
      */
     public void addBirds(Structure structureToAdd){
 
@@ -1545,15 +1547,16 @@ public class LevelDisplay {
     }
 
     /**
-     *
+     *Vérifie si Snoopy est sur un bloc qui apparait et disparait
+     * @param structure bloc d'apparition et disparition
      */
     public void snoopyIsOnDisparitionBloc(Structure structure){
 
         if(structure.getHitbox().intersects(snoopy.getHitbox().getBoundsInLocal())){
 
-            if(!isEcrasé){
+            if(!isEcrase){
 
-                isEcrasé = true;
+                isEcrase = true;
                 snoopy.animateLooseLife();
 
             }
@@ -1592,7 +1595,10 @@ public class LevelDisplay {
 
     }
 
-    /** Récupérer les oiseaux **/
+    /**
+     *  Récupérer les oiseaux
+     * @return renvoie la liste des oiseaux
+     **/
     public List<Structure> getBirdList(){
         return birdList;
     }

@@ -1,5 +1,6 @@
 
 fr.manchez.snoopy.application
+fr.manchez.snoopy.application.AI
 fr.manchez.snoopy.application.enums
 fr.manchez.snoopy.application.models.display
 fr.manchez.snoopy.application.models.display.displays

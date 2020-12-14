@@ -16,6 +16,7 @@ public class Bird {
 
     /**
      * Récupére les coordonées de l'oiseau
+     * @return renvoie les coordonées de l'oiseau
      */
     public Point2D getCoords() {
         return point2D;

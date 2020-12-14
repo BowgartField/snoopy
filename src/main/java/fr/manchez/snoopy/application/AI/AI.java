@@ -44,8 +44,9 @@ public class AI {
     int y;
 
     /**
-     *
-     * @param levelDisplay
+     *Constructeur par défaut de l'IA
+     * @param levelDisplay L'affichage du niveau
+     * @param window  Fenetre du niveau
      */
     public AI(LevelDisplay levelDisplay, SnoopyWindow window){
 
