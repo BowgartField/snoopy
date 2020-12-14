@@ -524,7 +524,9 @@ public class AI {
      */
     public void stop(){
 
-        animateSnoopyTimeline.stop();
+        if(animateSnoopyTimeline != null){
+            animateSnoopyTimeline.stop();
+        }
 
     }
 

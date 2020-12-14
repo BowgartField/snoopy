@@ -66,7 +66,7 @@ public class Balle extends Structure{
      */
     public Balle(SnoopyWindow window) {
 
-        super(new Point2D(50,150), Structures.BALLE);
+        super(window.getLevelDisplay().getLevel().getBallePosition(), Structures.BALLE);
 
         this.window = window;
 
@@ -114,7 +114,6 @@ public class Balle extends Structure{
                 }else if(teleportDelayTime == 0){
                     teleportDelayTime = -1;
                 }else{
-                    System.out.println(teleportDelayTime);
                     teleportDelayTime--;
                 }
 

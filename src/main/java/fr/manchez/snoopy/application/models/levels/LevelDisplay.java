@@ -36,6 +36,11 @@ import java.util.Map;
  */
 public class LevelDisplay {
 
+    /**
+     * Deja ecrasé par un bloc
+     */
+    boolean isEcrasé = false;
+
     /** Ai **/
     AI ai;
 
@@ -237,7 +242,6 @@ public class LevelDisplay {
         stageInfo.setX((window.getPane().getWidth()-Structures.STAGE_LOOSE.getWidth()*SnoopyWindow.SCALE)/2);
 
 
-
         window.addAllNode(
                 levelEndBackground,
                 stageInfo
@@ -384,7 +388,7 @@ public class LevelDisplay {
 
         int vie = getPersonnage().getVie();
 
-        if(vie < 9){
+        if(vie <= 9){
             vieDixaine = new Structure(
                     new Point2D(162*SnoopyWindow.SCALE + levelEndBackground.getX(), 222*SnoopyWindow.SCALE + levelEndBackground.getY()),
                     Structures.ZERO
@@ -1170,11 +1174,11 @@ public class LevelDisplay {
                 if(alert.getResult() == ButtonType.YES){
 
                     window.getSauvegarde().save();
+                    isPause = false;
 
                 }else if(alert.getResult() == ButtonType.NO){
 
                     alert.close();
-
                     isPause = false;
 
                 }
@@ -1299,7 +1303,7 @@ public class LevelDisplay {
      */
     public void initDisparitionBloc(){
 
-        //List contenant les structure de bloc a faire disparaîtref
+        //List contenant les structure de bloc a faire disparaître
         List<Structure> disparitionBloc = new ArrayList<>();
 
         for(List<Structure> structureList: levelStruture){
@@ -1322,6 +1326,7 @@ public class LevelDisplay {
                 for(Structure structure : disparitionBloc){
 
                     structure.setImage(Structures.DISPARITION_DEMI);
+                    snoopyIsOnDisparitionBloc(structure);
 
                 }
 
@@ -1346,6 +1351,7 @@ public class LevelDisplay {
                 for(Structure structure : disparitionBloc){
 
                     structure.setImage(Structures.DISPARITION_DEMI);
+                    snoopyIsOnDisparitionBloc(structure);
 
                 }
 
@@ -1370,6 +1376,7 @@ public class LevelDisplay {
                 for(Structure structure : disparitionBloc){
 
                     structure.setImage(Structures.DISPARITION_DEMI);
+                    snoopyIsOnDisparitionBloc(structure);
 
                 }
 
@@ -1384,7 +1391,6 @@ public class LevelDisplay {
                 for(Structure structure : disparitionBloc){
 
                     structure.getImageView().setImage(null);
-
 
                     for(Map.Entry<Rectangle,Structures> colisionMap: colisionRectangle.entrySet()){
 
@@ -1411,6 +1417,7 @@ public class LevelDisplay {
                     snoopyIsOnDisparitionBloc(structure);
 
                     structure.setImage(Structures.DISPARITION_DEMI);
+
 
                 }
 
@@ -1500,7 +1507,6 @@ public class LevelDisplay {
 
                     structure.setImage(Structures.DISPARITION_ENTIER);
                     snoopyIsOnDisparitionBloc(structure);
-
                 }
 
             }
@@ -1543,15 +1549,16 @@ public class LevelDisplay {
      */
     public void snoopyIsOnDisparitionBloc(Structure structure){
 
-        if(structure.getImageView().getY() == snoopy.getImageView().getY()
-            && structure.getImageView().getX() == snoopy.getImageView().getX()){
+        if(structure.getHitbox().intersects(snoopy.getHitbox().getBoundsInLocal())){
 
-            System.out.println("ok");
+            if(!isEcrasé){
 
-            snoopy.animateLooseLife();
+                isEcrasé = true;
+                snoopy.animateLooseLife();
+
+            }
 
         }
-
 
     }
 
@@ -1596,6 +1603,17 @@ public class LevelDisplay {
 
     public void setBirdsRemaining(int birdsRemaining) {
         this.birdsRemaining = birdsRemaining;
+    }
+
+    public Levels getLevel() {
+        return level;
+    }
+
+    public void setLoose(boolean loose) {
+        isLoose = loose;
+    }
+    public void setLooseLife(boolean life){
+        isLooseLife = life;
     }
 
 }

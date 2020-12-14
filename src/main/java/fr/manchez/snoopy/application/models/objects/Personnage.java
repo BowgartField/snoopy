@@ -123,8 +123,11 @@ public class Personnage extends Structure {
                 (structure.getHeight()-2)*SnoopyWindow.SCALE
         );
 
-        Structure nextStructureBeforeMove = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX-1);
-        actionBeforeMove(nextStructureBeforeMove, Moves.LEFT);
+        if(moveToX > 0){
+            Structure nextStructureBeforeMove = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX-1);
+            actionBeforeMove(nextStructureBeforeMove, Moves.LEFT);
+        }
+
         if(moveToX > 0 && !isColided(nextPlayerPosition)){
 
             moveToX--;
@@ -200,13 +203,15 @@ public class Personnage extends Structure {
                 (structure.getHeight()-2)*SnoopyWindow.SCALE
         );
 
-        Structure nextStructureBeforeMove = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX+1);
-        actionBeforeMove(nextStructureBeforeMove, Moves.RIGHT);
+        if(moveToX < 8){
+            Structure nextStructureBeforeMove = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX+1);
+            actionBeforeMove(nextStructureBeforeMove, Moves.RIGHT);
+        }
+
         if(moveToX < 8 && !isColided(nextPlayerPosition)){
 
             moveToX++;
             Structure nextStructure = window.getLevelDisplay().getLevelStruture().get(moveToY).get(moveToX);
-
 
             final KeyFrame keyFrame1 = new KeyFrame(Duration.millis(0), new EventHandler<ActionEvent>() {
                 @Override
@@ -275,8 +280,10 @@ public class Personnage extends Structure {
                 (structure.getHeight()-2)*SnoopyWindow.SCALE
         );
 
-        Structure nextStructureBeforeMove = window.getLevelDisplay().getLevelStruture().get(moveToY-1).get(moveToX);
-        actionBeforeMove(nextStructureBeforeMove, Moves.UP);
+        if(moveToY > 0){
+            Structure nextStructureBeforeMove = window.getLevelDisplay().getLevelStruture().get(moveToY-1).get(moveToX);
+            actionBeforeMove(nextStructureBeforeMove, Moves.UP);
+        }
 
         if(moveToY > 0 && !isColided(nextPlayerPosition)){
 
@@ -351,8 +358,11 @@ public class Personnage extends Structure {
                 (structure.getHeight()-2)*SnoopyWindow.SCALE
         );
 
-        Structure nextStructureBeforeMove = window.getLevelDisplay().getLevelStruture().get(moveToY+1).get(moveToX);
-        actionBeforeMove(nextStructureBeforeMove, Moves.DOWN);
+        if(moveToY < 8){
+            Structure nextStructureBeforeMove = window.getLevelDisplay().getLevelStruture().get(moveToY+1).get(moveToX);
+            actionBeforeMove(nextStructureBeforeMove, Moves.DOWN);
+        }
+
         if(moveToY < 8 && !isColided(nextPlayerPosition)){
 
             moveToY++;
@@ -511,6 +521,11 @@ public class Personnage extends Structure {
 
     }
 
+    /**
+     *
+     * @param nextStructure
+     * @param direction
+     */
     public void actionBeforeMove(Structure nextStructure, Moves direction) {
 
 
@@ -878,6 +893,8 @@ public class Personnage extends Structure {
      */
     public void animateLooseLife(){
 
+        window.getLevelDisplay().setLooseLife(true);
+
         //On sauvegarde la vie
         window.getSauvegarde().getPlayer().setVie(vie);
 
@@ -892,6 +909,8 @@ public class Personnage extends Structure {
      * Animation de la défaite
      */
     public void animateDefeate(){
+
+        window.getLevelDisplay().setLoose(true);
 
         isMoving = true;
 

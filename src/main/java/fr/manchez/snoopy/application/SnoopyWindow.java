@@ -229,8 +229,5 @@ public class SnoopyWindow{
     public void setPlayersType(PlayersType playersType) {
         this.playersType = playersType;
     }
-    public Stage getStage(){
-        return stage;
-    }
 
 }
